@@ -1,0 +1,809 @@
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { 
+  Star, 
+  MapPin, 
+  Wrench, 
+  ShieldCheck, 
+  Phone, 
+  Truck, 
+  Activity, 
+  Cpu, 
+  Disc, 
+  Droplets, 
+  FileText, 
+  ChevronDown, 
+  ChevronUp, 
+  User, 
+  ArrowRight,
+  ShieldAlert,
+  BellRing
+} from 'lucide-react';
+
+import Navbar from './components/Navbar';
+import CostEstimator from './components/CostEstimator';
+import GarageFinder from './components/GarageFinder';
+import Diagnostics from './components/Diagnostics';
+import MaintenanceReminder from './components/MaintenanceReminder';
+import BookingModal from './components/BookingModal';
+import SOSModal from './components/SOSModal';
+import AppSimulator from './components/AppSimulator';
+import InteractiveHUD from './components/InteractiveHUD';
+import { Garage, MOCK_TESTIMONIALS, POPULAR_SERVICES } from './types';
+
+// Asset paths
+const mcarfixLogo = "/src/assets/images/mcarfix_logo.svg";
+const heroImg = "/src/assets/images/kenyan_garage_hero_1783421229882.jpg";
+const sparePartsImg = "/src/assets/images/kenyan_spare_parts_1783421247627.jpg";
+const roadsideImg = "/src/assets/images/kenyan_roadside_1783421263692.jpg";
+
+export default function App() {
+  const [activeSOS, setActiveSOS] = useState(false);
+  const [selectedGarageToBook, setSelectedGarageToBook] = useState<Garage | null>(null);
+  const [activeFAQ, setActiveFAQ] = useState<number | null>(null);
+
+  const toggleFAQ = (index: number) => {
+    setActiveFAQ(activeFAQ === index ? null : index);
+  };
+
+  const handleScrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
+  const getServiceIcon = (iconName: string) => {
+    const props = { className: "w-6 h-6 text-brand-amber" };
+    if (iconName === 'Wrench') return <Wrench {...props} />;
+    if (iconName === 'ShieldAlert') return <ShieldAlert {...props} />;
+    if (iconName === 'Truck') return <Truck {...props} />;
+    if (iconName === 'Activity') return <Activity {...props} />;
+    if (iconName === 'Cpu') return <Cpu {...props} />;
+    if (iconName === 'Disc') return <Disc {...props} />;
+    if (iconName === 'Droplets') return <Droplets {...props} />;
+    if (iconName === 'FileText') return <FileText {...props} />;
+    return <Wrench {...props} />;
+  };
+
+  const faqs = [
+    {
+      q: 'How does mCarFix verify garages and mechanics?',
+      a: 'We perform strict physical and commercial audits of every garage before verification. This includes checking technician certifications, diagnostic equipment capability, and sourcing agreements to verify they only use original OEM spare parts.'
+    },
+    {
+      q: 'What do I do if my vehicle breaks down late at night?',
+      a: 'Simply click our "Emergency Assistance" button anywhere on the platform or call our 24/7 hotline (0700 mCarFix). Our GPS dispatch engine instantly routes the nearest verified flatbed tow truck or diagnostic responder to your precise location.'
+    },
+    {
+      q: 'Is there any warranty on repair works booked via mCarFix?',
+      a: 'Yes! Every booking completed via the mCarFix directory comes with an automatic 6-month warranty on both certified labor and parts. If any issues reappear, the partner garage will resolve them free of charge.'
+    },
+    {
+      q: 'Can I purchase spare parts directly through the app?',
+      a: 'Yes, our verified parts network allows you to request specific components (OEM or premium aftermarket). The components are delivered directly to your selected garage and come with original warranty tags for verification scanning.'
+    }
+  ];
+
+  return (
+    <div className="min-h-screen bg-brand-cream text-brand-dark flex flex-col font-sans selection:bg-brand-amber selection:text-white">
+      
+      {/* Header / Navbar */}
+      <Navbar 
+        onSOSClick={() => setActiveSOS(true)} 
+        onNavigate={handleScrollToSection}
+      />
+
+      {/* Hero Section */}
+      <header id="hero" className="relative overflow-hidden py-16 lg:py-24 border-b border-brand-gold/15 bg-brand-cream">
+        {/* Precision Autodesk Blueprint Grid Lines & Coordinates */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          {/* Subtle grid pattern background */}
+          <div className="absolute inset-0 opacity-[0.015]" 
+               style={{ 
+                 backgroundImage: `radial-gradient(circle, #ff5e00 1px, transparent 1px)`, 
+                 backgroundSize: '24px 24px' 
+               }} 
+          />
+          {/* Vertical thin engineering lines */}
+          <div className="absolute left-[8%] top-0 bottom-0 w-[1px] bg-brand-gold/10" />
+          <div className="absolute left-[30%] top-0 bottom-0 w-[1px] bg-brand-gold/10 hidden md:block" />
+          <div className="absolute left-[70%] top-0 bottom-0 w-[1px] bg-brand-gold/10 hidden md:block" />
+          <div className="absolute left-[92%] top-0 bottom-0 w-[1px] bg-brand-gold/10" />
+          
+          {/* Horizontal thin engineering lines */}
+          <div className="absolute left-0 right-0 top-[15%] h-[1px] bg-brand-gold/10" />
+          <div className="absolute left-0 right-0 top-[50%] h-[1px] bg-brand-gold/10" />
+          <div className="absolute left-0 right-0 top-[85%] h-[1px] bg-brand-gold/10" />
+          
+          {/* Precision Blueprint Corner Markers */}
+          <div className="absolute left-4 top-4 font-mono text-[9px] text-brand-gold/40 tracking-wider">SEC_DRAFT_HUD_2026 // GRID_A</div>
+          <div className="absolute right-4 bottom-4 font-mono text-[9px] text-brand-gold/40 tracking-wider">SYSTEM_CONNECTED_STABLE</div>
+          <div className="absolute left-1/2 top-4 -translate-x-1/2 font-mono text-[8px] text-brand-gold/30 hidden md:block uppercase tracking-widest">
+            LAT: 1.2921° S | LON: 36.8219° E (NAIROBI_HUB)
+          </div>
+        </div>
+
+        {/* Premium ambient glows */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,rgba(197,168,92,0.12),transparent_50%)] pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(255,94,0,0.06),transparent_50%)] pointer-events-none" />
+        
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            
+            {/* Left Content Column */}
+            <div className="lg:col-span-7 space-y-8 text-center lg:text-left relative">
+              {/* Vertical blueprint bracket on desktop to frame the text like design blueprints */}
+              <div className="absolute -left-6 top-2 bottom-2 w-[2px] bg-brand-amber/25 hidden lg:block" />
+              
+              <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="space-y-4"
+              >
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-amber/10 border border-brand-amber/25 text-brand-amber text-xs font-mono font-bold tracking-wider uppercase">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <span>Kenya’s Elite Automotive Platform</span>
+                </div>
+
+                <h1 className="font-display font-black text-4xl sm:text-5xl lg:text-[56px] tracking-tight text-brand-dark leading-[1.05]">
+                  The Digital Blueprint <br className="hidden sm:inline" />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-amber to-brand-gold">
+                    For Automotive Care
+                  </span>
+                </h1>
+
+                <p className="text-base sm:text-lg text-brand-muted max-w-2xl mx-auto lg:mx-0 font-light leading-relaxed">
+                  Book trusted mechanics, dispatch roadside emergency teams, trace authentic OEM spare parts, and verify diagnostic reports on East Africa's most advanced digital ecosystem.
+                </p>
+              </motion.div>
+
+              {/* CTAs */}
+              <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4"
+              >
+                <button
+                  onClick={() => handleScrollToSection('garages')}
+                  className="w-full sm:w-auto bg-brand-amber hover:bg-brand-amber-hover text-white font-mono text-xs font-extrabold py-4 px-8 rounded-xl flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-brand-amber/15 hover:-translate-y-0.5 transition-all duration-300 tracking-wider uppercase"
+                >
+                  <span>Book Verified Mechanic</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+
+                <button
+                  onClick={() => handleScrollToSection('simulator')}
+                  className="w-full sm:w-auto bg-transparent hover:bg-brand-gold-light/90 text-brand-dark font-mono text-xs font-extrabold py-4 px-8 rounded-xl border border-brand-gold/25 flex items-center justify-center gap-2 cursor-pointer transition-all duration-300 tracking-wider uppercase shadow-sm hover:border-brand-gold/40"
+                >
+                  <span>Watch App Demo</span>
+                </button>
+              </motion.div>
+
+              {/* Trust Signal Highlights */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="pt-6 border-t border-brand-gold/15 grid grid-cols-2 sm:grid-cols-4 gap-6 text-center lg:text-left"
+              >
+                <div>
+                  <p className="font-display font-extrabold text-2xl text-brand-amber tracking-tight font-mono">12,000+</p>
+                  <p className="text-[11px] font-mono uppercase tracking-wider text-brand-muted mt-1">Vehicles Serviced</p>
+                </div>
+                <div>
+                  <p className="font-display font-extrabold text-2xl text-emerald-600 tracking-tight font-mono">450+</p>
+                  <p className="text-[11px] font-mono uppercase tracking-wider text-brand-muted mt-1">Verified Garages</p>
+                </div>
+                <div>
+                  <p className="font-display font-extrabold text-2xl text-brand-dark tracking-tight font-mono">4.9 ★</p>
+                  <p className="text-[11px] font-mono uppercase tracking-wider text-brand-muted mt-1">Average Rating</p>
+                </div>
+                <div>
+                  <p className="font-display font-extrabold text-2xl text-brand-gold tracking-tight font-mono font-bold">100%</p>
+                  <p className="text-[11px] font-mono uppercase tracking-wider text-brand-muted mt-1">Trusted in Kenya</p>
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Right Interactive CAD HUD Column */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6 }}
+              className="lg:col-span-5 relative"
+            >
+              <div className="absolute -inset-2 bg-gradient-to-r from-brand-amber/10 to-brand-gold/10 blur-2xl rounded-3xl opacity-60 pointer-events-none" />
+              <InteractiveHUD />
+            </motion.div>
+
+          </div>
+        </div>
+      </header>
+
+      {/* Brand Trust/Partners Bar */}
+      <section className="bg-brand-gold-light/40 border-b border-brand-gold/15 py-8 text-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-[10px] font-mono uppercase tracking-widest text-brand-gold font-bold mb-4">
+            In Partnership with Verified Insurers & Lubricant Networks Across East Africa
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-4 text-brand-muted font-mono text-sm font-semibold uppercase tracking-wider">
+            <span className="hover:text-brand-amber transition-colors">AA KENYA</span>
+            <span className="hover:text-brand-amber transition-colors">TOTALENERGIES KENYA</span>
+            <span className="hover:text-brand-amber transition-colors">KCB BANK GROUP</span>
+            <span className="hover:text-brand-amber transition-colors">JUBILEE INSURANCE</span>
+          </div>
+        </div>
+      </section>
+
+      {/* Narrative Section: The Problem & The Solution (Critique Item 2 & 5) */}
+      <section className="py-24 bg-transparent border-b border-brand-gold/15 overflow-hidden relative">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_center,rgba(197,168,92,0.04),transparent_50%)] pointer-events-none" />
+        
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16 relative z-10">
+          
+          {/* Asymmetrical elegant statement (Critique Item 4) */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-start">
+            
+            {/* Left Column: Typographic Focus */}
+            <div className="lg:col-span-6 space-y-6">
+              <span className="text-[11px] font-mono font-bold text-brand-amber tracking-widest uppercase block">
+                THE AUTOMOTIVE STANDARD
+              </span>
+              <h2 className="font-display font-black text-3xl sm:text-4xl lg:text-5xl text-brand-dark leading-tight">
+                Vehicle care should be anchored in <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-amber to-brand-gold">absolute trust.</span>
+              </h2>
+              <p className="text-brand-muted text-sm sm:text-base leading-relaxed font-light">
+                For too long, car maintenance has been a gamble. Unpredictable towing fees, opaque pricing, and the worry of counterfeit spares have made roadside issues stressful. mCarFix changes the narrative by introducing transparency, verification, and instant accountability on every drive.
+              </p>
+            </div>
+
+            {/* Right Column: High-End Details */}
+            <div className="lg:col-span-6 space-y-8 pt-4 lg:pt-0">
+              <div className="space-y-4">
+                <h3 className="font-display font-bold text-lg sm:text-xl text-brand-dark">
+                  A Unified Digital Platform for Kenya’s Roads
+                </h3>
+                <p className="text-brand-muted text-sm leading-relaxed font-light">
+                  We pre-audit workshops, certify original parts distributors, and maintain a 24/7 heavy-duty towing fleet so you can focus on the destination, not the worry of getting stranded.
+                </p>
+              </div>
+
+              {/* Clean Row Highlights */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-4 border-t border-brand-gold/10">
+                <div className="space-y-1">
+                  <span className="font-mono text-xs font-bold text-brand-amber block">01 / ESTIMA</span>
+                  <span className="text-xs font-bold text-brand-dark block">Upfront Pricing</span>
+                  <span className="text-[11px] text-brand-muted leading-relaxed font-light block">Standardized local repair cost estimates.</span>
+                </div>
+                <div className="space-y-1">
+                  <span className="font-mono text-xs font-bold text-brand-amber block">02 / ESCROW</span>
+                  <span className="text-xs font-bold text-brand-dark block">Secure Escrow</span>
+                  <span className="text-[11px] text-brand-muted leading-relaxed font-light block">Funds released only when repairs are verified.</span>
+                </div>
+                <div className="space-y-1">
+                  <span className="font-mono text-xs font-bold text-brand-amber block">03 / FLEET</span>
+                  <span className="text-xs font-bold text-brand-dark block">GPS Dispatch</span>
+                  <span className="text-[11px] text-brand-muted leading-relaxed font-light block">Active roadside rescue across Nairobi and beyond.</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          {/* Live Recent Operations (Critique Item 7 & 9 - Kenyan roads, real stories, movement) */}
+          <div className="bg-brand-gold-light/40 border border-brand-gold/15 p-4 rounded-2xl flex flex-col md:flex-row items-center gap-4 justify-between overflow-hidden shadow-sm">
+            <div className="flex items-center gap-2 shrink-0">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+              <span className="text-[9px] font-mono font-bold tracking-widest text-brand-gold uppercase">RECENT OPERATIONS LOG</span>
+            </div>
+            
+            {/* Live Ticker Items */}
+            <div className="flex-1 overflow-hidden relative h-5 w-full text-center md:text-left">
+              <div className="animate-marquee whitespace-nowrap text-[11px] font-mono text-brand-dark inline-block space-x-12">
+                <span>[Westlands, Nairobi] Toyota RAV4 Brake Pads Certified & Installed <strong className="text-emerald-400">Saved KES 3,200</strong></span>
+                <span>•</span>
+                <span>[Nakuru CBD] Flatbed SOS Tow truck Dispatched to Highway Breakdown <strong className="text-brand-amber font-bold">Arrived in 19 mins</strong></span>
+                <span>•</span>
+                <span>[Milimani, Kisumu] Mazda Demio 5,000 km Oil Service Completed <strong className="text-brand-gold font-bold">6-Month Warranty active</strong></span>
+                <span>•</span>
+                <span>[Ganjoni, Mombasa] OBD-II Computer Diagnostics cleared air sensor <strong className="text-emerald-400 font-bold">Total KES 1,500</strong></span>
+                <span>•</span>
+                {/* Duplicated list for infinite seamless carousel transition */}
+                <span>[Westlands, Nairobi] Toyota RAV4 Brake Pads Certified & Installed <strong className="text-emerald-400">Saved KES 3,200</strong></span>
+                <span>•</span>
+                <span>[Nakuru CBD] Flatbed SOS Tow truck Dispatched to Highway Breakdown <strong className="text-brand-amber font-bold">Arrived in 19 mins</strong></span>
+                <span>•</span>
+                <span>[Milimani, Kisumu] Mazda Demio 5,000 km Oil Service Completed <strong className="text-brand-gold font-bold">6-Month Warranty active</strong></span>
+                <span>•</span>
+                <span>[Ganjoni, Mombasa] OBD-II Computer Diagnostics cleared air sensor <strong className="text-emerald-400 font-bold">Total KES 1,500</strong></span>
+              </div>
+            </div>
+            
+            <div className="text-[10px] font-mono text-slate-500 shrink-0 hidden lg:block">
+              Vetted Partner Network: 450+ Garages, 12,000+ Vehicles
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* Interactive App Screens Section (Critique Item 6 & 7) */}
+      <section id="simulator" className="py-20 border-b border-brand-gold/15 bg-[#0c1020]/20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <AppSimulator />
+        </div>
+      </section>
+
+      {/* Services Grid Section (Critique Item 3 & 8) */}
+      <section className="py-20 bg-transparent border-b border-brand-gold/15">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+          
+          <div className="text-center max-w-3xl mx-auto space-y-3">
+            <span className="text-xs font-mono font-bold text-brand-amber tracking-wider uppercase block">Explore Services</span>
+            <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-brand-dark">
+              What Automotive Service <span className="text-brand-amber">Do You Need?</span>
+            </h2>
+            <p className="text-brand-muted text-sm leading-relaxed max-w-xl mx-auto">
+              Find trusted mechanics near you in minutes, compare quotes, and book with absolute confidence.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {POPULAR_SERVICES.map((item) => (
+              <div 
+                key={item.id}
+                onClick={() => {
+                  if (item.id === 'roadside' || item.id === 'towing') {
+                    setActiveSOS(true);
+                  } else if (item.id === 'parts') {
+                    handleScrollToSection('estimator');
+                  } else {
+                    handleScrollToSection('garages');
+                  }
+                }}
+                className="bg-white border border-brand-gold/20 hover:border-brand-amber hover:bg-brand-gold-light/40 rounded-3xl p-6 transition-all duration-300 group cursor-pointer hover:-translate-y-1 flex flex-col justify-between shadow-xl"
+              >
+                <div className="space-y-4">
+                  <div className="bg-brand-gold-light/60 border border-brand-gold/15 text-brand-amber p-3 rounded-2xl w-max group-hover:bg-brand-amber group-hover:text-white transition-all duration-300">
+                    {getServiceIcon(item.iconName)}
+                  </div>
+                  <h3 className="font-display font-bold text-lg text-brand-dark group-hover:text-brand-amber transition-colors leading-snug">
+                    {item.name}
+                  </h3>
+                  <p className="text-xs text-brand-muted leading-relaxed font-light">
+                    {item.description}
+                  </p>
+                </div>
+
+                <div className="pt-4 border-t border-brand-gold/15 mt-4 flex items-center justify-between text-[11px] font-mono text-brand-muted group-hover:text-brand-amber transition-colors">
+                  <span>{item.popular ? 'POPULAR REQUEST' : 'BOOK ON-DEMAND'}</span>
+                  <ArrowRight className="w-3.5 h-3.5 -translate-x-1 group-hover:translate-x-0 transition-transform" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* How it Works Section (Critique Item 9) */}
+      <section className="py-20 border-t border-brand-gold/15 bg-brand-gold-light/40">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+          
+          <div className="text-center max-w-3xl mx-auto space-y-3">
+            <span className="text-xs font-mono font-bold text-brand-amber tracking-wider uppercase block">Process Flow</span>
+            <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-brand-dark">
+              Get Your Vehicle Fixed in <span className="text-brand-amber">3 Simple Steps</span>
+            </h2>
+            <p className="text-brand-muted text-sm leading-relaxed max-w-xl mx-auto">
+              We make finding trusted automotive repairs entirely frictionless. No guesswork, no overcharging.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                step: '01',
+                title: 'Search or Diagnose',
+                desc: 'Use our interactive directory to search for garages or select symptoms in our Diagnostic Helper to identify mechanical issues.'
+              },
+              {
+                step: '02',
+                title: 'Check Cost & Book',
+                desc: 'Estimate standard market rates for repairs using our cost estimator, compare nearby garages, and book an appointment with zero upfront fees.'
+              },
+              {
+                step: '03',
+                title: 'Drive with Confidence',
+                desc: 'Your selected garage performs the repair using certified original parts, backed by a free 6-month labor & parts guarantee.'
+              }
+            ].map((step, idx) => (
+              <div 
+                key={idx}
+                className="bg-white border border-brand-gold/20 p-6 md:p-8 rounded-3xl relative overflow-hidden flex flex-col justify-between h-full shadow-xl"
+              >
+                <span className="font-display font-black text-6xl text-brand-gold/15 absolute right-4 top-4 select-none">{step.step}</span>
+                <div className="space-y-4">
+                  <h4 className="font-display font-bold text-xl text-brand-dark mt-4">{step.title}</h4>
+                  <p className="text-xs text-brand-muted leading-relaxed font-light">{step.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Core Component 1: Interactive Garage Directory with Live Map (Critique Item 14 & 15) */}
+      <section id="garages" className="py-20 bg-transparent border-t border-brand-gold/15">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+          
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+            <div className="space-y-2">
+              <span className="text-xs font-mono font-bold text-brand-amber tracking-wider uppercase block">Live Finder</span>
+              <h2 className="font-display font-extrabold text-3xl text-brand-dark">
+                Verified Garages & Mechanics
+              </h2>
+              <p className="text-sm text-brand-muted max-w-md">
+                Find audited mechanics, compare distances, and book service appointments instantly. Click on map pins to select.
+              </p>
+            </div>
+            
+            <div className="flex items-center gap-2 text-xs font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 py-2 px-3.5 rounded-xl w-max">
+              <ShieldCheck className="w-4 h-4 text-emerald-400 animate-pulse" />
+              <span>450+ Licensed Kenya Garages Active</span>
+            </div>
+          </div>
+
+          <GarageFinder onBookClick={(g) => setSelectedGarageToBook(g)} />
+        </div>
+      </section>
+
+      {/* Core Component 2: Interactive Pricing Cost Estimator (Critique Item 12) */}
+      <section id="estimator" className="py-20 border-t border-brand-gold/15 bg-transparent">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <CostEstimator />
+        </div>
+      </section>
+
+      {/* Core Component 3: Diagnostics Help Section (Critique Item 14) */}
+      <section id="diagnostics" className="py-20 bg-transparent border-t border-brand-gold/15">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Diagnostics onSOSClick={() => setActiveSOS(true)} />
+        </div>
+      </section>
+
+      {/* Extra Interactive Cards Area (Critique Item 11: Authentic Photography) */}
+      <section className="py-20 border-t border-brand-gold/15 bg-brand-gold-light/40">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+          
+          <div className="text-center max-w-3xl mx-auto space-y-3">
+            <span className="text-xs font-mono font-bold text-brand-amber tracking-wider uppercase block">Premium Offerings</span>
+            <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-brand-dark">
+              Guaranteed OEM Spares & Roadside Assistance
+            </h2>
+            <p className="text-brand-muted text-sm leading-relaxed max-w-xl mx-auto">
+              We connect you directly with certified distributors to keep your car operating efficiently on Kenyan roads.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            
+            {/* Card 1: Spare Parts */}
+            <div className="bg-white border border-brand-gold/20 rounded-3xl overflow-hidden flex flex-col justify-between group shadow-xl">
+              <div>
+                <img 
+                  src={sparePartsImg} 
+                  alt="Verified spare parts store in Kenya" 
+                  referrerPolicy="no-referrer"
+                  className="w-full h-56 object-cover group-hover:scale-[1.01] transition-transform duration-500"
+                />
+                <div className="p-6 md:p-8 space-y-3">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-mono text-emerald-600 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded">
+                      100% GENUINE
+                    </span>
+                    <span className="text-xs font-mono text-brand-muted">Distributor network</span>
+                  </div>
+                  <h3 className="font-display font-bold text-xl text-brand-dark group-hover:text-brand-amber transition-colors">
+                    Sourcing Genuine Spare Parts
+                  </h3>
+                  <p className="text-xs text-brand-muted leading-relaxed font-light">
+                    Avoid counterfeit components that compromise safety and durability. Our parts distribution network links you directly with official distributors for Toyota, Subaru, Mazda, Nissan, and Mercedes-Benz original parts in Nairobi.
+                  </p>
+                </div>
+              </div>
+              <div className="px-6 md:px-8 pb-8">
+                <button
+                  onClick={() => handleScrollToSection('estimator')}
+                  className="bg-brand-amber hover:bg-brand-amber-hover text-white font-mono text-xs font-bold py-3 px-5 rounded-xl transition-all duration-300 cursor-pointer w-full text-center shadow-lg shadow-brand-amber/15 hover:-translate-y-0.5"
+                >
+                  Verify Spare Parts Pricing
+                </button>
+              </div>
+            </div>
+
+            {/* Card 2: Roadside Assistance */}
+            <div className="bg-white border border-brand-gold/20 rounded-3xl overflow-hidden flex flex-col justify-between group shadow-xl">
+              <div>
+                <img 
+                  src={roadsideImg} 
+                  alt="Kenyan roadside assistance flatbed towing vehicle" 
+                  referrerPolicy="no-referrer"
+                  className="w-full h-56 object-cover group-hover:scale-[1.01] transition-transform duration-500"
+                />
+                <div className="p-6 md:p-8 space-y-3">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-mono text-rose-600 bg-rose-500/10 px-2 py-0.5 rounded border border-rose-500/20">
+                      24/7 ACTIVE
+                    </span>
+                    <span className="text-xs font-mono text-brand-muted">Roadside Towing</span>
+                  </div>
+                  <h3 className="font-display font-bold text-xl text-brand-dark group-hover:text-rose-500 transition-colors">
+                    Emergency Highway Breakdown Response
+                  </h3>
+                  <p className="text-xs text-brand-muted leading-relaxed font-light">
+                    Stuck with a flat tyre, blown head gasket, or battery failure on the highway? Our towing network features flatbed trucks equipped to recover vehicles safely. Average dispatch arrival within Nairobi is 25 minutes.
+                  </p>
+                </div>
+              </div>
+              <div className="px-6 md:px-8 pb-8">
+                <button
+                  onClick={() => setActiveSOS(true)}
+                  className="bg-brand-amber hover:bg-brand-amber-hover text-white font-mono text-xs font-bold py-3 px-5 rounded-xl transition-all duration-300 cursor-pointer w-full text-center shadow-lg shadow-brand-amber/15 hover:-translate-y-0.5"
+                >
+                  Request Emergency Tow Truck
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* Core Component 4: Maintenance Scheduler Section (Critique Item 14) */}
+      <section id="schedules" className="py-20 bg-transparent border-t border-brand-gold/15">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <MaintenanceReminder />
+        </div>
+      </section>
+
+      {/* Social Proof / Testimonials Section (Critique Item 6) */}
+      <section className="py-20 border-t border-brand-gold/15 bg-brand-gold-light/40">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+          
+          <div className="text-center max-w-3xl mx-auto space-y-3">
+            <span className="text-xs font-mono font-bold text-brand-amber tracking-wider uppercase block">Testimonials</span>
+            <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-brand-dark">
+              Loved by Kenyan <span className="text-brand-amber">Car Owners</span>
+            </h2>
+            <p className="text-brand-muted text-sm leading-relaxed max-w-xl mx-auto">
+              Read how mCarFix has helped vehicle owners get back on the road safely and economically.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {MOCK_TESTIMONIALS.map((t) => (
+              <div 
+                key={t.id}
+                className="bg-white border border-brand-gold/20 p-6 rounded-3xl flex flex-col justify-between h-full hover:border-brand-amber hover:shadow-lg transition-all duration-300 shadow-xl"
+              >
+                <div className="space-y-4">
+                  <div className="flex text-brand-amber gap-0.5">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-brand-amber text-brand-amber" />
+                    ))}
+                  </div>
+                  <p className="text-xs text-brand-dark italic leading-relaxed font-light">
+                    "{t.text}"
+                  </p>
+                </div>
+
+                <div className="pt-4 border-t border-brand-gold/15 mt-6 flex items-center gap-3">
+                  {t.avatarUrl ? (
+                    <img
+                      src={t.avatarUrl}
+                      alt={t.name}
+                      className="w-10 h-10 rounded-full object-cover border border-brand-gold/20 shadow-sm select-none"
+                      referrerPolicy="no-referrer"
+                    />
+                  ) : (
+                    <div className="w-10 h-10 rounded-full bg-brand-gold-light/80 border border-brand-gold/20 flex items-center justify-center font-display text-xs font-extrabold text-brand-gold uppercase shadow-inner">
+                      {t.name.split(' ').map(n => n[0]).join('')}
+                    </div>
+                  )}
+                  <div>
+                    <span className="block text-xs font-bold text-brand-dark">{t.name}</span>
+                    <span className="block text-[10px] font-mono text-brand-muted uppercase tracking-wider">{t.location}, KE</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQs Section (Critique Item 10) */}
+      <section className="py-20 bg-transparent border-t border-brand-gold/15">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+          
+          <div className="text-center space-y-2">
+            <span className="text-xs font-mono font-bold text-brand-amber tracking-wider uppercase block">FAQ</span>
+            <h2 className="font-display font-extrabold text-3xl text-brand-dark">
+              Frequently Asked <span className="text-brand-amber">Questions</span>
+            </h2>
+          </div>
+
+          <div className="space-y-3">
+            {faqs.map((faq, idx) => {
+              const isOpen = activeFAQ === idx;
+              return (
+                <div 
+                  key={idx}
+                  className="bg-white border border-brand-gold/20 rounded-2xl overflow-hidden transition-all duration-300 shadow-xl"
+                >
+                  <button
+                    onClick={() => toggleFAQ(idx)}
+                    className="w-full flex items-center justify-between p-5 text-left text-sm font-semibold text-brand-dark focus:outline-none cursor-pointer hover:bg-brand-gold-light/20 transition-colors"
+                  >
+                    <span>{faq.q}</span>
+                    {isOpen ? <ChevronUp className="w-4 h-4 text-brand-amber" /> : <ChevronDown className="w-4 h-4 text-brand-muted" />}
+                  </button>
+
+                  <AnimatePresence initial={false}>
+                    {isOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="border-t border-brand-gold/15 bg-brand-gold-light/20"
+                      >
+                        <p className="p-5 text-xs text-brand-muted leading-relaxed font-light">
+                          {faq.a}
+                        </p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Final CTA Section (Critique Item 5 & 13) */}
+      <section className="py-20 border-t border-brand-gold/15 bg-brand-gold-light/40 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_center,rgba(197,168,92,0.06),transparent_50%)] pointer-events-none" />
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8 relative z-10">
+          
+          <div className="max-w-2xl mx-auto space-y-4">
+            <span className="text-xs font-mono font-bold text-brand-amber tracking-wider uppercase block">Keep Rolling</span>
+            <h2 className="font-display font-black text-3xl sm:text-4xl lg:text-5xl text-brand-dark tracking-tight">
+              Ready to Connect with Trusted Automotive Pros?
+            </h2>
+            <p className="text-sm sm:text-base text-brand-muted font-light max-w-xl mx-auto leading-relaxed">
+              Book a verified garage, estimate your repair costs, or trigger an emergency breakdown dispatch. It’s free to start.
+            </p>
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <button
+              onClick={() => handleScrollToSection('garages')}
+              className="w-full sm:w-auto bg-brand-amber hover:bg-brand-amber-hover text-white font-mono font-bold py-4 px-8 rounded-xl flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-brand-amber/15 transition-all hover:-translate-y-0.5"
+            >
+              <span>Book a Mechanic Now</span>
+            </button>
+            
+            <button
+              onClick={() => setActiveSOS(true)}
+              className="w-full sm:w-auto bg-brand-amber hover:bg-brand-amber-hover text-white font-mono font-bold py-4 px-8 rounded-xl flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-brand-amber/15 transition-all hover:-translate-y-0.5"
+            >
+              <span>Request Roadside SOS</span>
+            </button>
+          </div>
+
+        </div>
+      </section>
+
+      {/* Footer (Critique Item 10) */}
+      <footer className="bg-[#040610] border-t border-brand-gold/15 py-12 text-xs text-slate-400">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+            
+            {/* Logo and Pitch */}
+            <div className="space-y-4">
+              <div className="flex items-center gap-2.5">
+                <div className="w-10 h-10 rounded-lg overflow-hidden bg-white border border-brand-gold/20 shadow-sm flex items-center justify-center p-0.5">
+                  <img 
+                    src={mcarfixLogo} 
+                    alt="mCarFix Logo" 
+                    className="w-full h-full object-contain select-none"
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
+                <span className="font-display font-black text-lg text-white tracking-tight">
+                  mCar<span className="text-brand-amber">Fix</span>
+                </span>
+              </div>
+              <p className="leading-relaxed font-light text-slate-400">
+                Connecting vehicle owners with vetted, professional mechanics and spare part distributors in Kenya since 2021.
+              </p>
+            </div>
+
+            {/* Quick Links */}
+            <div>
+              <h4 className="font-display font-bold text-white mb-3 uppercase tracking-wider text-[11px]">Directory Link</h4>
+              <ul className="space-y-2 font-mono">
+                <li><button onClick={() => handleScrollToSection('garages')} className="hover:text-brand-amber transition-colors cursor-pointer text-left text-slate-400">Find Garages</button></li>
+                <li><button onClick={() => handleScrollToSection('estimator')} className="hover:text-brand-amber transition-colors cursor-pointer text-left text-slate-400">Cost Estimator</button></li>
+                <li><button onClick={() => handleScrollToSection('diagnostics')} className="hover:text-brand-amber transition-colors cursor-pointer text-left text-slate-400">Troubleshooter</button></li>
+                <li><button onClick={() => handleScrollToSection('schedules')} className="hover:text-brand-amber transition-colors cursor-pointer text-left text-slate-400">Service Reminder</button></li>
+              </ul>
+            </div>
+
+            {/* Support Hotline */}
+            <div>
+              <h4 className="font-display font-bold text-white mb-3 uppercase tracking-wider text-[11px]">Nairobi Head Office</h4>
+              <p className="leading-relaxed font-light mb-3 text-slate-400">
+                Delta Corner Towers, 4th Floor,<br />
+                Waiyaki Way, Westlands, Nairobi.
+              </p>
+              <a 
+                href="tel:+25470000000" 
+                className="inline-flex items-center gap-1.5 text-brand-amber hover:text-white font-mono font-bold"
+              >
+                <Phone className="w-3.5 h-3.5" />
+                <span>+254 700 mCarFix</span>
+              </a>
+            </div>
+
+            {/* Partners Portal */}
+            <div className="space-y-3">
+              <h4 className="font-display font-bold text-white uppercase tracking-wider text-[11px]">Are you a Garage owner?</h4>
+              <p className="leading-relaxed font-light text-slate-400">
+                Join 450+ verified service providers across Kenya to grow your business.
+              </p>
+              <button
+                onClick={() => alert('Partner integration portal! We will contact you at wayneian492@gmail.com to request business licenses and garage audit scheduling.')}
+                className="bg-transparent hover:bg-brand-gold/10 text-white border border-brand-gold/25 font-mono text-[10px] font-bold px-3 py-2 rounded-lg cursor-pointer transition-colors"
+              >
+                Partner with us
+              </button>
+            </div>
+
+          </div>
+
+          <div className="border-t border-slate-800/80 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-[10px] text-slate-500">
+            <p>© {new Date().getFullYear()} mCarFix Kenya. All rights reserved. Registered under NTSA directories.</p>
+            <div className="flex gap-4">
+              <a href="#" className="hover:text-brand-amber transition-colors">Privacy Policy</a>
+              <span>•</span>
+              <a href="#" className="hover:text-brand-amber transition-colors">Terms of Service</a>
+            </div>
+          </div>
+        </div>
+      </footer>
+
+      {/* MODAL POPUPS */}
+      <AnimatePresence>
+        {activeSOS && (
+          <SOSModal onClose={() => setActiveSOS(false)} />
+        )}
+
+        {selectedGarageToBook && (
+          <BookingModal 
+            garage={selectedGarageToBook} 
+            onClose={() => setSelectedGarageToBook(null)} 
+          />
+        )}
+      </AnimatePresence>
+
+    </div>
+  );
+}

@@ -1,0 +1,468 @@
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { APIProvider, Map, AdvancedMarker, Pin } from '@vis.gl/react-google-maps';
+
+const API_KEY =
+  process.env.GOOGLE_MAPS_PLATFORM_KEY ||
+  (import.meta as any).env?.VITE_GOOGLE_MAPS_PLATFORM_KEY ||
+  (globalThis as any).GOOGLE_MAPS_PLATFORM_KEY ||
+  '';
+const hasValidKey = Boolean(API_KEY) && API_KEY !== 'YOUR_API_KEY';
+
+const NAIROBI_POINTS = [
+  { name: 'Westlands Hub', position: { lat: -1.2635, lng: 36.8037 }, color: '#ff5e00' },
+  { name: 'Ind. Area Hub', position: { lat: -1.3120, lng: 36.8450 }, color: '#10b981' },
+  { name: 'Ngong Road Hub', position: { lat: -1.3005, lng: 36.7825 }, color: '#c5a85c' },
+];
+
+import { 
+  Activity, 
+  MapPin, 
+  ShieldCheck, 
+  Wrench, 
+  Cpu, 
+  Database, 
+  Smartphone, 
+  Lock, 
+  CheckCircle2, 
+  Server,
+  ArrowRight
+} from 'lucide-react';
+const redAudiHud = "/src/assets/images/red_audi_hud_1783926323190.jpg";
+
+type TabId = 'cad' | 'telemetry' | 'escrow';
+
+export default function InteractiveHUD() {
+  const [activeTab, setActiveTab] = useState<TabId>('cad');
+  const [telemetryPulse, setTelemetryPulse] = useState(0);
+  const [escrowStep, setEscrowStep] = useState(1);
+  const [selectedSensor, setSelectedSensor] = useState<string>('Engine ECU');
+
+  // Simulated live diagnostic updates
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTelemetryPulse(p => (p + 1) % 100);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const sensors = [
+    { name: 'Engine ECU', status: 'Optimal', temp: '92°C', pressure: '4.2 Bar', code: 'P0101-OK' },
+    { name: 'ABS Controller', status: 'Optimal', temp: '48°C', pressure: '120 Bar', code: 'C0220-OK' },
+    { name: 'Airbags SRS', status: 'Active', temp: '24°C', pressure: 'N/A', code: 'S0012-OK' },
+    { name: 'Transmission TCU', status: 'Normal', temp: '81°C', pressure: '2.8 Bar', code: 'T0402-OK' },
+  ];
+
+  const currentSensorData = sensors.find(s => s.name === selectedSensor) || sensors[0];
+
+  return (
+    <div className="w-full bg-white border border-brand-gold/20 shadow-2xl rounded-3xl overflow-hidden font-sans relative">
+      {/* HUD Header with Autodesk drafting layout style */}
+      <div className="bg-brand-dark text-white px-6 py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-brand-gold/10 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(197,168,92,0.15),transparent_60%)] pointer-events-none" />
+        
+        <div>
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-brand-amber animate-ping" />
+            <span className="text-[10px] font-mono tracking-widest text-brand-gold font-bold uppercase">mCarFix Live Control HUD</span>
+          </div>
+          <h3 className="font-display font-extrabold text-lg text-white mt-0.5 tracking-tight">Digital Automotive Ecosystem</h3>
+        </div>
+
+        <div className="flex items-center gap-2 text-[10px] font-mono text-brand-gold/80 bg-white/5 border border-white/10 px-2.5 py-1 rounded-md">
+          <Server className="w-3.5 h-3.5 text-brand-amber" />
+          <span>SYS_STATUS: ACTIVE</span>
+        </div>
+      </div>
+
+      {/* Modern Slim Engineering Tabs */}
+      <div className="grid grid-cols-3 border-b border-brand-gold/15 bg-brand-gold-light/40 font-mono text-[11px] font-semibold text-brand-muted text-center">
+        <button
+          onClick={() => setActiveTab('cad')}
+          className={`py-3.5 px-2 border-r border-brand-gold/15 transition-all cursor-pointer flex flex-col sm:flex-row items-center justify-center gap-1.5 ${
+            activeTab === 'cad'
+              ? 'bg-white text-brand-amber font-extrabold shadow-sm relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-brand-amber'
+              : 'hover:bg-white/40 hover:text-brand-dark'
+          }`}
+        >
+          <Cpu className="w-3.5 h-3.5 shrink-0" />
+          <span className="hidden sm:inline">01 //</span> CAD DIAGNOSTIC
+        </button>
+
+        <button
+          onClick={() => setActiveTab('telemetry')}
+          className={`py-3.5 px-2 border-r border-brand-gold/15 transition-all cursor-pointer flex flex-col sm:flex-row items-center justify-center gap-1.5 ${
+            activeTab === 'telemetry'
+              ? 'bg-white text-brand-amber font-extrabold shadow-sm relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-brand-amber'
+              : 'hover:bg-white/40 hover:text-brand-dark'
+          }`}
+        >
+          <Activity className="w-3.5 h-3.5 shrink-0" />
+          <span className="hidden sm:inline">02 //</span> GARAGE HUD
+        </button>
+
+        <button
+          onClick={() => setActiveTab('escrow')}
+          className={`py-3.5 px-2 transition-all cursor-pointer flex flex-col sm:flex-row items-center justify-center gap-1.5 ${
+            activeTab === 'escrow'
+              ? 'bg-white text-brand-amber font-extrabold shadow-sm relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-brand-amber'
+              : 'hover:bg-white/40 hover:text-brand-dark'
+          }`}
+        >
+          <Lock className="w-3.5 h-3.5 shrink-0" />
+          <span className="hidden sm:inline">03 //</span> ESCROW LEDGER
+        </button>
+      </div>
+
+      {/* Main Content Pane */}
+      <div className="p-6 h-[380px] bg-white relative overflow-hidden flex flex-col justify-between">
+        
+        {/* Underlay drafting grid paper texture */}
+        <div className="absolute inset-0 opacity-[0.03] pointer-events-none" 
+             style={{ 
+               backgroundImage: `radial-gradient(circle, #c5a85c 1px, transparent 1px)`, 
+               backgroundSize: '16px 16px' 
+             }} 
+        />
+
+        <AnimatePresence mode="wait">
+          {activeTab === 'cad' && (
+            <motion.div
+              key="cad"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.3 }}
+              className="flex-1 flex flex-col justify-between space-y-4"
+            >
+              {/* Interactive Vector CAD car chassis sketch */}
+              <div className="relative flex-1 bg-zinc-100 border border-brand-gold/20 rounded-2xl p-0 flex flex-col items-center justify-center overflow-hidden min-h-[250px] shadow-inner">
+                <div className="absolute top-3 left-3 text-[10px] font-mono text-brand-gold bg-brand-dark/95 border border-brand-gold/20 px-2 py-0.5 rounded-md font-bold z-10 shadow">
+                  VECTOR_RENDER // ENGINE_Z_AXIS
+                </div>
+
+                {/* Full-size container that takes 100% of the box */}
+                <div className="relative w-full h-full min-h-[250px] flex items-center justify-center">
+                  
+                  {/* Red Audi Sedan CAD Model Image */}
+                  <img 
+                    src={redAudiHud} 
+                    alt="Red Sport Sedan CAD Model" 
+                    className="absolute inset-0 w-full h-full object-cover object-center scale-100 opacity-95 select-none transition-all duration-500 hover:scale-[1.02]"
+                    referrerPolicy="no-referrer"
+                  />
+
+                  {/* Dark elegant overlay tint so text tags pop out clearly */}
+                  <div className="absolute inset-0 bg-black/5 pointer-events-none" />
+
+                  {/* Interactive Tags overlaying the car parts */}
+                  <div className="absolute inset-0 z-20">
+                    
+                    {/* Tag 1: Engine ECU */}
+                    <button 
+                      onClick={() => setSelectedSensor('Engine ECU')}
+                      style={{ left: '20%', top: '56%' }}
+                      className={`absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-start p-2 rounded-xl border shadow-xl font-sans transition-all duration-300 cursor-pointer min-w-[130px] ${
+                        selectedSensor === 'Engine ECU'
+                          ? 'bg-brand-dark text-white border-brand-amber scale-105 shadow-brand-amber/20 ring-2 ring-brand-amber/30'
+                          : 'bg-white/95 text-brand-dark border-brand-gold/20 hover:border-brand-amber hover:bg-white'
+                      }`}
+                    >
+                      <div className="flex items-center gap-1.5 w-full">
+                        <span className={`w-2 h-2 rounded-full ${selectedSensor === 'Engine ECU' ? 'bg-brand-amber animate-ping' : 'bg-emerald-500 animate-pulse'}`} />
+                        <span className="font-bold text-[10px] tracking-tight">Engine ECU</span>
+                      </div>
+                      <span className={`text-[8px] font-medium mt-0.5 leading-none ${selectedSensor === 'Engine ECU' ? 'text-brand-gold' : 'text-brand-muted'}`}>
+                        Powertrain Module
+                      </span>
+                    </button>
+
+                    {/* Tag 2: Transmission TCU */}
+                    <button 
+                      onClick={() => setSelectedSensor('Transmission TCU')}
+                      style={{ left: '42%', top: '64%' }}
+                      className={`absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-start p-2 rounded-xl border shadow-xl font-sans transition-all duration-300 cursor-pointer min-w-[130px] ${
+                        selectedSensor === 'Transmission TCU'
+                          ? 'bg-brand-dark text-white border-brand-amber scale-105 shadow-brand-amber/20 ring-2 ring-brand-amber/30'
+                          : 'bg-white/95 text-brand-dark border-brand-gold/20 hover:border-brand-amber hover:bg-white'
+                      }`}
+                    >
+                      <div className="flex items-center gap-1.5 w-full">
+                        <span className={`w-2 h-2 rounded-full ${selectedSensor === 'Transmission TCU' ? 'bg-brand-amber animate-ping' : 'bg-emerald-500 animate-pulse'}`} />
+                        <span className="font-bold text-[10px] tracking-tight">TCU Module</span>
+                      </div>
+                      <span className={`text-[8px] font-medium mt-0.5 leading-none ${selectedSensor === 'Transmission TCU' ? 'text-brand-gold' : 'text-brand-muted'}`}>
+                        Gearbox Controller
+                      </span>
+                    </button>
+
+                    {/* Tag 3: Airbags SRS */}
+                    <button 
+                      onClick={() => setSelectedSensor('Airbags SRS')}
+                      style={{ left: '56%', top: '35%' }}
+                      className={`absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-start p-2 rounded-xl border shadow-xl font-sans transition-all duration-300 cursor-pointer min-w-[130px] ${
+                        selectedSensor === 'Airbags SRS'
+                          ? 'bg-brand-dark text-white border-brand-amber scale-105 shadow-brand-amber/20 ring-2 ring-brand-amber/30'
+                          : 'bg-white/95 text-brand-dark border-brand-gold/20 hover:border-brand-amber hover:bg-white'
+                      }`}
+                    >
+                      <div className="flex items-center gap-1.5 w-full">
+                        <span className={`w-2 h-2 rounded-full ${selectedSensor === 'Airbags SRS' ? 'bg-brand-amber animate-ping' : 'bg-emerald-500 animate-pulse'}`} />
+                        <span className="font-bold text-[10px] tracking-tight">Airbags SRS</span>
+                      </div>
+                      <span className={`text-[8px] font-medium mt-0.5 leading-none ${selectedSensor === 'Airbags SRS' ? 'text-brand-gold' : 'text-brand-muted'}`}>
+                        Cabin Safety Guard
+                      </span>
+                    </button>
+
+                    {/* Tag 4: ABS Controller */}
+                    <button 
+                      onClick={() => setSelectedSensor('ABS Controller')}
+                      style={{ left: '80%', top: '58%' }}
+                      className={`absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-start p-2 rounded-xl border shadow-xl font-sans transition-all duration-300 cursor-pointer min-w-[130px] ${
+                        selectedSensor === 'ABS Controller'
+                          ? 'bg-brand-dark text-white border-brand-amber scale-105 shadow-brand-amber/20 ring-2 ring-brand-amber/30'
+                          : 'bg-white/95 text-brand-dark border-brand-gold/20 hover:border-brand-amber hover:bg-white'
+                      }`}
+                    >
+                      <div className="flex items-center gap-1.5 w-full">
+                        <span className={`w-2 h-2 rounded-full ${selectedSensor === 'ABS Controller' ? 'bg-brand-amber animate-ping' : 'bg-emerald-500 animate-pulse'}`} />
+                        <span className="font-bold text-[10px] tracking-tight">ABS Controller</span>
+                      </div>
+                      <span className={`text-[8px] font-medium mt-0.5 leading-none ${selectedSensor === 'ABS Controller' ? 'text-brand-gold' : 'text-brand-muted'}`}>
+                        Anti-Lock Braking
+                      </span>
+                    </button>
+
+                  </div>
+
+                </div>
+
+                {/* Radar sweep animation */}
+                <div className="absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-transparent via-brand-amber/15 to-transparent animate-pulse pointer-events-none transform -skew-x-12 translate-x-full" 
+                     style={{ animationDuration: '4s' }} />
+
+                {/* Micro instructions */}
+                <div className="absolute bottom-3 right-3 text-[10px] font-mono font-semibold text-brand-gold bg-brand-dark/95 border border-brand-gold/20 px-2.5 py-0.5 rounded-md z-10 shadow">
+                  ✦ Click parts tags to inspect telemetry
+                </div>
+              </div>
+
+              {/* Live Technical Metadata Block */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-brand-gold-light p-3.5 border border-brand-gold/15 rounded-xl">
+                <div>
+                  <span className="text-[9px] font-mono text-brand-muted uppercase block">NODE SELECT</span>
+                  <span className="text-xs font-bold text-brand-dark font-mono">{currentSensorData.name}</span>
+                </div>
+                <div>
+                  <span className="text-[9px] font-mono text-brand-muted uppercase block">DIAGNOSTIC STATUS</span>
+                  <span className="text-xs font-extrabold text-emerald-600 font-mono flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    {currentSensorData.status}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-[9px] font-mono text-brand-muted uppercase block">SYS PARAMETERS</span>
+                  <span className="text-xs font-bold text-brand-dark font-mono">
+                    {currentSensorData.temp} / {currentSensorData.pressure}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-[9px] font-mono text-brand-muted uppercase block">SYS_OBD2_CODE</span>
+                  <span className="text-xs font-bold text-brand-amber font-mono">{currentSensorData.code}</span>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {activeTab === 'telemetry' && (
+            <motion.div
+              key="telemetry"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.3 }}
+              className="flex-1 flex flex-col justify-between space-y-4"
+            >
+              {/* Simulated Garage Telemetry Nodes */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 flex-1">
+                {/* Visual Nairobi Map Grid Sim */}
+                <div className="bg-brand-gold-light/40 border border-brand-gold/15 rounded-2xl p-4 flex flex-col justify-between relative overflow-hidden">
+                  <div className="text-[9px] font-mono text-brand-gold font-bold mb-2">
+                    GEOLOCATION_MATRIX // NAIROBI_CORRIDOR
+                  </div>
+                  
+                  {/* Realistic Interactive Google Map */}
+                  {hasValidKey ? (
+                    <div className="relative w-full h-40 bg-zinc-100 border border-brand-gold/15 rounded-xl overflow-hidden shadow-inner">
+                      <APIProvider apiKey={API_KEY} version="weekly">
+                        <Map
+                          defaultCenter={{ lat: -1.2921, lng: 36.8219 }}
+                          defaultZoom={11}
+                          mapId="DEMO_MAP_ID"
+                          gestureHandling={'cooperative'}
+                          disableDefaultUI={true}
+                          internalUsageAttributionIds={['gmp_mcp_codeassist_v1_aistudio']}
+                          style={{ width: '100%', height: '100%' }}
+                        >
+                          {NAIROBI_POINTS.map((pt, i) => (
+                            <AdvancedMarker key={i} position={pt.position} title={pt.name}>
+                              <Pin background={pt.color} glyphColor="#fff" borderColor="#fff" />
+                            </AdvancedMarker>
+                          ))}
+                        </Map>
+                      </APIProvider>
+                    </div>
+                  ) : (
+                    <div className="relative w-full h-40 bg-zinc-900 border border-brand-gold/10 rounded-xl overflow-hidden flex flex-col items-center justify-center p-4 text-center shadow-inner group">
+                      {/* Grid overlay for Blueprint feel */}
+                      <div className="absolute inset-0 opacity-15 bg-[linear-gradient(to_right,#c5a85c_1px,transparent_1px),linear-gradient(to_bottom,#c5a85c_1px,transparent_1px)] bg-[size:14px_14px] pointer-events-none" />
+                      
+                      <div className="z-10 space-y-1.5 max-w-[280px]">
+                        <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-brand-amber/15 border border-brand-amber/30 text-brand-amber text-[8px] font-mono font-bold uppercase tracking-wider">
+                          <span className="w-1.5 h-1.5 rounded-full bg-brand-amber animate-pulse" />
+                          <span>Google Maps Integration</span>
+                        </div>
+                        <h4 className="text-[11px] font-extrabold text-white leading-tight font-display tracking-tight">Nairobi Real-Time Corridor</h4>
+                        <p className="text-[9px] text-zinc-400 leading-normal">
+                          Paste your API key in <strong>Settings ⚙️ (top-right)</strong> → <strong>Secrets</strong> as <code>GOOGLE_MAPS_PLATFORM_KEY</code> to enable live navigation immediately.
+                        </p>
+                        <a 
+                          href="https://console.cloud.google.com/google/maps-apis/start?utm_campaign=gmp-code-assist-ais" 
+                          target="_blank" 
+                          rel="noopener noreferrer" 
+                          className="inline-block text-[9px] font-mono font-bold text-brand-gold hover:text-brand-amber underline transition-colors"
+                        >
+                          Get API Key ↗
+                        </a>
+                      </div>
+                    </div>
+                  )}
+
+                  <p className="text-[10px] font-mono text-brand-muted mt-2 text-right">
+                    GPS SATELLITES LOCKED // COMPASS: 1.04"S, 36.8"E
+                  </p>
+                </div>
+
+                {/* Telemetry live stats feed */}
+                <div className="space-y-3">
+                  <div className="bg-brand-gold-light border border-brand-gold/15 p-3 rounded-xl flex items-start gap-3">
+                    <div className="bg-brand-amber/10 text-brand-amber p-1.5 rounded-lg border border-brand-amber/25">
+                      <Wrench className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <span className="text-[9px] font-mono text-brand-muted uppercase block">Active Dispatch Unit</span>
+                      <span className="text-xs font-bold text-brand-dark block">Westlands Mobile Responder</span>
+                      <span className="text-[10px] font-mono text-emerald-600 mt-0.5 block">Response Time: 12.4 Mins (Avg)</span>
+                    </div>
+                  </div>
+
+                  <div className="bg-brand-gold-light border border-brand-gold/15 p-3 rounded-xl flex items-start gap-3">
+                    <div className="bg-emerald-500/10 text-emerald-600 p-1.5 rounded-lg border border-emerald-500/20">
+                      <ShieldCheck className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <span className="text-[9px] font-mono text-brand-muted uppercase block">Anti-Counterfeit Spares</span>
+                      <span className="text-xs font-bold text-brand-dark block">RFID Spare Verification Engine</span>
+                      <span className="text-[10px] font-mono text-brand-gold font-bold mt-0.5 block">Scan Ledger: SECURE_CHAIN_OK</span>
+                    </div>
+                  </div>
+
+                  <div className="bg-brand-gold-light border border-brand-gold/15 p-3 rounded-xl flex items-start gap-3">
+                    <div className="bg-brand-gold-light text-brand-dark p-1.5 rounded-lg border border-brand-gold/20">
+                      <Smartphone className="w-4 h-4 text-brand-gold" />
+                    </div>
+                    <div>
+                      <span className="text-[9px] font-mono text-brand-muted uppercase block">Connected Car Clients</span>
+                      <span className="text-xs font-bold text-brand-dark block">Nairobi Hub Connected Gateways</span>
+                      <span className="text-[10px] font-mono text-brand-amber font-bold mt-0.5 block">Active Sessions: 4,512 Live</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {activeTab === 'escrow' && (
+            <motion.div
+              key="escrow"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.3 }}
+              className="flex-1 flex flex-col justify-between space-y-4"
+            >
+              {/* Interactive Escrow Workflow Tracker */}
+              <div className="space-y-4 flex-1">
+                <div className="text-[9px] font-mono text-brand-gold font-bold">
+                  TRANSACTION CONTRACT ENGINE // MPESA_ESCROW_CHANNEL_01
+                </div>
+
+                <div className="grid grid-cols-3 gap-3">
+                  {[
+                    { step: 1, label: '01. Hold Fund', desc: 'Secure Escrow Lock' },
+                    { step: 2, label: '02. Verify Spares', desc: 'RFID Validation Scan' },
+                    { step: 3, label: '03. Release Fund', desc: 'Sign-off Disbursement' },
+                  ].map((s) => {
+                    const isPassed = escrowStep >= s.step;
+                    const isCurrent = escrowStep === s.step;
+                    return (
+                      <button
+                        key={s.step}
+                        onClick={() => setEscrowStep(s.step)}
+                        className={`p-3 rounded-xl border text-left cursor-pointer transition-all ${
+                          isCurrent 
+                            ? 'bg-brand-amber/5 border-brand-amber shadow-md' 
+                            : isPassed 
+                            ? 'bg-emerald-500/5 border-emerald-500/30' 
+                            : 'bg-brand-gold-light/40 border-brand-gold/15'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between gap-1 mb-1">
+                          <span className={`text-[9px] font-mono font-extrabold tracking-tight ${isCurrent ? 'text-brand-amber' : isPassed ? 'text-emerald-600' : 'text-brand-muted'}`}>
+                            {s.label}
+                          </span>
+                          {isPassed && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />}
+                        </div>
+                        <p className="text-[11px] font-bold text-brand-dark leading-tight">{s.desc}</p>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Workflow Simulation Details */}
+                <div className="bg-brand-gold-light/40 border border-brand-gold/15 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                  <div className="space-y-1">
+                    <span className="text-[9px] font-mono text-brand-muted uppercase block">ACTIVE CONTRACT STATUS</span>
+                    <p className="text-xs text-brand-dark font-sans leading-relaxed">
+                      {escrowStep === 1 && "Funds locked on booking inside verified KCB/M-Pesa Escrow Wallet. Mechanic commences work with payment guaranteed."}
+                      {escrowStep === 2 && "Mechanic scans spare parts packaging RFID via mCarFix app. System validates authentic OEM codes against supplier ledger."}
+                      {escrowStep === 3 && "Customer approves completed work on client app. Funds are automatically routed from escrow to mechanic's payout wallet."}
+                    </p>
+                  </div>
+
+                  <div className="bg-white border border-brand-gold/15 p-3 rounded-xl font-mono text-[10px] text-brand-dark shrink-0 w-full sm:w-auto">
+                    <div className="flex justify-between gap-4 mb-1">
+                      <span className="text-brand-muted uppercase">WALLET:</span>
+                      <span className="font-bold text-brand-amber">KES 14,500</span>
+                    </div>
+                    <div className="flex justify-between gap-4">
+                      <span className="text-brand-muted uppercase">CONTRACT:</span>
+                      <span className="font-bold text-emerald-600">VERIFIED ✓</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Footer info line */}
+        <div className="border-t border-brand-gold/10 pt-3 mt-4 flex items-center justify-between gap-4 text-[10px] font-mono text-brand-muted">
+          <span>HUD TERMINAL v4.11 // COMPILED SECURE</span>
+          <span className="text-brand-gold font-bold">100% RELIABILITY IN EAST AFRICA</span>
+        </div>
+      </div>
+    </div>
+  );
+}

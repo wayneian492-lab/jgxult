@@ -1,0 +1,146 @@
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { Wrench, ShieldAlert, Phone, Menu, X } from 'lucide-react';
+
+const mcarfixLogo = "/src/assets/images/mcarfix_logo.svg";
+
+interface NavbarProps {
+  onSOSClick: () => void;
+  onNavigate: (sectionId: string) => void;
+}
+
+export default function Navbar({ onSOSClick, onNavigate }: NavbarProps) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const navItems = [
+    { label: 'Garages', target: 'garages' },
+    { label: 'Cost Estimator', target: 'estimator' },
+    { label: 'Diagnostic Helper', target: 'diagnostics' },
+    { label: 'Schedules', target: 'schedules' },
+  ];
+
+  const handleLinkClick = (target: string) => {
+    onNavigate(target);
+    setIsOpen(false);
+  };
+
+  return (
+    <nav className="sticky top-0 z-50 backdrop-blur-md bg-brand-cream/90 border-b border-brand-gold/15 transition-all duration-300">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-20">
+          {/* Logo */}
+          <div 
+            onClick={() => handleLinkClick('hero')} 
+            className="flex items-center gap-3 cursor-pointer group"
+          >
+            <div className="w-12 h-12 rounded-xl overflow-hidden bg-white border border-brand-gold/20 shadow-sm flex items-center justify-center p-0.5 group-hover:border-brand-amber transition-all duration-300">
+              <img 
+                src={mcarfixLogo} 
+                alt="mCarFix Logo" 
+                className="w-full h-full object-contain select-none"
+                referrerPolicy="no-referrer"
+              />
+            </div>
+            <div>
+              <span className="font-display font-extrabold text-2xl tracking-tight text-brand-dark group-hover:text-brand-amber transition-colors">
+                mCar<span className="text-brand-amber">Fix</span>
+              </span>
+              <span className="block text-[10px] font-mono tracking-widest text-brand-muted font-semibold uppercase">KENYA DIRECTORY</span>
+            </div>
+          </div>
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center gap-8">
+            {navItems.map((item) => (
+              <button
+                key={item.target}
+                onClick={() => handleLinkClick(item.target)}
+                className="text-brand-dark/85 hover:text-brand-amber font-semibold transition-colors cursor-pointer text-sm"
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Action Buttons */}
+          <div className="hidden md:flex items-center gap-4">
+            <a 
+              href="tel:+25470000000" 
+              className="flex items-center gap-2 text-brand-muted hover:text-brand-dark font-mono text-sm transition-colors mr-2 font-medium"
+            >
+              <Phone className="w-4 h-4 text-brand-amber animate-pulse" />
+              <span>0700 mCarFix</span>
+            </a>
+            
+            <button
+              onClick={onSOSClick}
+              className="relative group overflow-hidden bg-brand-amber hover:bg-brand-amber-hover text-white font-bold py-2.5 px-5 rounded-xl flex items-center gap-2 cursor-pointer transition-all duration-300 shadow-md hover:-translate-y-0.5 active:translate-y-0 text-sm"
+            >
+              <div className="absolute inset-0 w-3 bg-white/10 transition-all duration-500 ease-out group-hover:w-full -skew-x-12" />
+              <ShieldAlert className="w-4 h-4 animate-bounce text-white" />
+              <span>Emergency Assistance</span>
+            </button>
+          </div>
+
+          {/* Mobile Menu Toggle */}
+          <div className="md:hidden">
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="text-brand-dark hover:text-brand-amber p-2 transition-colors cursor-pointer"
+            >
+              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Menu Panel */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden border-b border-brand-gold/15 bg-brand-cream/95 backdrop-blur-lg overflow-hidden"
+          >
+            <div className="px-4 pt-2 pb-6 space-y-3">
+              {navItems.map((item) => (
+                <button
+                   key={item.target}
+                   onClick={() => handleLinkClick(item.target)}
+                   className="block w-full text-left px-4 py-3 rounded-lg text-brand-dark/90 hover:text-brand-amber hover:bg-brand-gold/5 transition-colors font-semibold text-base"
+                >
+                   {item.label}
+                </button>
+              ))}
+              <div className="pt-4 border-t border-brand-gold/15 flex flex-col gap-3 px-4">
+                <a 
+                  href="tel:+25470000000" 
+                  className="flex items-center gap-2 text-brand-muted font-mono text-sm"
+                >
+                  <Phone className="w-4 h-4 text-brand-amber animate-pulse" />
+                  <span>Call Emergency Support</span>
+                </a>
+                <button
+                  onClick={() => {
+                    setIsOpen(false);
+                    onSOSClick();
+                  }}
+                  className="w-full bg-brand-amber hover:bg-brand-amber-hover text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 shadow-md"
+                >
+                  <ShieldAlert className="w-4 h-4" />
+                  <span>Request Emergency SOS</span>
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </nav>
+  );
+}
