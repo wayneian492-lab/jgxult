@@ -64,6 +64,31 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<string>('home');
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [desktopSidebarExpanded, setDesktopSidebarExpanded] = useState(false);
+
+  // Scroll event and timeout to automatically show the sidebar on scrolling
+  useEffect(() => {
+    let scrollTimeout: NodeJS.Timeout;
+    const handleScroll = () => {
+      // Automatically expand sidebar when user scrolls
+      setDesktopSidebarExpanded(true);
+      
+      // Auto-collapse after 2.5 seconds of scroll inactivity, unless mouse is currently hovering
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        const sidebar = document.getElementById('desktop-sidebar');
+        if (sidebar && !sidebar.matches(':hover')) {
+          setDesktopSidebarExpanded(false);
+        }
+      }, 2500);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      clearTimeout(scrollTimeout);
+    };
+  }, []);
 
   const handleTouchStart = (e: React.TouchEvent) => {
     setTouchStart(e.targetTouches[0].clientX);
@@ -153,11 +178,18 @@ export default function App() {
       className="min-h-screen bg-brand-cream text-brand-dark flex font-sans selection:bg-brand-amber selection:text-white"
     >
       
-      {/* 1. DESKTOP PERMANENT SIDEBAR */}
-      <aside className="hidden md:flex flex-col fixed left-0 top-0 bottom-0 w-72 bg-[#0c1020] border-r border-brand-gold/15 text-slate-100 z-30 select-none overflow-y-auto custom-scrollbar">
+      {/* 1. DESKTOP PERMANENT COLLAPSIBLE SIDEBAR */}
+      <aside 
+        id="desktop-sidebar"
+        onMouseEnter={() => setDesktopSidebarExpanded(true)}
+        onMouseLeave={() => setDesktopSidebarExpanded(false)}
+        className={`hidden md:flex flex-col fixed left-0 top-0 bottom-0 bg-[#0c1020] border-r border-brand-gold/15 text-slate-100 z-30 select-none overflow-y-auto overflow-x-hidden custom-scrollbar transition-all duration-300 ease-in-out ${
+          desktopSidebarExpanded ? 'w-72 shadow-[10px_0_40px_rgba(0,0,0,0.5)]' : 'w-18'
+        }`}
+      >
         {/* Brand / Logo Header */}
-        <div className="p-6 border-b border-white/5 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl overflow-hidden bg-white border border-brand-gold/20 flex items-center justify-center p-0.5 shadow-md">
+        <div className={`p-6 border-b border-white/5 flex items-center gap-3 ${desktopSidebarExpanded ? 'justify-start' : 'justify-center px-0'}`}>
+          <div className="w-10 h-10 rounded-xl overflow-hidden bg-white border border-brand-gold/20 flex items-center justify-center p-0.5 shrink-0 shadow-md">
             <img 
               src={mcarfixLogo} 
               alt="mCarFix Logo" 
@@ -165,7 +197,7 @@ export default function App() {
               referrerPolicy="no-referrer"
             />
           </div>
-          <div>
+          <div className={`transition-all duration-300 origin-left ${desktopSidebarExpanded ? 'opacity-100 scale-100 w-auto' : 'opacity-0 scale-90 w-0 h-0 overflow-hidden'}`}>
             <span className="font-display font-black text-lg tracking-wider text-white block">m<span className="text-brand-amber">Car</span>Fix</span>
             <span className="text-[10px] font-mono text-brand-gold uppercase tracking-widest font-semibold block">Kenya Platform</span>
           </div>
@@ -173,7 +205,7 @@ export default function App() {
 
         {/* Sidebar Nav Items */}
         <nav className="flex-1 p-4 space-y-1">
-          <div className="px-3 mb-2">
+          <div className={`px-3 mb-2 transition-all duration-300 ${desktopSidebarExpanded ? 'opacity-100' : 'opacity-0 h-0 overflow-hidden mb-0'}`}>
             <span className="text-[9px] font-mono font-bold tracking-widest text-slate-400 uppercase">Interactive Portals</span>
           </div>
           {sidebarTabs.map((tab) => {
@@ -183,14 +215,17 @@ export default function App() {
               <button
                 key={tab.id}
                 onClick={() => handleNavigate(tab.id)}
-                className={`w-full flex items-center gap-3.5 px-3.5 py-3 rounded-xl text-left transition-all duration-200 group cursor-pointer ${
+                className={`w-full flex items-center rounded-xl text-left transition-all duration-200 group cursor-pointer ${
+                  desktopSidebarExpanded ? 'px-3.5 py-3 gap-3.5 justify-start' : 'p-3 justify-center'
+                } ${
                   isActive
                     ? 'bg-brand-amber text-white shadow-lg shadow-brand-amber/20 font-bold'
                     : 'text-slate-400 hover:text-white hover:bg-white/5 font-medium'
                 }`}
+                title={!desktopSidebarExpanded ? tab.label : undefined}
               >
-                <Icon className={`w-4.5 h-4.5 shrink-0 transition-transform duration-200 group-hover:scale-110 ${isActive ? 'text-white' : 'text-brand-gold group-hover:text-brand-amber'}`} />
-                <div className="min-w-0">
+                <Icon className={`w-5 h-5 shrink-0 transition-transform duration-200 group-hover:scale-110 ${isActive ? 'text-white' : 'text-brand-gold group-hover:text-brand-amber'}`} />
+                <div className={`min-w-0 transition-all duration-300 origin-left ${desktopSidebarExpanded ? 'opacity-100 scale-100 w-auto' : 'opacity-0 scale-90 w-0 h-0 overflow-hidden'}`}>
                   <span className="text-xs font-display block leading-tight">{tab.label}</span>
                   <span className={`text-[10px] font-normal block truncate ${isActive ? 'text-white/70' : 'text-slate-500'}`}>{tab.description}</span>
                 </div>
@@ -200,16 +235,19 @@ export default function App() {
         </nav>
 
         {/* Sidebar Footer / Emergency Area */}
-        <div className="p-4 border-t border-white/5 bg-[#080b16] space-y-3">
+        <div className={`p-4 border-t border-white/5 bg-[#080b16] transition-all duration-300 ${desktopSidebarExpanded ? 'space-y-3' : 'space-y-0 p-3 flex flex-col items-center justify-center'}`}>
           <button
             onClick={() => setActiveSOS(true)}
-            className="w-full py-2.5 px-3 rounded-xl bg-red-600 hover:bg-red-700 active:bg-red-800 text-white font-mono text-[11px] font-extrabold uppercase tracking-widest flex items-center justify-center gap-2 transition-all shadow-md shadow-red-900/20 cursor-pointer"
+            className={`rounded-xl bg-red-600 hover:bg-red-700 active:bg-red-800 text-white font-mono text-[11px] font-extrabold uppercase tracking-widest flex items-center justify-center transition-all shadow-md shadow-red-900/20 cursor-pointer ${
+              desktopSidebarExpanded ? 'w-full py-2.5 px-3 gap-2' : 'p-2.5 rounded-full'
+            }`}
+            title="Emergency SOS"
           >
-            <ShieldAlert className="w-4 h-4 animate-pulse text-white" />
-            <span>Emergency SOS</span>
+            <ShieldAlert className="w-5 h-5 animate-pulse text-white shrink-0" />
+            <span className={desktopSidebarExpanded ? 'block' : 'hidden'}>Emergency SOS</span>
           </button>
           
-          <div className="flex items-center justify-between text-[10px] text-slate-500 font-mono">
+          <div className={`transition-all duration-300 flex items-center justify-between text-[10px] text-slate-500 font-mono w-full ${desktopSidebarExpanded ? 'opacity-100 h-auto mt-3' : 'opacity-0 h-0 overflow-hidden mt-0'}`}>
             <span>24/7 Helpline:</span>
             <a href="tel:+25470000000" className="text-brand-gold font-bold hover:text-brand-amber transition-colors">0700 mCarFix</a>
           </div>
@@ -312,8 +350,16 @@ export default function App() {
         )}
       </AnimatePresence>
 
+      {/* Invisible Hover Trigger on Left Edge to assist in expanding sidebar easily */}
+      <div 
+        onMouseEnter={() => setDesktopSidebarExpanded(true)} 
+        className="hidden md:block fixed left-0 top-0 bottom-0 w-3.5 z-40 bg-transparent" 
+      />
+
       {/* 3. MAIN WORKSPACE CONTENT */}
-      <div className="flex-1 flex flex-col min-w-0 md:pl-72 relative">
+      <div className={`flex-1 flex flex-col min-w-0 transition-all duration-300 ease-in-out relative ${
+        desktopSidebarExpanded ? 'md:pl-72' : 'md:pl-18'
+      }`}>
         
         {/* MOBILE STICKY HEADER */}
         <header className="md:hidden sticky top-0 z-30 flex items-center justify-between h-16 bg-[#0c1020] border-b border-brand-gold/15 px-4 text-white">
