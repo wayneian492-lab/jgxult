@@ -66,30 +66,6 @@ export default function App() {
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [desktopSidebarExpanded, setDesktopSidebarExpanded] = useState(false);
 
-  // Scroll event and timeout to automatically show the sidebar on scrolling
-  useEffect(() => {
-    let scrollTimeout: NodeJS.Timeout;
-    const handleScroll = () => {
-      // Automatically expand sidebar when user scrolls
-      setDesktopSidebarExpanded(true);
-      
-      // Auto-collapse after 2.5 seconds of scroll inactivity, unless mouse is currently hovering
-      clearTimeout(scrollTimeout);
-      scrollTimeout = setTimeout(() => {
-        const sidebar = document.getElementById('desktop-sidebar');
-        if (sidebar && !sidebar.matches(':hover')) {
-          setDesktopSidebarExpanded(false);
-        }
-      }, 2500);
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      clearTimeout(scrollTimeout);
-    };
-  }, []);
-
   const handleTouchStart = (e: React.TouchEvent) => {
     setTouchStart(e.targetTouches[0].clientX);
   };
