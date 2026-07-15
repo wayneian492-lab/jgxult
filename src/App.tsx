@@ -19,6 +19,7 @@ import {
   FileText, 
   ChevronDown, 
   ChevronUp, 
+  ChevronRight,
   User, 
   ArrowRight,
   ShieldAlert,
@@ -159,10 +160,17 @@ export default function App() {
         id="desktop-sidebar"
         onMouseEnter={() => setDesktopSidebarExpanded(true)}
         onMouseLeave={() => setDesktopSidebarExpanded(false)}
-        className={`hidden md:flex flex-col fixed left-0 top-0 bottom-0 bg-[#0c1020] border-r border-brand-gold/15 text-slate-100 z-30 select-none overflow-y-auto overflow-x-hidden custom-scrollbar transition-all duration-300 ease-in-out ${
+        className={`hidden md:flex flex-col fixed left-0 top-0 bottom-0 bg-[#0c1020] border-r border-brand-gold/15 text-slate-100 z-30 select-none overflow-y-auto overflow-x-hidden custom-scrollbar transition-[width] duration-150 ease-out will-change-[width] ${
           desktopSidebarExpanded ? 'w-72 shadow-[10px_0_40px_rgba(0,0,0,0.5)]' : 'w-18'
         }`}
       >
+        {/* Floating expand hint icon visible when sidebar is collapsed */}
+        {!desktopSidebarExpanded && (
+          <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-5 h-12 bg-[#0c1020] border-y border-r border-brand-gold/25 rounded-r-xl flex items-center justify-center text-brand-gold shadow-md shadow-black/40 animate-pulse pointer-events-none z-40">
+            <ChevronRight className="w-3.5 h-3.5 text-brand-amber" />
+          </div>
+        )}
+
         {/* Brand / Logo Header */}
         <div className={`p-6 border-b border-white/5 flex items-center gap-3 ${desktopSidebarExpanded ? 'justify-start' : 'justify-center px-0'}`}>
           <div className="w-10 h-10 rounded-xl overflow-hidden bg-white border border-brand-gold/20 flex items-center justify-center p-0.5 shrink-0 shadow-md">
@@ -333,7 +341,7 @@ export default function App() {
       />
 
       {/* 3. MAIN WORKSPACE CONTENT */}
-      <div className={`flex-1 flex flex-col min-w-0 transition-all duration-300 ease-in-out relative ${
+      <div className={`flex-1 flex flex-col min-w-0 transition-[padding-left] duration-150 ease-out will-change-[padding-left] relative ${
         desktopSidebarExpanded ? 'md:pl-72' : 'md:pl-18'
       }`}>
         
