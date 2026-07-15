@@ -24,6 +24,8 @@ import {
   CheckCircle2
 } from 'lucide-react';
 
+import smilingMechanicImg from '../assets/images/smiling_mechanic_tablet_1784113536332.jpg';
+
 export default function AppSimulator() {
   const [activeScreen, setActiveScreen] = useState<'booking' | 'tracking' | 'parts' | 'payment'>('booking');
   const [eta, setEta] = useState(18);
@@ -42,8 +44,21 @@ export default function AppSimulator() {
   }, [activeScreen, eta]);
 
   return (
-    <div className="bg-white border border-brand-gold/20 rounded-[32px] p-6 lg:p-10 shadow-2xl">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+    <div className="border border-brand-gold/20 rounded-[32px] p-6 lg:p-10 shadow-2xl relative overflow-hidden bg-slate-100">
+      {/* 95% Visible Background Image (User-requested, positioned on the left) */}
+      <div className="absolute inset-0 pointer-events-none select-none">
+        <img 
+          src={smilingMechanicImg} 
+          alt="Smiling Mechanic with Tablet" 
+          className="w-full h-full object-cover opacity-95 filter saturate-[1.05] brightness-[1.02] object-left-top lg:object-[15%_25%]"
+          referrerPolicy="no-referrer"
+        />
+        {/* Soft elegant gradient overlays that keep the mechanic on the left 95% visible while maintaining text contrast */}
+        <div className="absolute inset-0 bg-gradient-to-r from-white/40 via-white/70 to-white/90 lg:from-white/10 lg:via-white/60 lg:to-white/90" />
+        <div className="absolute inset-0 bg-gradient-to-t from-white/90 via-transparent to-transparent" />
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center relative z-10">
         
         {/* Left Interactive Controller Grid */}
         <div className="lg:col-span-5 space-y-6">
@@ -68,8 +83,8 @@ export default function AppSimulator() {
               onClick={() => { setActiveScreen('booking'); }}
               className={`p-4 rounded-2xl border text-left flex items-center gap-3.5 transition-all cursor-pointer ${
                 activeScreen === 'booking'
-                  ? 'bg-brand-amber/5 border-brand-amber shadow-md'
-                  : 'bg-brand-gold-light/40 border-brand-gold/15 hover:border-brand-amber/50'
+                  ? 'bg-white/95 border-brand-amber shadow-md'
+                  : 'bg-white/70 backdrop-blur-[2px] border-brand-gold/15 hover:border-brand-amber/50 shadow-sm'
               }`}
             >
               <div className={`p-2.5 rounded-xl ${activeScreen === 'booking' ? 'bg-brand-amber text-white' : 'bg-brand-gold-light text-brand-gold font-bold'}`}>
@@ -87,8 +102,8 @@ export default function AppSimulator() {
               onClick={() => { setActiveScreen('tracking'); }}
               className={`p-4 rounded-2xl border text-left flex items-center gap-3.5 transition-all cursor-pointer ${
                 activeScreen === 'tracking'
-                  ? 'bg-brand-amber/5 border-brand-amber shadow-md'
-                  : 'bg-brand-gold-light/40 border-brand-gold/15 hover:border-brand-amber/50'
+                  ? 'bg-white/95 border-brand-amber shadow-md'
+                  : 'bg-white/70 backdrop-blur-[2px] border-brand-gold/15 hover:border-brand-amber/50 shadow-sm'
               }`}
             >
               <div className={`p-2.5 rounded-xl ${activeScreen === 'tracking' ? 'bg-brand-amber text-white' : 'bg-brand-gold-light text-brand-gold font-bold'}`}>
@@ -106,8 +121,8 @@ export default function AppSimulator() {
               onClick={() => { setActiveScreen('parts'); }}
               className={`p-4 rounded-2xl border text-left flex items-center gap-3.5 transition-all cursor-pointer ${
                 activeScreen === 'parts'
-                  ? 'bg-brand-amber/5 border-brand-amber shadow-md'
-                  : 'bg-brand-gold-light/40 border-brand-gold/15 hover:border-brand-amber/50'
+                  ? 'bg-white/95 border-brand-amber shadow-md'
+                  : 'bg-white/70 backdrop-blur-[2px] border-brand-gold/15 hover:border-brand-amber/50 shadow-sm'
               }`}
             >
               <div className={`p-2.5 rounded-xl ${activeScreen === 'parts' ? 'bg-brand-amber text-white' : 'bg-brand-gold-light text-brand-gold font-bold'}`}>
@@ -125,8 +140,8 @@ export default function AppSimulator() {
               onClick={() => { setActiveScreen('payment'); }}
               className={`p-4 rounded-2xl border text-left flex items-center gap-3.5 transition-all cursor-pointer ${
                 activeScreen === 'payment'
-                  ? 'bg-brand-amber/5 border-brand-amber shadow-md'
-                  : 'bg-brand-gold-light/40 border-brand-gold/15 hover:border-brand-amber/50'
+                  ? 'bg-white/95 border-brand-amber shadow-md'
+                  : 'bg-white/70 backdrop-blur-[2px] border-brand-gold/15 hover:border-brand-amber/50 shadow-sm'
               }`}
             >
               <div className={`p-2.5 rounded-xl ${activeScreen === 'payment' ? 'bg-brand-amber text-white' : 'bg-brand-gold-light text-brand-gold font-bold'}`}>

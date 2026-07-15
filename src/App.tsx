@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   Star, 
@@ -22,7 +22,19 @@ import {
   User, 
   ArrowRight,
   ShieldAlert,
-  BellRing
+  BellRing,
+  Home,
+  DollarSign,
+  Link as LinkIcon,
+  Calendar,
+  Play,
+  Menu,
+  X,
+  Layers,
+  HelpCircle,
+  Info,
+  Map,
+  MessageSquare
 } from 'lucide-react';
 
 import Navbar from './components/Navbar';
@@ -34,28 +46,58 @@ import BookingModal from './components/BookingModal';
 import SOSModal from './components/SOSModal';
 import AppSimulator from './components/AppSimulator';
 import InteractiveHUD from './components/InteractiveHUD';
+import LinkShortener from './components/LinkShortener';
 import { Garage, MOCK_TESTIMONIALS, POPULAR_SERVICES } from './types';
 
 // Asset paths
-const mcarfixLogo = "/src/assets/images/mcarfix_logo.svg";
-const heroImg = "/src/assets/images/kenyan_garage_hero_1783421229882.jpg";
-const sparePartsImg = "/src/assets/images/kenyan_spare_parts_1783421247627.jpg";
-const roadsideImg = "/src/assets/images/kenyan_roadside_1783421263692.jpg";
+import mcarfixLogo from './assets/images/mcarfix_logo.svg';
+import heroImg from './assets/images/kenyan_garage_hero_workspace_1784112765366.jpg';
+import diagnosticsBgImg from './assets/images/garage_diagnostics_session_1784113397868.jpg';
+import mercedesSuvImg from './assets/images/mercedes_suv_front_1784114603495.jpg';
+import sparePartsImg from './assets/images/kenyan_spare_parts_1783421247627.jpg';
+import roadsideImg from './assets/images/kenyan_roadside_1783421263692.jpg';
 
 export default function App() {
   const [activeSOS, setActiveSOS] = useState(false);
   const [selectedGarageToBook, setSelectedGarageToBook] = useState<Garage | null>(null);
   const [activeFAQ, setActiveFAQ] = useState<number | null>(null);
+  const [activeTab, setActiveTab] = useState<string>('home');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStart === null) return;
+    const touchEnd = e.changedTouches[0].clientX;
+    const diff = touchEnd - touchStart;
+
+    if (diff > 70 && touchStart < 90) {
+      setSidebarOpen(true);
+    } else if (diff < -70) {
+      setSidebarOpen(false);
+    }
+    setTouchStart(null);
+  };
 
   const toggleFAQ = (index: number) => {
     setActiveFAQ(activeFAQ === index ? null : index);
   };
 
-  const handleScrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const handleNavigate = (targetId: string) => {
+    if (targetId === 'hero') {
+      setActiveTab('home');
+    } else {
+      setActiveTab(targetId);
     }
+    setSidebarOpen(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleScrollToSection = (sectionId: string) => {
+    handleNavigate(sectionId);
   };
 
   const getServiceIcon = (iconName: string) => {
@@ -90,17 +132,326 @@ export default function App() {
     }
   ];
 
-  return (
-    <div className="min-h-screen bg-brand-cream text-brand-dark flex flex-col font-sans selection:bg-brand-amber selection:text-white">
-      
-      {/* Header / Navbar */}
-      <Navbar 
-        onSOSClick={() => setActiveSOS(true)} 
-        onNavigate={handleScrollToSection}
-      />
+  const sidebarTabs = [
+    { id: 'home', label: 'Dashboard Hub', description: 'mCarFix Core Portal', icon: Home },
+    { id: 'garages', label: 'Verified Garages', description: 'Nairobi Smart Map & Booking', icon: MapPin },
+    { id: 'estimator', label: 'Cost Estimator', description: 'Pre-Negotiated Maintenance Rates', icon: DollarSign },
+    { id: 'diagnostics', label: 'Diagnostic Helper', description: 'OBD-II Code Expert Solver', icon: Cpu },
+    { id: 'services', label: 'Premium Services', description: 'Oils, Batteries, Tires & Spares Grid', icon: Wrench },
+    { id: 'simulator', label: 'Live App Demo', description: 'Interactive App Screens & HUD', icon: Play },
+    { id: 'shortener', label: 'Smart Link Engine', description: 'mcflink.com Shortener & Diagnostics Share', icon: LinkIcon },
+    { id: 'schedules', label: 'Maintenance Log', description: 'Vehicle Service History Reminder Diaries', icon: Calendar },
+    { id: 'how-it-works', label: 'How it Works & FAQs', description: 'Verification Auditing & Expert Answers', icon: FileText }
+  ];
 
-      {/* Hero Section */}
-      <header id="hero" className="relative overflow-hidden py-16 lg:py-24 border-b border-brand-gold/15 bg-brand-cream">
+  const currentTabInfo = sidebarTabs.find(tab => tab.id === activeTab) || sidebarTabs[0];
+
+  return (
+    <div 
+      onTouchStart={handleTouchStart} 
+      onTouchEnd={handleTouchEnd}
+      className="min-h-screen bg-brand-cream text-brand-dark flex font-sans selection:bg-brand-amber selection:text-white"
+    >
+      
+      {/* 1. DESKTOP PERMANENT SIDEBAR */}
+      <aside className="hidden md:flex flex-col fixed left-0 top-0 bottom-0 w-72 bg-[#0c1020] border-r border-brand-gold/15 text-slate-100 z-30 select-none overflow-y-auto custom-scrollbar">
+        {/* Brand / Logo Header */}
+        <div className="p-6 border-b border-white/5 flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl overflow-hidden bg-white border border-brand-gold/20 flex items-center justify-center p-0.5 shadow-md">
+            <img 
+              src={mcarfixLogo} 
+              alt="mCarFix Logo" 
+              className="w-full h-full object-contain"
+              referrerPolicy="no-referrer"
+            />
+          </div>
+          <div>
+            <span className="font-display font-black text-lg tracking-wider text-white block">m<span className="text-brand-amber">Car</span>Fix</span>
+            <span className="text-[10px] font-mono text-brand-gold uppercase tracking-widest font-semibold block">Kenya Platform</span>
+          </div>
+        </div>
+
+        {/* Sidebar Nav Items */}
+        <nav className="flex-1 p-4 space-y-1">
+          <div className="px-3 mb-2">
+            <span className="text-[9px] font-mono font-bold tracking-widest text-slate-400 uppercase">Interactive Portals</span>
+          </div>
+          {sidebarTabs.map((tab) => {
+            const isActive = activeTab === tab.id;
+            const Icon = tab.icon;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => handleNavigate(tab.id)}
+                className={`w-full flex items-center gap-3.5 px-3.5 py-3 rounded-xl text-left transition-all duration-200 group cursor-pointer ${
+                  isActive
+                    ? 'bg-brand-amber text-white shadow-lg shadow-brand-amber/20 font-bold'
+                    : 'text-slate-400 hover:text-white hover:bg-white/5 font-medium'
+                }`}
+              >
+                <Icon className={`w-4.5 h-4.5 shrink-0 transition-transform duration-200 group-hover:scale-110 ${isActive ? 'text-white' : 'text-brand-gold group-hover:text-brand-amber'}`} />
+                <div className="min-w-0">
+                  <span className="text-xs font-display block leading-tight">{tab.label}</span>
+                  <span className={`text-[10px] font-normal block truncate ${isActive ? 'text-white/70' : 'text-slate-500'}`}>{tab.description}</span>
+                </div>
+              </button>
+            );
+          })}
+        </nav>
+
+        {/* Sidebar Footer / Emergency Area */}
+        <div className="p-4 border-t border-white/5 bg-[#080b16] space-y-3">
+          <button
+            onClick={() => setActiveSOS(true)}
+            className="w-full py-2.5 px-3 rounded-xl bg-red-600 hover:bg-red-700 active:bg-red-800 text-white font-mono text-[11px] font-extrabold uppercase tracking-widest flex items-center justify-center gap-2 transition-all shadow-md shadow-red-900/20 cursor-pointer"
+          >
+            <ShieldAlert className="w-4 h-4 animate-pulse text-white" />
+            <span>Emergency SOS</span>
+          </button>
+          
+          <div className="flex items-center justify-between text-[10px] text-slate-500 font-mono">
+            <span>24/7 Helpline:</span>
+            <a href="tel:+25470000000" className="text-brand-gold font-bold hover:text-brand-amber transition-colors">0700 mCarFix</a>
+          </div>
+        </div>
+      </aside>
+
+      {/* 2. MOBILE DRAWER SIDEBAR WITH SWIPE CAPABILITIES */}
+      <AnimatePresence>
+        {sidebarOpen && (
+          <>
+            {/* Backdrop layer */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSidebarOpen(false)}
+              className="fixed inset-0 bg-brand-dark/60 backdrop-blur-sm z-40 md:hidden cursor-pointer"
+            />
+
+            {/* Slide-out Drawer */}
+            <motion.div
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
+              transition={{ type: 'spring', damping: 26, stiffness: 220 }}
+              className="fixed left-0 top-0 bottom-0 w-72 bg-[#0c1020] border-r border-brand-gold/15 text-slate-100 z-50 flex flex-col md:hidden select-none"
+            >
+              <div className="p-6 border-b border-white/5 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl overflow-hidden bg-white border border-brand-gold/20 flex items-center justify-center p-0.5 shadow-md">
+                    <img 
+                      src={mcarfixLogo} 
+                      alt="mCarFix Logo" 
+                      className="w-full h-full object-contain"
+                      referrerPolicy="no-referrer"
+                    />
+                  </div>
+                  <div>
+                    <span className="font-display font-black text-lg tracking-wider text-white block">m<span className="text-brand-amber">Car</span>Fix</span>
+                    <span className="text-[10px] font-mono text-brand-gold uppercase tracking-widest font-semibold block">Kenya Platform</span>
+                  </div>
+                </div>
+                <button 
+                  onClick={() => setSidebarOpen(false)}
+                  className="p-1.5 rounded-lg hover:bg-white/5 text-slate-400 hover:text-white transition-colors cursor-pointer"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Drawer navigation */}
+              <nav className="flex-1 p-4 space-y-1 overflow-y-auto custom-scrollbar">
+                <div className="px-3 mb-2 flex items-center justify-between">
+                  <span className="text-[9px] font-mono font-bold tracking-widest text-slate-400 uppercase">Interactive Portals</span>
+                  <span className="text-[9px] font-mono font-semibold text-brand-gold/50">Swipe ← to Close</span>
+                </div>
+                {sidebarTabs.map((tab) => {
+                  const isActive = activeTab === tab.id;
+                  const Icon = tab.icon;
+                  return (
+                    <button
+                      key={tab.id}
+                      onClick={() => handleNavigate(tab.id)}
+                      className={`w-full flex items-center gap-3.5 px-3.5 py-3 rounded-xl text-left transition-all duration-200 group cursor-pointer ${
+                        isActive
+                          ? 'bg-brand-amber text-white shadow-lg shadow-brand-amber/20 font-bold'
+                          : 'text-slate-400 hover:text-white hover:bg-white/5 font-medium'
+                      }`}
+                    >
+                      <Icon className={`w-4.5 h-4.5 shrink-0 transition-transform duration-200 group-hover:scale-110 ${isActive ? 'text-white' : 'text-brand-gold group-hover:text-brand-amber'}`} />
+                      <div className="min-w-0">
+                        <span className="text-xs font-display block leading-tight">{tab.label}</span>
+                        <span className={`text-[10px] font-normal block truncate ${isActive ? 'text-white/70' : 'text-slate-500'}`}>{tab.description}</span>
+                      </div>
+                    </button>
+                  );
+                })}
+              </nav>
+
+              {/* Drawer footer */}
+              <div className="p-4 border-t border-white/5 bg-[#080b16] space-y-3">
+                <button
+                  onClick={() => {
+                    setActiveSOS(true);
+                    setSidebarOpen(false);
+                  }}
+                  className="w-full py-2.5 px-3 rounded-xl bg-red-600 hover:bg-red-700 active:bg-red-800 text-white font-mono text-[11px] font-extrabold uppercase tracking-widest flex items-center justify-center gap-2 transition-all shadow-md shadow-red-900/20 cursor-pointer"
+                >
+                  <ShieldAlert className="w-4 h-4 animate-pulse text-white" />
+                  <span>Emergency SOS</span>
+                </button>
+                
+                <div className="flex items-center justify-between text-[10px] text-slate-500 font-mono">
+                  <span>24/7 Helpline:</span>
+                  <a href="tel:+25470000000" className="text-brand-gold font-bold hover:text-brand-amber transition-colors">0700 mCarFix</a>
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* 3. MAIN WORKSPACE CONTENT */}
+      <div className="flex-1 flex flex-col min-w-0 md:pl-72 relative">
+        
+        {/* MOBILE STICKY HEADER */}
+        <header className="md:hidden sticky top-0 z-30 flex items-center justify-between h-16 bg-[#0c1020] border-b border-brand-gold/15 px-4 text-white">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="p-1.5 -ml-1 rounded-lg hover:bg-white/5 text-slate-300 hover:text-white transition-colors cursor-pointer"
+              title="Open menu"
+            >
+              <Menu className="w-6 h-6" />
+            </button>
+            <div className="flex items-center gap-2">
+              <div className="w-7 h-7 rounded bg-white flex items-center justify-center p-0.5">
+                <img src={mcarfixLogo} alt="Logo" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
+              </div>
+              <span className="font-display font-bold text-sm tracking-wide text-white">{currentTabInfo.label}</span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setActiveSOS(true)}
+              className="px-3 py-1.5 rounded-lg bg-red-600 hover:bg-red-700 text-white text-[10px] font-mono font-bold uppercase tracking-wider flex items-center gap-1 shadow-sm transition-all cursor-pointer"
+            >
+              <ShieldAlert className="w-3.5 h-3.5 animate-pulse" />
+              <span>SOS</span>
+            </button>
+          </div>
+        </header>
+
+        {/* DESKTOP HEADER (STAYS FIXED AT TOP OF WORKSPACE CONTENT) */}
+        <header className="hidden md:flex sticky top-0 z-20 items-center justify-between h-20 bg-white/80 backdrop-blur-md border-b border-brand-gold/15 px-8 select-none">
+          <div className="space-y-0.5">
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-mono text-brand-amber font-bold uppercase tracking-widest">mCarFix Premium Hub</span>
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            </div>
+            <h1 className="font-display font-extrabold text-2xl text-brand-dark tracking-tight flex items-center gap-2">
+              <currentTabInfo.icon className="w-6 h-6 text-brand-amber shrink-0" />
+              <span>{currentTabInfo.label}</span>
+            </h1>
+          </div>
+
+          <div className="flex items-center gap-5">
+            {/* Quick status banner */}
+            <div className="flex items-center gap-2 bg-brand-gold-light/60 border border-brand-gold/15 py-1.5 px-3 rounded-xl text-[10px] font-mono font-bold text-brand-muted">
+              <span>GPS Dispatcher:</span>
+              <span className="text-brand-amber font-extrabold">Active (Nairobi Central)</span>
+            </div>
+
+            <a 
+              href="tel:+25470000000" 
+              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-gold-light border border-brand-gold/15 hover:border-brand-amber/50 hover:bg-brand-gold-light/80 text-brand-dark font-mono text-xs font-bold transition-all"
+            >
+              <Phone className="w-3.5 h-3.5 text-brand-amber" />
+              <span>Helpline: 0700 mCarFix</span>
+            </a>
+
+            <button
+              onClick={() => setActiveSOS(true)}
+              className="px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-mono text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-red-950/10 transition-all hover:scale-[1.02] cursor-pointer"
+            >
+              <ShieldAlert className="w-4 h-4 animate-pulse" />
+              <span>Emergency SOS</span>
+            </button>
+          </div>
+        </header>
+
+        {/* Mobile Swipe-in visual guide overlay (disappears on interaction) */}
+        <div className="md:hidden pointer-events-none absolute left-0 top-1/2 -translate-y-1/2 z-20">
+          <div className="bg-[#0c1020]/80 backdrop-blur-md text-[9px] text-white py-2 px-1 rounded-r-lg border border-l-0 border-brand-gold/20 flex flex-col items-center gap-1.5 font-mono shadow-md opacity-70">
+            <span className="writing-mode-vertical uppercase tracking-widest text-[8px]">Swipe</span>
+            <span className="animate-bounce">→</span>
+          </div>
+        </div>
+
+        {/* Selected Tab Content Viewport */}
+        <main className="flex-grow">
+          {activeTab === 'home' && (
+            <header id="hero" className="relative overflow-hidden py-16 lg:py-24 border-b border-brand-gold/15 bg-brand-cream">
+        {/* Visually Stunning Background Garage Image */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden select-none">
+          <img 
+            src={heroImg} 
+            alt="Verified Modern Garage Workspace with Mechanics" 
+            className="w-full h-full object-cover opacity-90 filter saturate-[1.05] brightness-[1.02] blur-[4px]"
+            referrerPolicy="no-referrer"
+          />
+          {/* Premium light transparent overlays that blend beautifully while keeping the image 90% visible and keeping text readable */}
+          <div className="absolute inset-0 bg-gradient-to-b from-brand-cream/40 via-transparent to-brand-cream/50" />
+          <div className="absolute inset-0 bg-gradient-to-r from-brand-cream/35 via-transparent to-brand-cream/35" />
+          <div className="absolute inset-0 bg-white/10 mix-blend-overlay" />
+
+          {/* Animated subtle high-tech scanning rings & glowing blueprint particles (User-requested) */}
+          <div className="absolute inset-0 pointer-events-none overflow-hidden select-none opacity-40">
+            <motion.div 
+              animate={{ 
+                scale: [1, 1.25, 1],
+                opacity: [0.12, 0.28, 0.12],
+                x: [0, 25, 0],
+                y: [0, -20, 0]
+              }}
+              transition={{ 
+                duration: 14, 
+                repeat: Infinity, 
+                ease: "easeInOut" 
+              }}
+              className="absolute top-1/4 left-1/4 w-80 h-80 rounded-full border border-brand-amber/15 bg-brand-amber/5 blur-xl"
+            />
+            <motion.div 
+              animate={{ 
+                scale: [1, 1.15, 1],
+                opacity: [0.08, 0.20, 0.08],
+                x: [0, -30, 0],
+                y: [0, 25, 0]
+              }}
+              transition={{ 
+                duration: 18, 
+                repeat: Infinity, 
+                ease: "easeInOut" 
+              }}
+              className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full border border-brand-gold/15 bg-brand-gold/5 blur-2xl"
+            />
+            {/* Animated slow-scanning radar line */}
+            <motion.div 
+              animate={{ 
+                y: ["-100%", "200%"]
+              }}
+              transition={{ 
+                duration: 9, 
+                repeat: Infinity, 
+                ease: "linear" 
+              }}
+              className="absolute left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-brand-amber/20 to-transparent"
+            />
+          </div>
+        </div>
+
         {/* Precision Autodesk Blueprint Grid Lines & Coordinates */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           {/* Subtle grid pattern background */}
@@ -109,7 +460,7 @@ export default function App() {
                  backgroundImage: `radial-gradient(circle, #ff5e00 1px, transparent 1px)`, 
                  backgroundSize: '24px 24px' 
                }} 
-          />
+           />
           {/* Vertical thin engineering lines */}
           <div className="absolute left-[8%] top-0 bottom-0 w-[1px] bg-brand-gold/10" />
           <div className="absolute left-[30%] top-0 bottom-0 w-[1px] bg-brand-gold/10 hidden md:block" />
@@ -227,9 +578,11 @@ export default function App() {
           </div>
         </div>
       </header>
+      )}
 
       {/* Brand Trust/Partners Bar */}
-      <section className="bg-brand-gold-light/40 border-b border-brand-gold/15 py-8 text-center">
+      {activeTab === 'home' && (
+        <section className="bg-brand-gold-light/40 border-b border-brand-gold/15 py-8 text-center">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <p className="text-[10px] font-mono uppercase tracking-widest text-brand-gold font-bold mb-4">
             In Partnership with Verified Insurers & Lubricant Networks Across East Africa
@@ -242,10 +595,24 @@ export default function App() {
           </div>
         </div>
       </section>
+      )}
 
       {/* Narrative Section: The Problem & The Solution (Critique Item 2 & 5) */}
-      <section className="py-24 bg-transparent border-b border-brand-gold/15 overflow-hidden relative">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_center,rgba(197,168,92,0.04),transparent_50%)] pointer-events-none" />
+      {activeTab === 'home' && (
+        <section className="py-24 bg-transparent border-b border-brand-gold/15 overflow-hidden relative">
+        {/* Visually Stunning Background Image (User-requested) */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden select-none">
+          <img 
+            src={diagnosticsBgImg} 
+            alt="Garage Diagnostics Workspace and Discussion" 
+            className="w-full h-full object-cover opacity-90 filter saturate-[1.05] brightness-[1.02] blur-[4px]"
+            referrerPolicy="no-referrer"
+          />
+          {/* Subtle light transparent overlays that blend beautifully while keeping the image 90% visible and keeping text readable */}
+          <div className="absolute inset-0 bg-gradient-to-b from-brand-cream/60 via-transparent to-brand-cream/60" />
+          <div className="absolute inset-0 bg-gradient-to-r from-brand-cream/60 via-transparent to-brand-cream/60" />
+          <div className="absolute inset-0 bg-white/10 mix-blend-overlay" />
+        </div>
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16 relative z-10">
           
@@ -334,16 +701,38 @@ export default function App() {
 
         </div>
       </section>
+      )}
 
       {/* Interactive App Screens Section (Critique Item 6 & 7) */}
-      <section id="simulator" className="py-20 border-b border-brand-gold/15 bg-[#0c1020]/20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <AppSimulator />
+      {activeTab === 'simulator' && (
+        <section id="simulator" className="py-20 border-b border-brand-gold/15 bg-[#0c1020]/20">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <AppSimulator />
+          </div>
+        </section>
+      )}
+
+      {/* NEW: mcf.link - Automotive Link Shortener & Live Analytics Section (User-requested feature) */}
+      {activeTab === 'shortener' && (
+        <section id="shortener" className="py-20 bg-transparent border-b border-brand-gold/15">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+          <div className="text-center max-w-3xl mx-auto space-y-3">
+            <span className="text-xs font-mono font-bold text-brand-amber tracking-wider uppercase block">Link Compression Tool</span>
+            <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-brand-dark">
+              Automotive <span className="text-brand-amber">Smart Link Engine</span> & Clicks Tracker
+            </h2>
+            <p className="text-brand-muted text-sm leading-relaxed max-w-xl mx-auto">
+              Our specialized links outperform generic services like Bitly or TinyURL with direct diagnostics integrations, high-fidelity analytics, zero ads, and Safaricom SMS payload optimizations.
+            </p>
+          </div>
+          <LinkShortener />
         </div>
       </section>
+      )}
 
       {/* Services Grid Section (Critique Item 3 & 8) */}
-      <section className="py-20 bg-transparent border-b border-brand-gold/15">
+      {activeTab === 'services' && (
+        <section className="py-20 bg-transparent border-b border-brand-gold/15">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           
           <div className="text-center max-w-3xl mx-auto space-y-3">
@@ -392,9 +781,11 @@ export default function App() {
           </div>
         </div>
       </section>
+      )}
 
       {/* How it Works Section (Critique Item 9) */}
-      <section className="py-20 border-t border-brand-gold/15 bg-brand-gold-light/40">
+      {activeTab === 'how-it-works' && (
+        <section className="py-20 border-t border-brand-gold/15 bg-brand-gold-light/40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           
           <div className="text-center max-w-3xl mx-auto space-y-3">
@@ -439,10 +830,26 @@ export default function App() {
           </div>
         </div>
       </section>
+      )}
 
       {/* Core Component 1: Interactive Garage Directory with Live Map (Critique Item 14 & 15) */}
-      <section id="garages" className="py-20 bg-transparent border-t border-brand-gold/15">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+      {activeTab === 'garages' && (
+        <section id="garages" className="py-20 bg-transparent border-t border-brand-gold/15 relative overflow-hidden">
+        {/* 90% Visible Background Image (User-requested) */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden select-none">
+          <img 
+            src={mercedesSuvImg} 
+            alt="Premium Mercedes SUV in Nairobi" 
+            className="w-full h-full object-cover opacity-90 filter saturate-[1.05] brightness-[1.02]"
+            referrerPolicy="no-referrer"
+          />
+          {/* Subtle light transparent overlays that blend beautifully while keeping the image 90% visible */}
+          <div className="absolute inset-0 bg-gradient-to-b from-brand-cream/45 via-transparent to-brand-cream/45" />
+          <div className="absolute inset-0 bg-gradient-to-r from-brand-cream/45 via-transparent to-brand-cream/45" />
+          <div className="absolute inset-0 bg-white/10 mix-blend-overlay" />
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 bg-gradient-to-br from-white/75 via-brand-gold-light/75 to-brand-gold/15 backdrop-blur-[10px] p-6 sm:p-10 rounded-[32px] border-2 border-brand-gold/30 shadow-[0_20px_50px_rgba(197,168,92,0.12)] space-y-8">
           
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div className="space-y-2">
@@ -464,23 +871,29 @@ export default function App() {
           <GarageFinder onBookClick={(g) => setSelectedGarageToBook(g)} />
         </div>
       </section>
+      )}
 
       {/* Core Component 2: Interactive Pricing Cost Estimator (Critique Item 12) */}
-      <section id="estimator" className="py-20 border-t border-brand-gold/15 bg-transparent">
+      {activeTab === 'estimator' && (
+        <section id="estimator" className="py-20 border-t border-brand-gold/15 bg-transparent">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <CostEstimator />
         </div>
       </section>
+      )}
 
       {/* Core Component 3: Diagnostics Help Section (Critique Item 14) */}
-      <section id="diagnostics" className="py-20 bg-transparent border-t border-brand-gold/15">
+      {activeTab === 'diagnostics' && (
+        <section id="diagnostics" className="py-20 bg-transparent border-t border-brand-gold/15">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Diagnostics onSOSClick={() => setActiveSOS(true)} />
         </div>
       </section>
+      )}
 
       {/* Extra Interactive Cards Area (Critique Item 11: Authentic Photography) */}
-      <section className="py-20 border-t border-brand-gold/15 bg-brand-gold-light/40">
+      {activeTab === 'services' && (
+        <section className="py-20 border-t border-brand-gold/15 bg-brand-gold-light/40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           
           <div className="text-center max-w-3xl mx-auto space-y-3">
@@ -566,16 +979,20 @@ export default function App() {
           </div>
         </div>
       </section>
+      )}
 
       {/* Core Component 4: Maintenance Scheduler Section (Critique Item 14) */}
-      <section id="schedules" className="py-20 bg-transparent border-t border-brand-gold/15">
+      {activeTab === 'schedules' && (
+        <section id="schedules" className="py-20 bg-transparent border-t border-brand-gold/15">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <MaintenanceReminder />
         </div>
       </section>
+      )}
 
       {/* Social Proof / Testimonials Section (Critique Item 6) */}
-      <section className="py-20 border-t border-brand-gold/15 bg-brand-gold-light/40">
+      {activeTab === 'services' && (
+        <section className="py-20 border-t border-brand-gold/15 bg-brand-gold-light/40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           
           <div className="text-center max-w-3xl mx-auto space-y-3">
@@ -628,9 +1045,11 @@ export default function App() {
           </div>
         </div>
       </section>
+      )}
 
       {/* FAQs Section (Critique Item 10) */}
-      <section className="py-20 bg-transparent border-t border-brand-gold/15">
+      {activeTab === 'how-it-works' && (
+        <section className="py-20 bg-transparent border-t border-brand-gold/15">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
           
           <div className="text-center space-y-2">
@@ -676,9 +1095,11 @@ export default function App() {
           </div>
         </div>
       </section>
+      )}
 
       {/* Final CTA Section (Critique Item 5 & 13) */}
-      <section className="py-20 border-t border-brand-gold/15 bg-brand-gold-light/40 relative overflow-hidden">
+      {activeTab === 'home' && (
+        <section className="py-20 border-t border-brand-gold/15 bg-brand-gold-light/40 relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_center,rgba(197,168,92,0.06),transparent_50%)] pointer-events-none" />
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8 relative z-10">
           
@@ -710,9 +1131,12 @@ export default function App() {
 
         </div>
       </section>
+      )}
 
-      {/* Footer (Critique Item 10) */}
-      <footer className="bg-[#040610] border-t border-brand-gold/15 py-12 text-xs text-slate-400">
+        </main>
+
+        {/* Footer (Critique Item 10) */}
+        <footer className="bg-[#040610] border-t border-brand-gold/15 py-12 text-xs text-slate-400">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
             
@@ -743,6 +1167,7 @@ export default function App() {
                 <li><button onClick={() => handleScrollToSection('garages')} className="hover:text-brand-amber transition-colors cursor-pointer text-left text-slate-400">Find Garages</button></li>
                 <li><button onClick={() => handleScrollToSection('estimator')} className="hover:text-brand-amber transition-colors cursor-pointer text-left text-slate-400">Cost Estimator</button></li>
                 <li><button onClick={() => handleScrollToSection('diagnostics')} className="hover:text-brand-amber transition-colors cursor-pointer text-left text-slate-400">Troubleshooter</button></li>
+                <li><button onClick={() => handleScrollToSection('shortener')} className="hover:text-brand-amber transition-colors cursor-pointer text-left text-slate-400">Smart Link Shortener</button></li>
                 <li><button onClick={() => handleScrollToSection('schedules')} className="hover:text-brand-amber transition-colors cursor-pointer text-left text-slate-400">Service Reminder</button></li>
               </ul>
             </div>
@@ -789,6 +1214,8 @@ export default function App() {
           </div>
         </div>
       </footer>
+
+      </div> {/* closes workspace flex-1 container */}
 
       {/* MODAL POPUPS */}
       <AnimatePresence>

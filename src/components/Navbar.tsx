@@ -7,20 +7,22 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Wrench, ShieldAlert, Phone, Menu, X } from 'lucide-react';
 
-const mcarfixLogo = "/src/assets/images/mcarfix_logo.svg";
+import mcarfixLogo from '../assets/images/mcarfix_logo.svg';
 
 interface NavbarProps {
   onSOSClick: () => void;
   onNavigate: (sectionId: string) => void;
+  activeTab?: string;
 }
 
-export default function Navbar({ onSOSClick, onNavigate }: NavbarProps) {
+export default function Navbar({ onSOSClick, onNavigate, activeTab }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const navItems = [
     { label: 'Garages', target: 'garages' },
     { label: 'Cost Estimator', target: 'estimator' },
     { label: 'Diagnostic Helper', target: 'diagnostics' },
+    { label: 'Link Engine', target: 'shortener' },
     { label: 'Schedules', target: 'schedules' },
   ];
 
@@ -56,15 +58,29 @@ export default function Navbar({ onSOSClick, onNavigate }: NavbarProps) {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
-            {navItems.map((item) => (
-              <button
-                key={item.target}
-                onClick={() => handleLinkClick(item.target)}
-                className="text-brand-dark/85 hover:text-brand-amber font-semibold transition-colors cursor-pointer text-sm"
-              >
-                {item.label}
-              </button>
-            ))}
+            {navItems.map((item) => {
+              const isActive = activeTab === item.target;
+              return (
+                <button
+                  key={item.target}
+                  onClick={() => handleLinkClick(item.target)}
+                  className={`font-semibold transition-all cursor-pointer text-sm relative py-2 ${
+                    isActive
+                      ? 'text-brand-amber font-bold'
+                      : 'text-brand-dark/85 hover:text-brand-amber'
+                  }`}
+                >
+                  {item.label}
+                  {isActive && (
+                    <motion.div 
+                      layoutId="navUnderline"
+                      className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-brand-amber rounded-full"
+                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                    />
+                  )}
+                </button>
+              );
+            })}
           </div>
 
           {/* Action Buttons */}
@@ -109,15 +125,22 @@ export default function Navbar({ onSOSClick, onNavigate }: NavbarProps) {
             className="md:hidden border-b border-brand-gold/15 bg-brand-cream/95 backdrop-blur-lg overflow-hidden"
           >
             <div className="px-4 pt-2 pb-6 space-y-3">
-              {navItems.map((item) => (
-                <button
-                   key={item.target}
-                   onClick={() => handleLinkClick(item.target)}
-                   className="block w-full text-left px-4 py-3 rounded-lg text-brand-dark/90 hover:text-brand-amber hover:bg-brand-gold/5 transition-colors font-semibold text-base"
-                >
-                   {item.label}
-                </button>
-              ))}
+              {navItems.map((item) => {
+                const isActive = activeTab === item.target;
+                return (
+                  <button
+                     key={item.target}
+                     onClick={() => handleLinkClick(item.target)}
+                     className={`block w-full text-left px-4 py-3 rounded-lg font-semibold text-base transition-colors ${
+                       isActive
+                         ? 'text-brand-amber bg-brand-gold-light/40 font-bold'
+                         : 'text-brand-dark/90 hover:text-brand-amber hover:bg-brand-gold/5'
+                     }`}
+                  >
+                     {item.label}
+                  </button>
+                );
+              })}
               <div className="pt-4 border-t border-brand-gold/15 flex flex-col gap-3 px-4">
                 <a 
                   href="tel:+25470000000" 

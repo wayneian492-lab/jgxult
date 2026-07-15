@@ -28,7 +28,7 @@ import {
   Server,
   ArrowRight
 } from 'lucide-react';
-const redAudiHud = "/src/assets/images/red_audi_hud_1783926323190.jpg";
+import redAudiHud from '../assets/images/red_audi_hud_1783926323190.jpg';
 
 type TabId = 'cad' | 'telemetry' | 'escrow';
 
