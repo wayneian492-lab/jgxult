@@ -5,7 +5,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Wrench, ShieldAlert, Phone, Menu, X } from 'lucide-react';
+import { Wrench, ShieldAlert, Phone, Menu, X, Mail } from 'lucide-react';
 
 import mcarfixLogo from '../assets/images/mcarfix_logo.svg';
 
@@ -85,13 +85,23 @@ export default function Navbar({ onSOSClick, onNavigate, activeTab }: NavbarProp
 
           {/* Action Buttons */}
           <div className="hidden md:flex items-center gap-4">
-            <a 
-              href="tel:+25470000000" 
-              className="flex items-center gap-2 text-brand-muted hover:text-brand-dark font-mono text-sm transition-colors mr-2 font-medium"
-            >
-              <Phone className="w-4 h-4 text-brand-amber animate-pulse" />
-              <span>0700 mCarFix</span>
-            </a>
+            <div className="flex flex-col items-end text-right font-mono text-xs border-r border-brand-gold/15 pr-4 mr-2">
+              <span className="text-[9px] uppercase tracking-widest text-brand-muted font-extrabold block">Customer Support</span>
+              <a 
+                href="tel:+254704804932" 
+                className="flex items-center gap-1.5 text-brand-dark hover:text-brand-amber font-bold transition-colors mt-0.5"
+              >
+                <Phone className="w-3.5 h-3.5 text-brand-amber shrink-0" />
+                <span>+254 704 804932</span>
+              </a>
+              <a 
+                href="mailto:support@mcarfix.com" 
+                className="text-[10px] text-slate-500 hover:text-brand-amber transition-colors flex items-center gap-1 mt-0.5 justify-end"
+              >
+                <Mail className="w-3 h-3 text-slate-400 shrink-0" />
+                <span>support@mcarfix.com</span>
+              </a>
+            </div>
             
             <button
               onClick={onSOSClick}
@@ -142,13 +152,23 @@ export default function Navbar({ onSOSClick, onNavigate, activeTab }: NavbarProp
                 );
               })}
               <div className="pt-4 border-t border-brand-gold/15 flex flex-col gap-3 px-4">
-                <a 
-                  href="tel:+25470000000" 
-                  className="flex items-center gap-2 text-brand-muted font-mono text-sm"
-                >
-                  <Phone className="w-4 h-4 text-brand-amber animate-pulse" />
-                  <span>Call Emergency Support</span>
-                </a>
+                <div className="flex flex-col gap-1.5 text-xs font-mono">
+                  <span className="text-[10px] uppercase tracking-wider text-brand-muted font-bold">Customer Support</span>
+                  <a 
+                    href="tel:+254704804932" 
+                    className="flex items-center gap-2 text-brand-dark hover:text-brand-amber transition-colors font-bold"
+                  >
+                    <Phone className="w-4 h-4 text-brand-amber shrink-0" />
+                    <span>+254 704 804932</span>
+                  </a>
+                  <a 
+                    href="mailto:support@mcarfix.com" 
+                    className="flex items-center gap-2 text-slate-500 hover:text-brand-amber transition-colors"
+                  >
+                    <Mail className="w-4 h-4 text-slate-400 shrink-0" />
+                    <span>support@mcarfix.com</span>
+                  </a>
+                </div>
                 <button
                   onClick={() => {
                     setIsOpen(false);

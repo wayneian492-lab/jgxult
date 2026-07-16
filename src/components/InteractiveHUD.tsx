@@ -28,6 +28,7 @@ import {
   Server,
   ArrowRight,
   Maximize2,
+  Minimize2,
   X
 } from 'lucide-react';
 import redAudiHud from '../assets/images/red_audi_hud_1783926323190.jpg';
@@ -40,6 +41,7 @@ export default function InteractiveHUD() {
   const [escrowStep, setEscrowStep] = useState(1);
   const [selectedSensor, setSelectedSensor] = useState<string>('Engine ECU');
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isMinimized, setIsMinimized] = useState(true);
 
   // Simulated live diagnostic updates
   useEffect(() => {
@@ -75,23 +77,100 @@ export default function InteractiveHUD() {
 
   const currentSensorData = sensors.find(s => s.name === selectedSensor) || sensors[0];
 
+  if (isMinimized) {
+    return (
+      <motion.div
+        layoutId="interactive-hud-wrapper"
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.95 }}
+        transition={{ type: "spring", stiffness: 400, damping: 28 }}
+        className="w-full max-w-[340px] mx-auto lg:ml-auto"
+      >
+        <button
+          onClick={() => setIsMinimized(false)}
+          className="w-full bg-[#0a0d1a] border border-brand-gold/25 hover:border-brand-amber/80 rounded-2xl p-4 flex items-center gap-4 transition-all duration-200 cursor-pointer text-left shadow-[0_0_20px_rgba(197,168,92,0.06)] hover:shadow-[0_0_30px_rgba(255,94,0,0.15)] select-none group relative overflow-hidden"
+          title="Click to expand Interactive Telemetry HUD"
+        >
+          {/* Holographic glowing grid lines */}
+          <div className="absolute inset-0 opacity-[0.05] pointer-events-none" 
+               style={{ 
+                 backgroundImage: `radial-gradient(circle, #c5a85c 1px, transparent 1px)`, 
+                 backgroundSize: '12px 12px' 
+               }} 
+          />
+          
+          {/* Radar pulsing ring with a small red car mini thumbnail */}
+          <div className="relative w-12 h-12 bg-black/60 rounded-xl border border-brand-gold/20 flex items-center justify-center shrink-0 overflow-hidden">
+            {/* Pulsing ring */}
+            <div className="absolute inset-1 rounded-full border border-brand-amber/30 animate-ping opacity-75" />
+            {/* Subtle radar sweep */}
+            <div className="absolute inset-0 bg-gradient-to-t from-transparent via-brand-amber/15 to-transparent animate-spin" style={{ animationDuration: '3s' }} />
+            
+            <img 
+              src={redAudiHud} 
+              alt="HUD thumbnail" 
+              className="w-9 h-9 object-contain relative z-10 opacity-90 group-hover:scale-110 transition-transform duration-300"
+              referrerPolicy="no-referrer"
+            />
+          </div>
+
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-brand-amber animate-pulse" />
+              <span className="text-[8px] font-mono tracking-widest text-brand-gold font-bold uppercase">M-HUD // ACTIVE</span>
+            </div>
+            <h4 className="font-display font-extrabold text-xs text-white mt-0.5 uppercase tracking-tight">
+              Interactive CAD HUD
+            </h4>
+            <span className="text-[10px] font-mono text-brand-muted block mt-0.5 group-hover:text-brand-amber transition-colors">
+              TAP TO EXPAND HUD ✦
+            </span>
+          </div>
+
+          {/* Expand Indicator Icon */}
+          <div className="text-brand-gold group-hover:text-brand-amber transition-colors shrink-0">
+            <Maximize2 className="w-4 h-4" />
+          </div>
+        </button>
+      </motion.div>
+    );
+  }
+
   return (
-    <div className="w-full bg-white border border-brand-gold/20 shadow-2xl rounded-3xl overflow-hidden font-sans relative">
+    <motion.div
+      layoutId="interactive-hud-wrapper"
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.95 }}
+      transition={{ type: "spring", stiffness: 400, damping: 28 }}
+      className="w-full bg-white border border-brand-gold/20 shadow-2xl rounded-3xl overflow-hidden font-sans relative"
+    >
       {/* HUD Header with Autodesk drafting layout style */}
-      <div className="bg-brand-dark text-white px-6 py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-brand-gold/10 relative overflow-hidden">
+      <div className="bg-brand-dark text-white px-6 py-4 flex items-center justify-between gap-3 border-b border-brand-gold/10 relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(197,168,92,0.15),transparent_60%)] pointer-events-none" />
         
-        <div>
+        <div className="min-w-0">
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-brand-amber animate-ping" />
-            <span className="text-[10px] font-mono tracking-widest text-brand-gold font-bold uppercase">mCarFix Live Control HUD</span>
+            <span className="w-2 h-2 rounded-full bg-brand-amber animate-ping shrink-0" />
+            <span className="text-[10px] font-mono tracking-widest text-brand-gold font-bold uppercase truncate">mCarFix Live Control HUD</span>
           </div>
-          <h3 className="font-display font-extrabold text-lg text-white mt-0.5 tracking-tight">Digital Automotive Ecosystem</h3>
+          <h3 className="font-display font-extrabold text-sm sm:text-lg text-white mt-0.5 tracking-tight truncate">Digital Automotive Ecosystem</h3>
         </div>
 
-        <div className="flex items-center gap-2 text-[10px] font-mono text-brand-gold/80 bg-white/5 border border-white/10 px-2.5 py-1 rounded-md">
-          <Server className="w-3.5 h-3.5 text-brand-amber" />
-          <span>SYS_STATUS: ACTIVE</span>
+        <div className="flex items-center gap-2 shrink-0">
+          <div className="hidden lg:flex items-center gap-2 text-[10px] font-mono text-brand-gold/80 bg-white/5 border border-white/10 px-2.5 py-1 rounded-md">
+            <Server className="w-3.5 h-3.5 text-brand-amber" />
+            <span>SYS_STATUS: ACTIVE</span>
+          </div>
+
+          <button
+            onClick={() => setIsMinimized(true)}
+            className="w-9 h-9 rounded-xl bg-gradient-to-br from-orange-500/10 to-red-600/15 hover:from-orange-500/25 hover:to-red-600/30 border border-orange-500/30 hover:border-orange-500/70 text-orange-400 hover:text-orange-200 transition-all duration-200 flex items-center justify-center cursor-pointer shadow-[0_0_12px_rgba(249,115,22,0.15)] hover:shadow-[0_0_20px_rgba(249,115,22,0.4)] select-none group shrink-0"
+            title="Minimize / Close HUD"
+          >
+            <X className="w-4 h-4 transition-transform group-hover:rotate-90 duration-300 text-orange-400 group-hover:text-orange-300" />
+          </button>
         </div>
       </div>
 
@@ -192,140 +271,140 @@ export default function InteractiveHUD() {
                     <button 
                       onClick={() => setSelectedSensor('Radar Sensor')}
                       style={{ left: '10%', top: '65%' }}
-                      className={`absolute -translate-x-1/2 -translate-y-1/2 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded border shadow-lg font-sans transition-all duration-200 cursor-pointer flex items-center gap-1.5 whitespace-nowrap ${
+                      className={`absolute -translate-x-1/2 -translate-y-1/2 px-1 py-[1px] sm:px-1.5 sm:py-0.5 rounded border shadow-md font-sans transition-all duration-200 cursor-pointer flex items-center gap-1 whitespace-nowrap ${
                         selectedSensor === 'Radar Sensor'
                           ? 'bg-brand-dark text-white border-brand-amber scale-105 ring-1 ring-brand-amber/40 shadow-brand-amber/10'
-                          : 'bg-white/90 text-brand-dark/95 border-brand-gold/20 hover:border-brand-amber hover:bg-white text-opacity-90'
+                          : 'bg-white/95 text-brand-dark/95 border-brand-gold/20 hover:border-brand-amber hover:bg-white text-opacity-90'
                       }`}
                     >
-                      <span className={`w-1.5 h-1.5 rounded-full ${selectedSensor === 'Radar Sensor' ? 'bg-brand-amber animate-pulse' : 'bg-emerald-500'}`} />
-                      <span className="font-bold text-[8px] sm:text-[9px] tracking-tight">1. Radar Sensor</span>
+                      <span className={`w-1 h-1 rounded-full ${selectedSensor === 'Radar Sensor' ? 'bg-brand-amber animate-pulse' : 'bg-emerald-500'}`} />
+                      <span className="font-extrabold text-[6.5px] sm:text-[8px] tracking-tight">1. Radar</span>
                     </button>
 
                     {/* Tag 2: LED Headlights */}
                     <button 
                       onClick={() => setSelectedSensor('LED Headlights')}
                       style={{ left: '14%', top: '51%' }}
-                      className={`absolute -translate-x-1/2 -translate-y-1/2 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded border shadow-lg font-sans transition-all duration-200 cursor-pointer flex items-center gap-1.5 whitespace-nowrap ${
+                      className={`absolute -translate-x-1/2 -translate-y-1/2 px-1 py-[1px] sm:px-1.5 sm:py-0.5 rounded border shadow-md font-sans transition-all duration-200 cursor-pointer flex items-center gap-1 whitespace-nowrap ${
                         selectedSensor === 'LED Headlights'
                           ? 'bg-brand-dark text-white border-brand-amber scale-105 ring-1 ring-brand-amber/40 shadow-brand-amber/10'
-                          : 'bg-white/90 text-brand-dark/95 border-brand-gold/20 hover:border-brand-amber hover:bg-white text-opacity-90'
+                          : 'bg-white/95 text-brand-dark/95 border-brand-gold/20 hover:border-brand-amber hover:bg-white text-opacity-90'
                       }`}
                     >
-                      <span className={`w-1.5 h-1.5 rounded-full ${selectedSensor === 'LED Headlights' ? 'bg-brand-amber animate-pulse' : 'bg-emerald-500'}`} />
-                      <span className="font-bold text-[8px] sm:text-[9px] tracking-tight">2. LED Headlights</span>
+                      <span className={`w-1 h-1 rounded-full ${selectedSensor === 'LED Headlights' ? 'bg-brand-amber animate-pulse' : 'bg-emerald-500'}`} />
+                      <span className="font-extrabold text-[6.5px] sm:text-[8px] tracking-tight">2. LED</span>
                     </button>
 
                     {/* Tag 3: Engine ECU */}
                     <button 
                       onClick={() => setSelectedSensor('Engine ECU')}
                       style={{ left: '26%', top: '46%' }}
-                      className={`absolute -translate-x-1/2 -translate-y-1/2 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded border shadow-lg font-sans transition-all duration-200 cursor-pointer flex items-center gap-1.5 whitespace-nowrap ${
+                      className={`absolute -translate-x-1/2 -translate-y-1/2 px-1 py-[1px] sm:px-1.5 sm:py-0.5 rounded border shadow-md font-sans transition-all duration-200 cursor-pointer flex items-center gap-1 whitespace-nowrap ${
                         selectedSensor === 'Engine ECU'
                           ? 'bg-brand-dark text-white border-brand-amber scale-105 ring-1 ring-brand-amber/40 shadow-brand-amber/10'
-                          : 'bg-white/90 text-brand-dark/95 border-brand-gold/20 hover:border-brand-amber hover:bg-white text-opacity-90'
+                          : 'bg-white/95 text-brand-dark/95 border-brand-gold/20 hover:border-brand-amber hover:bg-white text-opacity-90'
                       }`}
                     >
-                      <span className={`w-1.5 h-1.5 rounded-full ${selectedSensor === 'Engine ECU' ? 'bg-brand-amber animate-pulse' : 'bg-emerald-500'}`} />
-                      <span className="font-bold text-[8px] sm:text-[9px] tracking-tight">3. Engine ECU</span>
+                      <span className={`w-1 h-1 rounded-full ${selectedSensor === 'Engine ECU' ? 'bg-brand-amber animate-pulse' : 'bg-emerald-500'}`} />
+                      <span className="font-extrabold text-[6.5px] sm:text-[8px] tracking-tight">3. ECU</span>
                     </button>
 
                     {/* Tag 4: Brake Caliper */}
                     <button 
                       onClick={() => setSelectedSensor('Brake Caliper')}
                       style={{ left: '30%', top: '72%' }}
-                      className={`absolute -translate-x-1/2 -translate-y-1/2 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded border shadow-lg font-sans transition-all duration-200 cursor-pointer flex items-center gap-1.5 whitespace-nowrap ${
+                      className={`absolute -translate-x-1/2 -translate-y-1/2 px-1 py-[1px] sm:px-1.5 sm:py-0.5 rounded border shadow-md font-sans transition-all duration-200 cursor-pointer flex items-center gap-1 whitespace-nowrap ${
                         selectedSensor === 'Brake Caliper'
                           ? 'bg-brand-dark text-white border-brand-amber scale-105 ring-1 ring-brand-amber/40 shadow-brand-amber/10'
-                          : 'bg-white/90 text-brand-dark/95 border-brand-gold/20 hover:border-brand-amber hover:bg-white text-opacity-90'
+                          : 'bg-white/95 text-brand-dark/95 border-brand-gold/20 hover:border-brand-amber hover:bg-white text-opacity-90'
                       }`}
                     >
-                      <span className={`w-1.5 h-1.5 rounded-full ${selectedSensor === 'Brake Caliper' ? 'bg-brand-amber animate-pulse' : 'bg-emerald-500'}`} />
-                      <span className="font-bold text-[8px] sm:text-[9px] tracking-tight">4. Brake Caliper</span>
+                      <span className={`w-1 h-1 rounded-full ${selectedSensor === 'Brake Caliper' ? 'bg-brand-amber animate-pulse' : 'bg-emerald-500'}`} />
+                      <span className="font-extrabold text-[6.5px] sm:text-[8px] tracking-tight">4. Brake</span>
                     </button>
 
                     {/* Tag 5: ADAS Camera */}
                     <button 
                       onClick={() => setSelectedSensor('ADAS Camera')}
                       style={{ left: '46%', top: '30%' }}
-                      className={`absolute -translate-x-1/2 -translate-y-1/2 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded border shadow-lg font-sans transition-all duration-200 cursor-pointer flex items-center gap-1.5 whitespace-nowrap ${
+                      className={`absolute -translate-x-1/2 -translate-y-1/2 px-1 py-[1px] sm:px-1.5 sm:py-0.5 rounded border shadow-md font-sans transition-all duration-200 cursor-pointer flex items-center gap-1 whitespace-nowrap ${
                         selectedSensor === 'ADAS Camera'
                           ? 'bg-brand-dark text-white border-brand-amber scale-105 ring-1 ring-brand-amber/40 shadow-brand-amber/10'
-                          : 'bg-white/90 text-brand-dark/95 border-brand-gold/20 hover:border-brand-amber hover:bg-white text-opacity-90'
+                          : 'bg-white/95 text-brand-dark/95 border-brand-gold/20 hover:border-brand-amber hover:bg-white text-opacity-90'
                       }`}
                     >
-                      <span className={`w-1.5 h-1.5 rounded-full ${selectedSensor === 'ADAS Camera' ? 'bg-brand-amber animate-pulse' : 'bg-emerald-500'}`} />
-                      <span className="font-bold text-[8px] sm:text-[9px] tracking-tight">5. ADAS Camera</span>
+                      <span className={`w-1 h-1 rounded-full ${selectedSensor === 'ADAS Camera' ? 'bg-brand-amber animate-pulse' : 'bg-emerald-500'}`} />
+                      <span className="font-extrabold text-[6.5px] sm:text-[8px] tracking-tight">5. ADAS</span>
                     </button>
 
                     {/* Tag 6: Transmission TCU */}
                     <button 
                       onClick={() => setSelectedSensor('Transmission TCU')}
                       style={{ left: '46%', top: '65%' }}
-                      className={`absolute -translate-x-1/2 -translate-y-1/2 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded border shadow-lg font-sans transition-all duration-200 cursor-pointer flex items-center gap-1.5 whitespace-nowrap ${
+                      className={`absolute -translate-x-1/2 -translate-y-1/2 px-1 py-[1px] sm:px-1.5 sm:py-0.5 rounded border shadow-md font-sans transition-all duration-200 cursor-pointer flex items-center gap-1 whitespace-nowrap ${
                         selectedSensor === 'Transmission TCU'
                           ? 'bg-brand-dark text-white border-brand-amber scale-105 ring-1 ring-brand-amber/40 shadow-brand-amber/10'
-                          : 'bg-white/90 text-brand-dark/95 border-brand-gold/20 hover:border-brand-amber hover:bg-white text-opacity-90'
+                          : 'bg-white/95 text-brand-dark/95 border-brand-gold/20 hover:border-brand-amber hover:bg-white text-opacity-90'
                       }`}
                     >
-                      <span className={`w-1.5 h-1.5 rounded-full ${selectedSensor === 'Transmission TCU' ? 'bg-brand-amber animate-pulse' : 'bg-emerald-500'}`} />
-                      <span className="font-bold text-[8px] sm:text-[9px] tracking-tight">6. TCU Module</span>
+                      <span className={`w-1 h-1 rounded-full ${selectedSensor === 'Transmission TCU' ? 'bg-brand-amber animate-pulse' : 'bg-emerald-500'}`} />
+                      <span className="font-extrabold text-[6.5px] sm:text-[8px] tracking-tight">6. TCU</span>
                     </button>
 
                     {/* Tag 7: Airbags SRS */}
                     <button 
                       onClick={() => setSelectedSensor('Airbags SRS')}
                       style={{ left: '58%', top: '38%' }}
-                      className={`absolute -translate-x-1/2 -translate-y-1/2 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded border shadow-lg font-sans transition-all duration-200 cursor-pointer flex items-center gap-1.5 whitespace-nowrap ${
+                      className={`absolute -translate-x-1/2 -translate-y-1/2 px-1 py-[1px] sm:px-1.5 sm:py-0.5 rounded border shadow-md font-sans transition-all duration-200 cursor-pointer flex items-center gap-1 whitespace-nowrap ${
                         selectedSensor === 'Airbags SRS'
                           ? 'bg-brand-dark text-white border-brand-amber scale-105 ring-1 ring-brand-amber/40 shadow-brand-amber/10'
-                          : 'bg-white/90 text-brand-dark/95 border-brand-gold/20 hover:border-brand-amber hover:bg-white text-opacity-90'
+                          : 'bg-white/95 text-brand-dark/95 border-brand-gold/20 hover:border-brand-amber hover:bg-white text-opacity-90'
                       }`}
                     >
-                      <span className={`w-1.5 h-1.5 rounded-full ${selectedSensor === 'Airbags SRS' ? 'bg-brand-amber animate-pulse' : 'bg-emerald-500'}`} />
-                      <span className="font-bold text-[8px] sm:text-[9px] tracking-tight">7. Airbags SRS</span>
+                      <span className={`w-1 h-1 rounded-full ${selectedSensor === 'Airbags SRS' ? 'bg-brand-amber animate-pulse' : 'bg-emerald-500'}`} />
+                      <span className="font-extrabold text-[6.5px] sm:text-[8px] tracking-tight">7. SRS</span>
                     </button>
 
                     {/* Tag 8: Fuel System */}
                     <button 
                       onClick={() => setSelectedSensor('Fuel System')}
                       style={{ left: '68%', top: '66%' }}
-                      className={`absolute -translate-x-1/2 -translate-y-1/2 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded border shadow-lg font-sans transition-all duration-200 cursor-pointer flex items-center gap-1.5 whitespace-nowrap ${
+                      className={`absolute -translate-x-1/2 -translate-y-1/2 px-1 py-[1px] sm:px-1.5 sm:py-0.5 rounded border shadow-md font-sans transition-all duration-200 cursor-pointer flex items-center gap-1 whitespace-nowrap ${
                         selectedSensor === 'Fuel System'
                           ? 'bg-brand-dark text-white border-brand-amber scale-105 ring-1 ring-brand-amber/40 shadow-brand-amber/10'
-                          : 'bg-white/90 text-brand-dark/95 border-brand-gold/20 hover:border-brand-amber hover:bg-white text-opacity-90'
+                          : 'bg-white/95 text-brand-dark/95 border-brand-gold/20 hover:border-brand-amber hover:bg-white text-opacity-90'
                       }`}
                     >
-                      <span className={`w-1.5 h-1.5 rounded-full ${selectedSensor === 'Fuel System' ? 'bg-brand-amber animate-pulse' : 'bg-emerald-500'}`} />
-                      <span className="font-bold text-[8px] sm:text-[9px] tracking-tight">8. Fuel System</span>
+                      <span className={`w-1 h-1 rounded-full ${selectedSensor === 'Fuel System' ? 'bg-brand-amber animate-pulse' : 'bg-emerald-500'}`} />
+                      <span className="font-extrabold text-[6.5px] sm:text-[8px] tracking-tight">8. Fuel</span>
                     </button>
 
                     {/* Tag 9: ABS Controller */}
                     <button 
                       onClick={() => setSelectedSensor('ABS Controller')}
                       style={{ left: '78%', top: '70%' }}
-                      className={`absolute -translate-x-1/2 -translate-y-1/2 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded border shadow-lg font-sans transition-all duration-200 cursor-pointer flex items-center gap-1.5 whitespace-nowrap ${
+                      className={`absolute -translate-x-1/2 -translate-y-1/2 px-1 py-[1px] sm:px-1.5 sm:py-0.5 rounded border shadow-md font-sans transition-all duration-200 cursor-pointer flex items-center gap-1 whitespace-nowrap ${
                         selectedSensor === 'ABS Controller'
                           ? 'bg-brand-dark text-white border-brand-amber scale-105 ring-1 ring-brand-amber/40 shadow-brand-amber/10'
-                          : 'bg-white/90 text-brand-dark/95 border-brand-gold/20 hover:border-brand-amber hover:bg-white text-opacity-90'
+                          : 'bg-white/95 text-brand-dark/95 border-brand-gold/20 hover:border-brand-amber hover:bg-white text-opacity-90'
                       }`}
                     >
-                      <span className={`w-1.5 h-1.5 rounded-full ${selectedSensor === 'ABS Controller' ? 'bg-brand-amber animate-pulse' : 'bg-emerald-500'}`} />
-                      <span className="font-bold text-[8px] sm:text-[9px] tracking-tight">9. ABS Module</span>
+                      <span className={`w-1 h-1 rounded-full ${selectedSensor === 'ABS Controller' ? 'bg-brand-amber animate-pulse' : 'bg-emerald-500'}`} />
+                      <span className="font-extrabold text-[6.5px] sm:text-[8px] tracking-tight">9. ABS</span>
                     </button>
 
                     {/* Tag 10: Tail Lights */}
                     <button 
                       onClick={() => setSelectedSensor('Tail Lights')}
                       style={{ left: '88%', top: '48%' }}
-                      className={`absolute -translate-x-1/2 -translate-y-1/2 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded border shadow-lg font-sans transition-all duration-200 cursor-pointer flex items-center gap-1.5 whitespace-nowrap ${
+                      className={`absolute -translate-x-1/2 -translate-y-1/2 px-1 py-[1px] sm:px-1.5 sm:py-0.5 rounded border shadow-md font-sans transition-all duration-200 cursor-pointer flex items-center gap-1 whitespace-nowrap ${
                         selectedSensor === 'Tail Lights'
                           ? 'bg-brand-dark text-white border-brand-amber scale-105 ring-1 ring-brand-amber/40 shadow-brand-amber/10'
-                          : 'bg-white/90 text-brand-dark/95 border-brand-gold/20 hover:border-brand-amber hover:bg-white text-opacity-90'
+                          : 'bg-white/95 text-brand-dark/95 border-brand-gold/20 hover:border-brand-amber hover:bg-white text-opacity-90'
                       }`}
                     >
-                      <span className={`w-1.5 h-1.5 rounded-full ${selectedSensor === 'Tail Lights' ? 'bg-brand-amber animate-pulse' : 'bg-emerald-500'}`} />
-                      <span className="font-bold text-[8px] sm:text-[9px] tracking-tight">10. Tail Lights</span>
+                      <span className={`w-1 h-1 rounded-full ${selectedSensor === 'Tail Lights' ? 'bg-brand-amber animate-pulse' : 'bg-emerald-500'}`} />
+                      <span className="font-extrabold text-[6.5px] sm:text-[8px] tracking-tight">10. Tail</span>
                     </button>
 
                   </div>
@@ -804,6 +883,6 @@ export default function InteractiveHUD() {
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </motion.div>
   );
 }

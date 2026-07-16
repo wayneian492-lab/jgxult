@@ -35,7 +35,8 @@ import {
   HelpCircle,
   Info,
   Map,
-  MessageSquare
+  MessageSquare,
+  Mail
 } from 'lucide-react';
 
 import Navbar from './components/Navbar';
@@ -160,7 +161,7 @@ export default function App() {
         id="desktop-sidebar"
         onMouseEnter={() => setDesktopSidebarExpanded(true)}
         onMouseLeave={() => setDesktopSidebarExpanded(false)}
-        className={`hidden md:flex flex-col fixed left-0 top-0 bottom-0 bg-[#0c1020] border-r border-brand-gold/15 text-slate-100 z-30 select-none overflow-y-auto overflow-x-hidden custom-scrollbar transition-[width] duration-150 ease-out will-change-[width] ${
+        className={`hidden md:flex flex-col fixed left-0 top-0 bottom-0 bg-[#0c1020] border-r border-brand-gold/15 text-slate-100 z-30 select-none overflow-y-auto overflow-x-hidden custom-scrollbar transition-[width,box-shadow] duration-250 ease-in-out will-change-[width] ${
           desktopSidebarExpanded ? 'w-72 shadow-[10px_0_40px_rgba(0,0,0,0.5)]' : 'w-18'
         }`}
       >
@@ -172,7 +173,7 @@ export default function App() {
         )}
 
         {/* Brand / Logo Header */}
-        <div className={`p-6 border-b border-white/5 flex items-center gap-3 ${desktopSidebarExpanded ? 'justify-start' : 'justify-center px-0'}`}>
+        <div className="p-6 border-b border-white/5 flex items-center gap-3 justify-start">
           <div className="w-10 h-10 rounded-xl overflow-hidden bg-white border border-brand-gold/20 flex items-center justify-center p-0.5 shrink-0 shadow-md">
             <img 
               src={mcarfixLogo} 
@@ -181,16 +182,24 @@ export default function App() {
               referrerPolicy="no-referrer"
             />
           </div>
-          <div className={`transition-all duration-300 origin-left ${desktopSidebarExpanded ? 'opacity-100 scale-100 w-auto' : 'opacity-0 scale-90 w-0 h-0 overflow-hidden'}`}>
-            <span className="font-display font-black text-lg tracking-wider text-white block">m<span className="text-brand-amber">Car</span>Fix</span>
-            <span className="text-[10px] font-mono text-brand-gold uppercase tracking-widest font-semibold block">Kenya Platform</span>
+          <div className={`transition-all duration-250 ease-in-out origin-left min-w-0 ${
+            desktopSidebarExpanded 
+              ? 'opacity-100 translate-x-0 max-w-[180px] visible' 
+              : 'opacity-0 -translate-x-3 max-w-0 overflow-hidden invisible pointer-events-none'
+          }`}>
+            <span className="font-display font-black text-lg tracking-wider text-white block whitespace-nowrap">m<span className="text-brand-amber">Car</span>Fix</span>
+            <span className="text-[10px] font-mono text-brand-gold uppercase tracking-widest font-semibold block whitespace-nowrap">Kenya Platform</span>
           </div>
         </div>
 
         {/* Sidebar Nav Items */}
         <nav className="flex-1 p-4 space-y-1">
-          <div className={`px-3 mb-2 transition-all duration-300 ${desktopSidebarExpanded ? 'opacity-100' : 'opacity-0 h-0 overflow-hidden mb-0'}`}>
-            <span className="text-[9px] font-mono font-bold tracking-widest text-slate-400 uppercase">Interactive Portals</span>
+          <div className={`px-3 mb-2 transition-all duration-250 ease-in-out ${
+            desktopSidebarExpanded 
+              ? 'opacity-100 max-h-8 visible' 
+              : 'opacity-0 max-h-0 overflow-hidden invisible pointer-events-none'
+          }`}>
+            <span className="text-[9px] font-mono font-bold tracking-widest text-slate-400 uppercase whitespace-nowrap">Interactive Portals</span>
           </div>
           {sidebarTabs.map((tab) => {
             const isActive = activeTab === tab.id;
@@ -199,9 +208,7 @@ export default function App() {
               <button
                 key={tab.id}
                 onClick={() => handleNavigate(tab.id)}
-                className={`w-full flex items-center rounded-xl text-left transition-all duration-200 group cursor-pointer ${
-                  desktopSidebarExpanded ? 'px-3.5 py-3 gap-3.5 justify-start' : 'p-3 justify-center'
-                } ${
+                className={`w-full flex items-center rounded-xl text-left transition-all duration-250 ease-in-out group cursor-pointer py-3 gap-3.5 justify-start px-3.5 ${
                   isActive
                     ? 'bg-brand-amber text-white shadow-lg shadow-brand-amber/20 font-bold'
                     : 'text-slate-400 hover:text-white hover:bg-white/5 font-medium'
@@ -209,9 +216,13 @@ export default function App() {
                 title={!desktopSidebarExpanded ? tab.label : undefined}
               >
                 <Icon className={`w-5 h-5 shrink-0 transition-transform duration-200 group-hover:scale-110 ${isActive ? 'text-white' : 'text-brand-gold group-hover:text-brand-amber'}`} />
-                <div className={`min-w-0 transition-all duration-300 origin-left ${desktopSidebarExpanded ? 'opacity-100 scale-100 w-auto' : 'opacity-0 scale-90 w-0 h-0 overflow-hidden'}`}>
-                  <span className="text-xs font-display block leading-tight">{tab.label}</span>
-                  <span className={`text-[10px] font-normal block truncate ${isActive ? 'text-white/70' : 'text-slate-500'}`}>{tab.description}</span>
+                <div className={`transition-all duration-250 ease-in-out origin-left min-w-0 ${
+                  desktopSidebarExpanded 
+                    ? 'opacity-100 translate-x-0 max-w-[200px] visible' 
+                    : 'opacity-0 -translate-x-3 max-w-0 overflow-hidden invisible pointer-events-none'
+                }`}>
+                  <span className="text-xs font-display block leading-tight whitespace-nowrap">{tab.label}</span>
+                  <span className={`text-[10px] font-normal block truncate whitespace-nowrap ${isActive ? 'text-white/70' : 'text-slate-500'}`}>{tab.description}</span>
                 </div>
               </button>
             );
@@ -219,21 +230,37 @@ export default function App() {
         </nav>
 
         {/* Sidebar Footer / Emergency Area */}
-        <div className={`p-4 border-t border-white/5 bg-[#080b16] transition-all duration-300 ${desktopSidebarExpanded ? 'space-y-3' : 'space-y-0 p-3 flex flex-col items-center justify-center'}`}>
+        <div className="p-4 border-t border-white/5 bg-[#080b16] space-y-3">
           <button
             onClick={() => setActiveSOS(true)}
-            className={`rounded-xl bg-red-600 hover:bg-red-700 active:bg-red-800 text-white font-mono text-[11px] font-extrabold uppercase tracking-widest flex items-center justify-center transition-all shadow-md shadow-red-900/20 cursor-pointer ${
-              desktopSidebarExpanded ? 'w-full py-2.5 px-3 gap-2' : 'p-2.5 rounded-full'
+            className={`rounded-xl bg-red-600 hover:bg-red-700 active:bg-red-800 text-white font-mono text-[11px] font-extrabold uppercase tracking-widest flex items-center transition-all duration-250 ease-in-out shadow-md shadow-red-900/20 cursor-pointer h-11 ${
+              desktopSidebarExpanded ? 'w-full px-4 gap-2.5 justify-start' : 'w-10 px-2.5 justify-center'
             }`}
             title="Emergency SOS"
           >
             <ShieldAlert className="w-5 h-5 animate-pulse text-white shrink-0" />
-            <span className={desktopSidebarExpanded ? 'block' : 'hidden'}>Emergency SOS</span>
+            <span className={`transition-all duration-250 ease-in-out origin-left whitespace-nowrap ${
+              desktopSidebarExpanded 
+                ? 'opacity-100 translate-x-0 max-w-[150px] visible' 
+                : 'opacity-0 -translate-x-3 max-w-0 overflow-hidden invisible pointer-events-none'
+            }`}>
+              Emergency SOS
+            </span>
           </button>
           
-          <div className={`transition-all duration-300 flex items-center justify-between text-[10px] text-slate-500 font-mono w-full ${desktopSidebarExpanded ? 'opacity-100 h-auto mt-3' : 'opacity-0 h-0 overflow-hidden mt-0'}`}>
-            <span>24/7 Helpline:</span>
-            <a href="tel:+25470000000" className="text-brand-gold font-bold hover:text-brand-amber transition-colors">0700 mCarFix</a>
+          <div className={`transition-all duration-250 ease-in-out flex flex-col gap-1 text-[10px] text-slate-500 font-mono w-full ${
+            desktopSidebarExpanded 
+              ? 'opacity-100 max-h-24 visible mt-1 border-t border-white/5 pt-2' 
+              : 'opacity-0 max-h-0 overflow-hidden invisible pointer-events-none mt-0'
+          }`}>
+            <span className="text-[9px] uppercase tracking-wider text-slate-400 font-bold whitespace-nowrap">Customer Support</span>
+            <a href="tel:+254704804932" className="text-brand-gold font-bold hover:text-brand-amber transition-colors whitespace-nowrap flex items-center gap-1">
+              <Phone className="w-3 h-3 shrink-0 text-brand-amber" />
+              <span>+254 704 804932</span>
+            </a>
+            <a href="mailto:support@mcarfix.com" className="text-slate-400 hover:text-brand-amber transition-colors truncate block">
+              support@mcarfix.com
+            </a>
           </div>
         </div>
       </aside>
@@ -324,9 +351,15 @@ export default function App() {
                   <span>Emergency SOS</span>
                 </button>
                 
-                <div className="flex items-center justify-between text-[10px] text-slate-500 font-mono">
-                  <span>24/7 Helpline:</span>
-                  <a href="tel:+25470000000" className="text-brand-gold font-bold hover:text-brand-amber transition-colors">0700 mCarFix</a>
+                <div className="flex flex-col gap-1 text-[10px] font-mono border-t border-white/5 pt-2 mt-1">
+                  <span className="text-[9px] uppercase tracking-wider text-slate-500 font-bold">Customer Support</span>
+                  <a href="tel:+254704804932" className="text-brand-gold hover:text-brand-amber font-bold transition-colors flex items-center gap-1">
+                    <Phone className="w-3 h-3 shrink-0 text-brand-amber" />
+                    <span>+254 704 804932</span>
+                  </a>
+                  <a href="mailto:support@mcarfix.com" className="text-slate-400 hover:text-brand-amber transition-colors truncate block">
+                    support@mcarfix.com
+                  </a>
                 </div>
               </div>
             </motion.div>
@@ -341,7 +374,7 @@ export default function App() {
       />
 
       {/* 3. MAIN WORKSPACE CONTENT */}
-      <div className={`flex-1 flex flex-col min-w-0 transition-[padding-left] duration-150 ease-out will-change-[padding-left] relative ${
+      <div className={`flex-1 flex flex-col min-w-0 transition-[padding-left] duration-250 ease-in-out will-change-[padding-left] relative ${
         desktopSidebarExpanded ? 'md:pl-72' : 'md:pl-18'
       }`}>
         
@@ -394,13 +427,23 @@ export default function App() {
               <span className="text-brand-amber font-extrabold">Active (Nairobi Central)</span>
             </div>
 
-            <a 
-              href="tel:+25470000000" 
-              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-gold-light border border-brand-gold/15 hover:border-brand-amber/50 hover:bg-brand-gold-light/80 text-brand-dark font-mono text-xs font-bold transition-all"
-            >
-              <Phone className="w-3.5 h-3.5 text-brand-amber" />
-              <span>Helpline: 0700 mCarFix</span>
-            </a>
+            <div className="flex flex-col items-end text-right font-mono border-l border-brand-gold/15 pl-4">
+              <span className="text-[9px] uppercase tracking-widest text-brand-muted font-extrabold block">Customer Support</span>
+              <a 
+                href="tel:+254704804932" 
+                className="flex items-center gap-1.5 text-brand-dark hover:text-brand-amber text-xs font-bold transition-all mt-0.5"
+              >
+                <Phone className="w-3.5 h-3.5 text-brand-amber shrink-0" />
+                <span>+254 704 804932</span>
+              </a>
+              <a 
+                href="mailto:support@mcarfix.com" 
+                className="text-[10px] text-slate-500 hover:text-brand-amber transition-all flex items-center gap-1 mt-0.5 justify-end"
+              >
+                <Mail className="w-3 h-3 text-slate-400 shrink-0" />
+                <span>support@mcarfix.com</span>
+              </a>
+            </div>
 
             <button
               onClick={() => setActiveSOS(true)}
