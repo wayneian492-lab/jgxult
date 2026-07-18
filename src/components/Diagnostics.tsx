@@ -70,7 +70,7 @@ export default function Diagnostics({ onSOSClick }: DiagnosticsProps) {
                 <button
                   key={item.id}
                   onClick={() => setSelectedSymptomId(item.id)}
-                  className={`w-full flex items-center gap-3.5 p-4 rounded-2xl border text-left transition-all duration-300 cursor-pointer ${
+                  className={`w-full flex items-center gap-3.5 p-4 rounded-2xl border text-left transition duration-300 cursor-pointer ${
                     isActive
                       ? 'border-brand-amber bg-brand-amber/5 text-brand-dark shadow-md'
                       : 'border-brand-gold/20 bg-brand-gold-light/40 text-brand-muted hover:border-brand-gold/40 hover:text-brand-dark'
@@ -159,7 +159,7 @@ export default function Diagnostics({ onSOSClick }: DiagnosticsProps) {
                   {selectedData.urgency.includes('Critical') ? (
                     <button
                       onClick={onSOSClick}
-                      className="w-full sm:w-auto bg-brand-amber hover:bg-brand-amber-hover text-white text-xs font-bold font-mono px-5 py-3 rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-brand-amber/15 transition-all duration-300 cursor-pointer hover:-translate-y-0.5"
+                      className="w-full sm:w-auto bg-brand-amber hover:bg-brand-amber-hover text-white text-xs font-bold font-mono px-5 py-3 rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-brand-amber/15 transition duration-300 cursor-pointer hover:-translate-y-0.5"
                     >
                       <span>Request Immediate Towing</span>
                       <ArrowRight className="w-4 h-4" />
@@ -172,7 +172,7 @@ export default function Diagnostics({ onSOSClick }: DiagnosticsProps) {
                           element.scrollIntoView({ behavior: 'smooth' });
                         }
                       }}
-                      className="w-full sm:w-auto bg-brand-amber hover:bg-brand-amber-hover text-white text-xs font-bold font-mono px-5 py-3 rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-brand-amber/10 transition-all cursor-pointer"
+                      className="w-full sm:w-auto bg-brand-amber hover:bg-brand-amber-hover text-white text-xs font-bold font-mono px-5 py-3 rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-brand-amber/10 transition cursor-pointer"
                     >
                       <span>Book Diagnostic Check</span>
                       <ArrowRight className="w-4 h-4" />

@@ -80,7 +80,6 @@ export default function InteractiveHUD() {
   if (isMinimized) {
     return (
       <motion.div
-        layoutId="interactive-hud-wrapper"
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
@@ -139,7 +138,6 @@ export default function InteractiveHUD() {
 
   return (
     <motion.div
-      layoutId="interactive-hud-wrapper"
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}

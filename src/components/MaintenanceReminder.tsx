@@ -182,7 +182,7 @@ export default function MaintenanceReminder() {
 
           <button
             type="submit"
-            className="w-full bg-brand-amber hover:bg-brand-amber-hover text-white font-mono font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-brand-amber/10 transition-all hover:-translate-y-0.5"
+            className="w-full bg-brand-amber hover:bg-brand-amber-hover text-white font-mono font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-brand-amber/10 transition hover:-translate-y-0.5"
           >
             <Plus className="w-4 h-4" />
             <span>Create Active Reminder</span>

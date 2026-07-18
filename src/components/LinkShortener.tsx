@@ -270,7 +270,7 @@ export default function LinkShortener() {
                 <button
                   type="button"
                   onClick={() => handleSelectPredefinedLink('invoice')}
-                  className={`py-2 px-1 text-center rounded-xl border text-[10px] font-mono font-bold transition-all ${
+                  className={`py-2 px-1 text-center rounded-xl border text-[10px] font-mono font-bold transition ${
                     selectedLinkType === 'invoice'
                       ? 'bg-brand-amber/10 border-brand-amber text-brand-amber'
                       : 'bg-brand-gold-light/20 border-brand-gold/15 hover:border-brand-amber/30 text-brand-muted'
@@ -281,7 +281,7 @@ export default function LinkShortener() {
                 <button
                   type="button"
                   onClick={() => handleSelectPredefinedLink('telemetry')}
-                  className={`py-2 px-1 text-center rounded-xl border text-[10px] font-mono font-bold transition-all ${
+                  className={`py-2 px-1 text-center rounded-xl border text-[10px] font-mono font-bold transition ${
                     selectedLinkType === 'telemetry'
                       ? 'bg-brand-amber/10 border-brand-amber text-brand-amber'
                       : 'bg-brand-gold-light/20 border-brand-gold/15 hover:border-brand-amber/30 text-brand-muted'
@@ -292,7 +292,7 @@ export default function LinkShortener() {
                 <button
                   type="button"
                   onClick={() => handleSelectPredefinedLink('sos')}
-                  className={`py-2 px-1 text-center rounded-xl border text-[10px] font-mono font-bold transition-all ${
+                  className={`py-2 px-1 text-center rounded-xl border text-[10px] font-mono font-bold transition ${
                     selectedLinkType === 'sos'
                       ? 'bg-brand-amber/10 border-brand-amber text-brand-amber'
                       : 'bg-brand-gold-light/20 border-brand-gold/15 hover:border-brand-amber/30 text-brand-muted'
@@ -360,7 +360,7 @@ export default function LinkShortener() {
               <button
                 type="submit"
                 disabled={isShortening}
-                className="w-full bg-brand-dark hover:bg-brand-amber text-white font-mono text-xs font-bold py-3.5 rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg hover:shadow-brand-amber/15 border border-brand-gold/10"
+                className="w-full bg-brand-dark hover:bg-brand-amber text-white font-mono text-xs font-bold py-3.5 rounded-xl transition flex items-center justify-center gap-2 cursor-pointer shadow-lg hover:shadow-brand-amber/15 border border-brand-gold/10"
               >
                 {isShortening ? (
                   <>
@@ -486,7 +486,7 @@ export default function LinkShortener() {
               <button
                 type="button"
                 onClick={triggerManualSimulation}
-                className="bg-brand-amber hover:bg-brand-gold text-white font-mono text-[9px] font-bold py-1.5 px-3 rounded-lg flex items-center gap-1 cursor-pointer transition-all active:scale-95"
+                className="bg-brand-amber hover:bg-brand-gold text-white font-mono text-[9px] font-bold py-1.5 px-3 rounded-lg flex items-center gap-1 cursor-pointer transition active:scale-95"
               >
                 <Sparkle className="w-3 h-3 text-white" />
                 <span>Simulate Visitor Click</span>
@@ -589,7 +589,7 @@ export default function LinkShortener() {
                         </div>
                         <div className="w-full bg-slate-800/80 h-1.5 rounded-full overflow-hidden">
                           <div 
-                            className="bg-brand-amber h-full transition-all duration-1000" 
+                            className="bg-brand-amber h-full transition duration-1000" 
                             style={{ width: `${pct}%` }} 
                           />
                         </div>

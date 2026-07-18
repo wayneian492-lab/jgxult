@@ -156,14 +156,10 @@ export default function App() {
       className="min-h-screen bg-brand-cream text-brand-dark flex font-sans selection:bg-brand-amber selection:text-white"
     >
       
-      {/* 1. DESKTOP PERMANENT COLLAPSIBLE SIDEBAR */}
+      {/* 1. DESKTOP PERMANENT SIDEBAR */}
       <aside 
         id="desktop-sidebar"
-        onMouseEnter={() => setDesktopSidebarExpanded(true)}
-        onMouseLeave={() => setDesktopSidebarExpanded(false)}
-        className={`hidden md:flex flex-col fixed left-0 top-0 bottom-0 bg-[#0c1020] border-r border-brand-gold/15 text-slate-100 z-30 select-none overflow-y-auto overflow-x-hidden custom-scrollbar transition-all duration-300 ease-in-out will-change-[width] ${
-          desktopSidebarExpanded ? 'w-72 shadow-[10px_0_40px_rgba(0,0,0,0.5)]' : 'w-18'
-        }`}
+        className="hidden md:flex flex-col fixed left-0 top-0 bottom-0 bg-[#0c1020] border-r border-brand-gold/15 text-slate-100 z-30 select-none overflow-y-auto overflow-x-hidden custom-scrollbar w-72 shadow-[10px_0_40px_rgba(0,0,0,0.5)]"
       >
         {/* Floating expand hint icon visible when sidebar is collapsed */}
         {!desktopSidebarExpanded && (
@@ -371,16 +367,8 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      {/* Invisible Hover Trigger on Left Edge to assist in expanding sidebar easily */}
-      <div 
-        onMouseEnter={() => setDesktopSidebarExpanded(true)} 
-        className="hidden md:block fixed left-0 top-0 bottom-0 w-3.5 z-40 bg-transparent" 
-      />
-
       {/* 3. MAIN WORKSPACE CONTENT */}
-      <div className={`flex-1 flex flex-col min-w-0 transition-all duration-300 ease-in-out will-change-[padding-left] relative ${
-        desktopSidebarExpanded ? 'md:pl-72' : 'md:pl-18'
-      }`}>
+      <div className="flex-1 flex flex-col min-w-0 md:pl-72 relative">
         
         {/* MOBILE STICKY HEADER */}
         <header className="md:hidden sticky top-0 z-30 flex items-center justify-between h-16 bg-[#0c1020] border-b border-brand-gold/15 px-6 text-white">
@@ -490,49 +478,49 @@ export default function App() {
         {/* Selected Tab Content Viewport */}
         <main className="flex-grow">
           {activeTab === 'home' && (
-            <header id="hero" className="relative overflow-hidden py-16 lg:py-24 border-b border-sky-100 bg-gradient-to-b from-sky-100/40 via-sky-50/20 to-white">
+            <header id="hero" className="relative overflow-hidden py-16 lg:py-24 border-b border-white/5 bg-gradient-to-b from-[#0c0e17] via-[#090a0f] to-[#07080c] text-white">
         {/* Visually Stunning Background Garage Image */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden select-none">
           <img 
             src={heroImg} 
             alt="Verified Modern Garage Workspace with Mechanics" 
-            className="w-full h-full object-cover opacity-90 filter saturate-[1.05] brightness-[1.02] blur-[4px]"
+            className="w-full h-full object-cover opacity-20 filter saturate-[0.8] brightness-[0.4] blur-[3px]"
             referrerPolicy="no-referrer"
           />
-          {/* Premium light transparent overlays that blend beautifully while keeping the image 90% visible and keeping text readable */}
-          <div className="absolute inset-0 bg-gradient-to-b from-sky-100/60 via-transparent to-sky-50/80" />
-          <div className="absolute inset-0 bg-gradient-to-r from-sky-100/35 via-transparent to-sky-100/35" />
-          <div className="absolute inset-0 bg-white/10 mix-blend-overlay" />
+          {/* Premium dark transparent overlays that blend beautifully while keeping the image visible and keeping text readable */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0c0e17]/80 via-transparent to-[#07080c]/90" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0c0e17]/90 via-transparent to-[#0c0e17]/90" />
+          <div className="absolute inset-0 bg-black/40 mix-blend-multiply" />
 
-          {/* Animated subtle high-tech scanning rings & glowing blueprint particles (User-requested) */}
-          <div className="absolute inset-0 pointer-events-none overflow-hidden select-none opacity-40">
+          {/* Animated subtle high-tech scanning rings & glowing blueprint particles */}
+          <div className="absolute inset-0 pointer-events-none overflow-hidden select-none opacity-50">
             <motion.div 
               animate={{ 
                 scale: [1, 1.25, 1],
-                opacity: [0.12, 0.28, 0.12],
-                x: [0, 25, 0],
-                y: [0, -20, 0]
+                opacity: [0.10, 0.25, 0.10],
+                x: [0, 20, 0],
+                y: [0, -15, 0]
               }}
               transition={{ 
                 duration: 14, 
                 repeat: Infinity, 
                 ease: "easeInOut" 
               }}
-              className="absolute top-1/4 left-1/4 w-80 h-80 rounded-full border border-sky-300/15 bg-sky-400/5 blur-xl"
+              className="absolute top-1/4 left-1/4 w-80 h-80 rounded-full border border-brand-amber/10 bg-brand-amber/5 blur-xl"
             />
             <motion.div 
               animate={{ 
                 scale: [1, 1.15, 1],
-                opacity: [0.08, 0.20, 0.08],
-                x: [0, -30, 0],
-                y: [0, 25, 0]
+                opacity: [0.05, 0.15, 0.05],
+                x: [0, -20, 0],
+                y: [0, 15, 0]
               }}
               transition={{ 
                 duration: 18, 
                 repeat: Infinity, 
                 ease: "easeInOut" 
               }}
-              className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full border border-cyan-300/15 bg-cyan-400/5 blur-2xl"
+              className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full border border-white/5 bg-white/5 blur-2xl"
             />
             {/* Animated slow-scanning radar line */}
             <motion.div 
@@ -559,27 +547,27 @@ export default function App() {
                }} 
            />
           {/* Vertical thin engineering lines */}
-          <div className="absolute left-[8%] top-0 bottom-0 w-[1px] bg-brand-gold/10" />
-          <div className="absolute left-[30%] top-0 bottom-0 w-[1px] bg-brand-gold/10 hidden md:block" />
-          <div className="absolute left-[70%] top-0 bottom-0 w-[1px] bg-brand-gold/10 hidden md:block" />
-          <div className="absolute left-[92%] top-0 bottom-0 w-[1px] bg-brand-gold/10" />
+          <div className="absolute left-[8%] top-0 bottom-0 w-[1px] bg-white/5" />
+          <div className="absolute left-[30%] top-0 bottom-0 w-[1px] bg-white/5 hidden md:block" />
+          <div className="absolute left-[70%] top-0 bottom-0 w-[1px] bg-white/5 hidden md:block" />
+          <div className="absolute left-[92%] top-0 bottom-0 w-[1px] bg-white/5" />
           
           {/* Horizontal thin engineering lines */}
-          <div className="absolute left-0 right-0 top-[15%] h-[1px] bg-brand-gold/10" />
-          <div className="absolute left-0 right-0 top-[50%] h-[1px] bg-brand-gold/10" />
-          <div className="absolute left-0 right-0 top-[85%] h-[1px] bg-brand-gold/10" />
+          <div className="absolute left-0 right-0 top-[15%] h-[1px] bg-white/5" />
+          <div className="absolute left-0 right-0 top-[50%] h-[1px] bg-white/5" />
+          <div className="absolute left-0 right-0 top-[85%] h-[1px] bg-white/5" />
           
           {/* Precision Blueprint Corner Markers */}
-          <div className="absolute left-4 top-4 font-mono text-[9px] text-brand-gold/40 tracking-wider">SEC_DRAFT_HUD_2026 // GRID_A</div>
-          <div className="absolute right-4 bottom-4 font-mono text-[9px] text-brand-gold/40 tracking-wider">SYSTEM_CONNECTED_STABLE</div>
-          <div className="absolute left-1/2 top-4 -translate-x-1/2 font-mono text-[8px] text-brand-gold/30 hidden md:block uppercase tracking-widest">
+          <div className="absolute left-4 top-4 font-mono text-[9px] text-slate-500/40 tracking-wider">SEC_DRAFT_HUD_2026 // GRID_A</div>
+          <div className="absolute right-4 bottom-4 font-mono text-[9px] text-slate-500/40 tracking-wider">SYSTEM_CONNECTED_STABLE</div>
+          <div className="absolute left-1/2 top-4 -translate-x-1/2 font-mono text-[8px] text-slate-500/30 hidden md:block uppercase tracking-widest">
             LAT: 1.2921° S | LON: 36.8219° E (NAIROBI_HUB)
           </div>
         </div>
 
         {/* Premium ambient glows */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,rgba(14,165,233,0.15),transparent_50%)] pointer-events-none" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(6,182,212,0.1),transparent_50%)] pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,rgba(245,158,11,0.08),transparent_50%)] pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(255,255,255,0.02),transparent_50%)] pointer-events-none" />
         
         <div className="max-w-7xl mx-auto px-6 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
@@ -587,7 +575,7 @@ export default function App() {
             {/* Left Content Column */}
             <div className="lg:col-span-7 space-y-8 text-center lg:text-left relative">
               {/* Vertical blueprint bracket on desktop to frame the text like design blueprints */}
-              <div className="absolute -left-6 top-2 bottom-2 w-[2px] bg-brand-amber/25 hidden lg:block" />
+              <div className="absolute -left-6 top-2 bottom-2 w-[2px] bg-brand-amber/40 hidden lg:block" />
               
               <motion.div
                 initial={{ opacity: 0, y: 15 }}
@@ -595,19 +583,19 @@ export default function App() {
                 transition={{ duration: 0.5 }}
                 className="space-y-4"
               >
-                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-amber/10 border border-brand-amber/25 text-brand-amber text-xs font-mono font-bold tracking-wider uppercase">
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-amber/10 border border-brand-amber/30 text-brand-amber text-xs font-mono font-bold tracking-wider uppercase">
                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                   <span>Kenya’s Elite Automotive Platform</span>
                 </div>
 
-                <h1 className="font-display font-black text-4xl sm:text-5xl lg:text-[56px] tracking-tight text-brand-dark leading-[1.05]">
+                <h1 className="font-display font-black text-4xl sm:text-5xl lg:text-[56px] tracking-tight text-white leading-[1.05]">
                   The Digital Blueprint <br className="hidden sm:inline" />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-amber to-brand-gold">
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-amber to-[#f5b842]">
                     For Automotive Care
                   </span>
                 </h1>
 
-                <p className="text-base sm:text-lg text-brand-muted max-w-2xl mx-auto lg:mx-0 font-light leading-relaxed">
+                <p className="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto lg:mx-0 font-light leading-relaxed">
                   Book trusted mechanics, dispatch roadside emergency teams, trace authentic OEM spare parts, and verify diagnostic reports on East Africa's most advanced digital ecosystem.
                 </p>
               </motion.div>
@@ -621,15 +609,15 @@ export default function App() {
               >
                 <button
                   onClick={() => handleScrollToSection('garages')}
-                  className="w-full sm:w-auto bg-brand-amber hover:bg-brand-amber-hover text-white font-mono text-xs font-extrabold py-4 px-8 rounded-xl flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-brand-amber/15 hover:-translate-y-0.5 transition duration-300 tracking-wider uppercase"
+                  className="w-full sm:w-auto bg-brand-amber hover:bg-brand-amber-hover text-brand-dark font-mono text-xs font-extrabold py-4 px-8 rounded-xl flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-brand-amber/20 hover:-translate-y-0.5 transition duration-300 tracking-wider uppercase"
                 >
-                  <span>Book Verified Mechanic</span>
-                  <ArrowRight className="w-4 h-4" />
+                  <span className="text-white">Book Verified Mechanic</span>
+                  <ArrowRight className="w-4 h-4 text-white" />
                 </button>
 
                 <button
                   onClick={() => handleScrollToSection('simulator')}
-                  className="w-full sm:w-auto bg-transparent hover:bg-brand-gold-light/90 text-brand-dark font-mono text-xs font-extrabold py-4 px-8 rounded-xl border border-brand-gold/25 flex items-center justify-center gap-2 cursor-pointer transition duration-300 tracking-wider uppercase shadow-sm hover:border-brand-gold/40"
+                  className="w-full sm:w-auto bg-white/5 hover:bg-white/10 text-white font-mono text-xs font-extrabold py-4 px-8 rounded-xl border border-white/10 flex items-center justify-center gap-2 cursor-pointer transition duration-300 tracking-wider uppercase shadow-sm hover:border-white/25"
                 >
                   <span>Watch App Demo</span>
                 </button>
@@ -640,23 +628,23 @@ export default function App() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
-                className="pt-6 border-t border-brand-gold/15 grid grid-cols-2 sm:grid-cols-4 gap-6 text-center lg:text-left"
+                className="pt-6 border-t border-white/5 grid grid-cols-2 sm:grid-cols-4 gap-6 text-center lg:text-left"
               >
                 <div>
                   <p className="font-display font-extrabold text-2xl text-brand-amber tracking-tight font-mono">12,000+</p>
-                  <p className="text-[11px] font-mono uppercase tracking-wider text-brand-muted mt-1">Vehicles Serviced</p>
+                  <p className="text-[11px] font-mono uppercase tracking-wider text-slate-400 mt-1">Vehicles Serviced</p>
                 </div>
                 <div>
-                  <p className="font-display font-extrabold text-2xl text-emerald-600 tracking-tight font-mono">450+</p>
-                  <p className="text-[11px] font-mono uppercase tracking-wider text-brand-muted mt-1">Verified Garages</p>
+                  <p className="font-display font-extrabold text-2xl text-emerald-400 tracking-tight font-mono">450+</p>
+                  <p className="text-[11px] font-mono uppercase tracking-wider text-slate-400 mt-1">Verified Garages</p>
                 </div>
                 <div>
-                  <p className="font-display font-extrabold text-2xl text-brand-dark tracking-tight font-mono">4.9 ★</p>
-                  <p className="text-[11px] font-mono uppercase tracking-wider text-brand-muted mt-1">Average Rating</p>
+                  <p className="font-display font-extrabold text-2xl text-white tracking-tight font-mono">4.9 ★</p>
+                  <p className="text-[11px] font-mono uppercase tracking-wider text-slate-400 mt-1">Average Rating</p>
                 </div>
                 <div>
-                  <p className="font-display font-extrabold text-2xl text-brand-gold tracking-tight font-mono font-bold">100%</p>
-                  <p className="text-[11px] font-mono uppercase tracking-wider text-brand-muted mt-1">Trusted in Kenya</p>
+                  <p className="font-display font-extrabold text-2xl text-brand-amber tracking-tight font-mono font-bold">100%</p>
+                  <p className="text-[11px] font-mono uppercase tracking-wider text-slate-400 mt-1">Trusted in Kenya</p>
                 </div>
               </motion.div>
             </div>

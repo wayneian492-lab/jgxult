@@ -87,7 +87,7 @@ export default function GarageFinder({ onBookClick }: GarageFinderProps) {
                 const firstInCity = MOCK_GARAGES.find((g) => g.city === city);
                 setSelectedGarageId(firstInCity ? firstInCity.id : null);
               }}
-              className={`px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer ${
+              className={`px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-wider transition cursor-pointer ${
                 selectedCity === city
                   ? 'bg-brand-amber text-white font-extrabold shadow-md shadow-brand-amber/10'
                   : 'text-brand-muted hover:text-brand-dark bg-white hover:bg-brand-gold-light/80 border border-brand-gold/10'
@@ -123,9 +123,8 @@ export default function GarageFinder({ onBookClick }: GarageFinderProps) {
                 return (
                   <motion.div
                     key={garage.id}
-                    layoutId={`garage-card-${garage.id}`}
                     onClick={() => handleSelectGarage(garage.id)}
-                    className={`p-4 rounded-2xl border transition-all duration-300 cursor-pointer flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 ${
+                    className={`p-4 rounded-2xl border transition duration-300 cursor-pointer flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 ${
                       isSelected
                         ? 'bg-white border-brand-amber shadow-xl shadow-brand-gold/10'
                         : 'bg-white/40 border-brand-gold/15 hover:bg-white/90 hover:border-brand-gold/30'
@@ -175,7 +174,7 @@ export default function GarageFinder({ onBookClick }: GarageFinderProps) {
                           e.stopPropagation();
                           onBookClick(garage);
                         }}
-                        className="flex-1 sm:flex-none bg-brand-amber hover:bg-brand-amber-hover text-white font-mono text-xs font-bold px-4 py-2 rounded-lg transition-all cursor-pointer shadow-md shadow-brand-amber/5"
+                        className="flex-1 sm:flex-none bg-brand-amber hover:bg-brand-amber-hover text-white font-mono text-xs font-bold px-4 py-2 rounded-lg transition cursor-pointer shadow-md shadow-brand-amber/5"
                       >
                         Book
                       </button>
@@ -209,7 +208,7 @@ export default function GarageFinder({ onBookClick }: GarageFinderProps) {
                 d="M -20 120 Q 80 150 140 300 T 400 350 T 600 450 L 600 600 L -20 600 Z"
                 fill="#1e1b4b"
                 fillOpacity="0.4"
-                className="transition-all duration-700"
+                className="transition duration-700"
               />
             )}
             {selectedCity === 'Kisumu' && (
@@ -218,7 +217,7 @@ export default function GarageFinder({ onBookClick }: GarageFinderProps) {
                 d="M -20 300 Q 150 280 220 400 T 450 480 L -20 600 Z"
                 fill="#1e1b4b"
                 fillOpacity="0.4"
-                className="transition-all duration-700"
+                className="transition duration-700"
               />
             )}
             
@@ -260,7 +259,7 @@ export default function GarageFinder({ onBookClick }: GarageFinderProps) {
 
                   {/* Marker Pin */}
                   <div
-                    className={`p-2 rounded-full border transition-all duration-300 ${
+                    className={`p-2 rounded-full border transition duration-300 ${
                       isSelected
                         ? 'bg-brand-amber text-brand-dark scale-125 border-white shadow-xl shadow-brand-amber/40 z-30'
                         : 'bg-slate-900 text-brand-amber border-slate-750 group-hover:bg-slate-850 group-hover:scale-110'
@@ -295,7 +294,7 @@ export default function GarageFinder({ onBookClick }: GarageFinderProps) {
               </div>
               <button
                 onClick={() => onBookClick(activeGarage)}
-                className="bg-brand-amber hover:bg-brand-amber-hover text-brand-dark text-xs font-bold font-mono px-3 py-2 rounded-xl transition-all shadow-md cursor-pointer"
+                className="bg-brand-amber hover:bg-brand-amber-hover text-brand-dark text-xs font-bold font-mono px-3 py-2 rounded-xl transition shadow-md cursor-pointer"
               >
                 Book
               </button>

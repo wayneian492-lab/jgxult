@@ -121,7 +121,7 @@ export default function BookingModal({ garage, onClose }: BookingModalProps) {
 
             <button
               type="submit"
-              className="w-full bg-brand-amber hover:bg-brand-amber-hover text-white font-mono font-bold py-3.5 px-4 rounded-xl flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-brand-amber/15 transition-all hover:-translate-y-0.5"
+              className="w-full bg-brand-amber hover:bg-brand-amber-hover text-white font-mono font-bold py-3.5 px-4 rounded-xl flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-brand-amber/15 transition hover:-translate-y-0.5"
             >
               <Calendar className="w-4 h-4" />
               <span>Confirm Appointment Booking</span>

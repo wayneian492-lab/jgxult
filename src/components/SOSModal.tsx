@@ -132,7 +132,7 @@ export default function SOSModal({ onClose }: SOSModalProps) {
                         key={item.id}
                         type="button"
                         onClick={() => setIssue(item.id)}
-                        className={`p-3 rounded-xl border text-xs font-semibold text-center transition-all cursor-pointer ${
+                        className={`p-3 rounded-xl border text-xs font-semibold text-center transition cursor-pointer ${
                           issue === item.id
                             ? 'border-brand-amber bg-brand-amber/10 text-brand-amber font-extrabold'
                             : 'border-brand-gold/20 bg-brand-gold-light/40 text-brand-muted hover:border-brand-gold/40 hover:text-brand-dark'
@@ -154,7 +154,7 @@ export default function SOSModal({ onClose }: SOSModalProps) {
 
               <button
                 type="submit"
-                className="w-full bg-brand-amber hover:bg-brand-amber-hover text-white font-mono font-bold py-3.5 px-4 rounded-xl flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-brand-amber/15 transition-all hover:-translate-y-0.5"
+                className="w-full bg-brand-amber hover:bg-brand-amber-hover text-white font-mono font-bold py-3.5 px-4 rounded-xl flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-brand-amber/15 transition hover:-translate-y-0.5"
               >
                 <Navigation className="w-4 h-4 animate-pulse" />
                 <span>Confirm Dispatch SOS</span>
