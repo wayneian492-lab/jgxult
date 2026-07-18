@@ -66,7 +66,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<string>('home');
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [touchStart, setTouchStart] = useState<number | null>(null);
-  const [desktopSidebarExpanded, setDesktopSidebarExpanded] = useState(false);
+  const [desktopSidebarExpanded, setDesktopSidebarExpanded] = useState(true);
 
   const handleTouchStart = (e: React.TouchEvent) => {
     setTouchStart(e.targetTouches[0].clientX);
@@ -238,7 +238,7 @@ export default function App() {
           <button
             onClick={() => setActiveSOS(true)}
             className={`rounded-xl bg-red-600 hover:bg-red-700 active:bg-red-800 text-white font-mono text-[11px] font-extrabold uppercase tracking-widest flex items-center transition-all duration-300 ease-in-out shadow-md shadow-red-900/20 cursor-pointer h-11 ${
-              desktopSidebarExpanded ? 'w-full px-4 gap-2.5 justify-start' : 'w-10 px-2.5 justify-center'
+              desktopSidebarExpanded ? 'w-full px-6 gap-2.5 justify-start' : 'w-10 px-2.5 justify-center'
             }`}
             title="Emergency SOS"
           >
@@ -383,7 +383,7 @@ export default function App() {
       }`}>
         
         {/* MOBILE STICKY HEADER */}
-        <header className="md:hidden sticky top-0 z-30 flex items-center justify-between h-16 bg-[#0c1020] border-b border-brand-gold/15 px-4 text-white">
+        <header className="md:hidden sticky top-0 z-30 flex items-center justify-between h-16 bg-[#0c1020] border-b border-brand-gold/15 px-6 text-white">
           <div className="flex items-center gap-3">
             <button
               onClick={() => setSidebarOpen(true)}
@@ -581,7 +581,7 @@ export default function App() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,rgba(14,165,233,0.15),transparent_50%)] pointer-events-none" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(6,182,212,0.1),transparent_50%)] pointer-events-none" />
         
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="max-w-7xl mx-auto px-6 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             
             {/* Left Content Column */}
@@ -680,7 +680,7 @@ export default function App() {
       {/* Brand Trust/Partners Bar */}
       {activeTab === 'home' && (
         <section className="bg-brand-gold-light/40 border-b border-brand-gold/15 py-8 text-center">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-6 sm:px-6 lg:px-8">
           <p className="text-[10px] font-mono uppercase tracking-widest text-brand-gold font-bold mb-4">
             In Partnership with Verified Insurers & Lubricant Networks Across East Africa
           </p>
@@ -711,7 +711,7 @@ export default function App() {
           <div className="absolute inset-0 bg-white/10 mix-blend-overlay" />
         </div>
         
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16 relative z-10">
+        <div className="max-w-7xl mx-auto px-6 sm:px-6 lg:px-8 space-y-16 relative z-10">
           
           {/* Asymmetrical elegant statement (Critique Item 4) */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-start">
@@ -803,7 +803,7 @@ export default function App() {
       {/* Interactive App Screens Section (Critique Item 6 & 7) */}
       {activeTab === 'simulator' && (
         <section id="simulator" className="py-20 border-b border-brand-gold/15 bg-[#0c1020]/20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto px-6 sm:px-6 lg:px-8">
             <AppSimulator />
           </div>
         </section>
@@ -812,7 +812,7 @@ export default function App() {
       {/* NEW: mcf.link - Automotive Link Shortener & Live Analytics Section (User-requested feature) */}
       {activeTab === 'shortener' && (
         <section id="shortener" className="py-20 bg-transparent border-b border-brand-gold/15">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+        <div className="max-w-7xl mx-auto px-6 sm:px-6 lg:px-8 space-y-12">
           <div className="text-center max-w-3xl mx-auto space-y-3">
             <span className="text-xs font-mono font-bold text-brand-amber tracking-wider uppercase block">Link Compression Tool</span>
             <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-brand-dark">
@@ -830,7 +830,7 @@ export default function App() {
       {/* Services Grid Section (Critique Item 3 & 8) */}
       {activeTab === 'services' && (
         <section className="py-20 bg-transparent border-b border-brand-gold/15">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+        <div className="max-w-7xl mx-auto px-6 sm:px-6 lg:px-8 space-y-12">
           
           <div className="text-center max-w-3xl mx-auto space-y-3">
             <span className="text-xs font-mono font-bold text-brand-amber tracking-wider uppercase block">Explore Services</span>
@@ -883,7 +883,7 @@ export default function App() {
       {/* How it Works Section (Critique Item 9) */}
       {activeTab === 'how-it-works' && (
         <section className="py-20 border-t border-brand-gold/15 bg-brand-gold-light/40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+        <div className="max-w-7xl mx-auto px-6 sm:px-6 lg:px-8 space-y-12">
           
           <div className="text-center max-w-3xl mx-auto space-y-3">
             <span className="text-xs font-mono font-bold text-brand-amber tracking-wider uppercase block">Process Flow</span>
@@ -946,7 +946,7 @@ export default function App() {
           <div className="absolute inset-0 bg-white/10 mix-blend-overlay" />
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 bg-gradient-to-br from-white/75 via-brand-gold-light/75 to-brand-gold/15 backdrop-blur-[10px] p-6 sm:p-10 rounded-[32px] border-2 border-brand-gold/30 shadow-[0_20px_50px_rgba(197,168,92,0.12)] space-y-8">
+        <div className="max-w-7xl mx-auto px-6 sm:px-6 lg:px-8 relative z-10 bg-gradient-to-br from-white/75 via-brand-gold-light/75 to-brand-gold/15 backdrop-blur-[10px] p-6 sm:p-10 rounded-[32px] border-2 border-brand-gold/30 shadow-[0_20px_50px_rgba(197,168,92,0.12)] space-y-8">
           
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div className="space-y-2">
@@ -973,7 +973,7 @@ export default function App() {
       {/* Core Component 2: Interactive Pricing Cost Estimator (Critique Item 12) */}
       {activeTab === 'estimator' && (
         <section id="estimator" className="py-20 border-t border-brand-gold/15 bg-transparent">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-6 sm:px-6 lg:px-8">
           <CostEstimator />
         </div>
       </section>
@@ -982,7 +982,7 @@ export default function App() {
       {/* Core Component 3: Diagnostics Help Section (Critique Item 14) */}
       {activeTab === 'diagnostics' && (
         <section id="diagnostics" className="py-20 bg-transparent border-t border-brand-gold/15">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-6 sm:px-6 lg:px-8">
           <Diagnostics onSOSClick={() => setActiveSOS(true)} />
         </div>
       </section>
@@ -991,7 +991,7 @@ export default function App() {
       {/* Extra Interactive Cards Area (Critique Item 11: Authentic Photography) */}
       {activeTab === 'services' && (
         <section className="py-20 border-t border-brand-gold/15 bg-brand-gold-light/40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+        <div className="max-w-7xl mx-auto px-6 sm:px-6 lg:px-8 space-y-12">
           
           <div className="text-center max-w-3xl mx-auto space-y-3">
             <span className="text-xs font-mono font-bold text-brand-amber tracking-wider uppercase block">Premium Offerings</span>
@@ -1081,7 +1081,7 @@ export default function App() {
       {/* Core Component 4: Maintenance Scheduler Section (Critique Item 14) */}
       {activeTab === 'schedules' && (
         <section id="schedules" className="py-20 bg-transparent border-t border-brand-gold/15">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-6 sm:px-6 lg:px-8">
           <MaintenanceReminder />
         </div>
       </section>
@@ -1090,7 +1090,7 @@ export default function App() {
       {/* Social Proof / Testimonials Section (Critique Item 6) */}
       {activeTab === 'services' && (
         <section className="py-20 border-t border-brand-gold/15 bg-brand-gold-light/40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+        <div className="max-w-7xl mx-auto px-6 sm:px-6 lg:px-8 space-y-12">
           
           <div className="text-center max-w-3xl mx-auto space-y-3">
             <span className="text-xs font-mono font-bold text-brand-amber tracking-wider uppercase block">Testimonials</span>
@@ -1147,7 +1147,7 @@ export default function App() {
       {/* FAQs Section (Critique Item 10) */}
       {activeTab === 'how-it-works' && (
         <section className="py-20 bg-transparent border-t border-brand-gold/15">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+        <div className="max-w-4xl mx-auto px-6 sm:px-6 lg:px-8 space-y-10">
           
           <div className="text-center space-y-2">
             <span className="text-xs font-mono font-bold text-brand-amber tracking-wider uppercase block">FAQ</span>
@@ -1198,7 +1198,7 @@ export default function App() {
       {activeTab === 'home' && (
         <section className="py-20 border-t border-brand-gold/15 bg-brand-gold-light/40 relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_center,rgba(197,168,92,0.06),transparent_50%)] pointer-events-none" />
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8 relative z-10">
+        <div className="max-w-5xl mx-auto px-6 sm:px-6 lg:px-8 text-center space-y-8 relative z-10">
           
           <div className="max-w-2xl mx-auto space-y-4">
             <span className="text-xs font-mono font-bold text-brand-amber tracking-wider uppercase block">Keep Rolling</span>
@@ -1234,7 +1234,7 @@ export default function App() {
 
         {/* Footer (Critique Item 10) */}
         <footer className="bg-[#040610] border-t border-brand-gold/15 py-12 text-xs text-slate-400">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-6 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
             
             {/* Logo and Pitch */}

@@ -41,7 +41,7 @@ export default function InteractiveHUD() {
   const [escrowStep, setEscrowStep] = useState(1);
   const [selectedSensor, setSelectedSensor] = useState<string>('Engine ECU');
   const [isExpanded, setIsExpanded] = useState(false);
-  const [isMinimized, setIsMinimized] = useState(true);
+  const [isMinimized, setIsMinimized] = useState(false);
 
   // Simulated live diagnostic updates
   useEffect(() => {
@@ -89,7 +89,7 @@ export default function InteractiveHUD() {
       >
         <button
           onClick={() => setIsMinimized(false)}
-          className="w-full bg-[#0a0d1a] border border-brand-gold/25 hover:border-brand-amber/80 rounded-2xl p-4 flex items-center gap-4 transition-all duration-200 cursor-pointer text-left shadow-[0_0_20px_rgba(197,168,92,0.06)] hover:shadow-[0_0_30px_rgba(255,94,0,0.15)] select-none group relative overflow-hidden"
+          className="w-full bg-[#0a0d1a] border border-brand-gold/25 hover:border-brand-amber/80 rounded-2xl p-4 flex items-center gap-4 transition duration-200 cursor-pointer text-left shadow-[0_0_20px_rgba(197,168,92,0.06)] hover:shadow-[0_0_30px_rgba(255,94,0,0.15)] select-none group relative overflow-hidden"
           title="Click to expand Interactive Telemetry HUD"
         >
           {/* Holographic glowing grid lines */}
@@ -166,7 +166,7 @@ export default function InteractiveHUD() {
 
           <button
             onClick={() => setIsMinimized(true)}
-            className="w-9 h-9 rounded-xl bg-gradient-to-br from-orange-500/10 to-red-600/15 hover:from-orange-500/25 hover:to-red-600/30 border border-orange-500/30 hover:border-orange-500/70 text-orange-400 hover:text-orange-200 transition-all duration-200 flex items-center justify-center cursor-pointer shadow-[0_0_12px_rgba(249,115,22,0.15)] hover:shadow-[0_0_20px_rgba(249,115,22,0.4)] select-none group shrink-0"
+            className="w-9 h-9 rounded-xl bg-gradient-to-br from-orange-500/10 to-red-600/15 hover:from-orange-500/25 hover:to-red-600/30 border border-orange-500/30 hover:border-orange-500/70 text-orange-400 hover:text-orange-200 transition duration-200 flex items-center justify-center cursor-pointer shadow-[0_0_12px_rgba(249,115,22,0.15)] hover:shadow-[0_0_20px_rgba(249,115,22,0.4)] select-none group shrink-0"
             title="Minimize / Close HUD"
           >
             <X className="w-4 h-4 transition-transform group-hover:rotate-90 duration-300 text-orange-400 group-hover:text-orange-300" />
@@ -178,7 +178,7 @@ export default function InteractiveHUD() {
       <div className="grid grid-cols-3 border-b border-brand-gold/15 bg-brand-gold-light/40 font-mono text-[11px] font-semibold text-brand-muted text-center">
         <button
           onClick={() => setActiveTab('cad')}
-          className={`py-3.5 px-2 border-r border-brand-gold/15 transition-all cursor-pointer flex flex-col sm:flex-row items-center justify-center gap-1.5 ${
+          className={`py-3.5 px-2 border-r border-brand-gold/15 transition cursor-pointer flex flex-col sm:flex-row items-center justify-center gap-1.5 ${
             activeTab === 'cad'
               ? 'bg-white text-brand-amber font-extrabold shadow-sm relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-brand-amber'
               : 'hover:bg-white/40 hover:text-brand-dark'
@@ -190,7 +190,7 @@ export default function InteractiveHUD() {
 
         <button
           onClick={() => setActiveTab('telemetry')}
-          className={`py-3.5 px-2 border-r border-brand-gold/15 transition-all cursor-pointer flex flex-col sm:flex-row items-center justify-center gap-1.5 ${
+          className={`py-3.5 px-2 border-r border-brand-gold/15 transition cursor-pointer flex flex-col sm:flex-row items-center justify-center gap-1.5 ${
             activeTab === 'telemetry'
               ? 'bg-white text-brand-amber font-extrabold shadow-sm relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-brand-amber'
               : 'hover:bg-white/40 hover:text-brand-dark'
@@ -202,7 +202,7 @@ export default function InteractiveHUD() {
 
         <button
           onClick={() => setActiveTab('escrow')}
-          className={`py-3.5 px-2 transition-all cursor-pointer flex flex-col sm:flex-row items-center justify-center gap-1.5 ${
+          className={`py-3.5 px-2 transition cursor-pointer flex flex-col sm:flex-row items-center justify-center gap-1.5 ${
             activeTab === 'escrow'
               ? 'bg-white text-brand-amber font-extrabold shadow-sm relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-brand-amber'
               : 'hover:bg-white/40 hover:text-brand-dark'
@@ -243,7 +243,7 @@ export default function InteractiveHUD() {
                 {/* Compact view Expand Button */}
                 <button 
                   onClick={() => setIsExpanded(true)}
-                  className="absolute top-3 right-3 text-[9px] font-mono text-brand-gold bg-brand-dark/95 border border-brand-gold/25 hover:border-brand-amber hover:text-white px-2 py-1 rounded-md font-bold z-30 shadow flex items-center gap-1.5 transition-all duration-200 cursor-pointer"
+                  className="absolute top-3 right-3 text-[9px] font-mono text-brand-gold bg-brand-dark/95 border border-brand-gold/25 hover:border-brand-amber hover:text-white px-2 py-1 rounded-md font-bold z-30 shadow flex items-center gap-1.5 transition duration-200 cursor-pointer"
                   title="Expand to Detailed Screen"
                 >
                   <Maximize2 className="w-3.5 h-3.5 text-brand-amber" />
@@ -257,7 +257,7 @@ export default function InteractiveHUD() {
                   <img 
                     src={redAudiHud} 
                     alt="Red Sport Sedan CAD Model" 
-                    className="w-full h-full max-h-[230px] object-contain opacity-95 select-none transition-all duration-500"
+                    className="w-full h-full max-h-[230px] object-contain opacity-95 select-none transition duration-500"
                     referrerPolicy="no-referrer"
                   />
 
@@ -271,7 +271,7 @@ export default function InteractiveHUD() {
                     <button 
                       onClick={() => setSelectedSensor('Radar Sensor')}
                       style={{ left: '10%', top: '65%' }}
-                      className={`absolute -translate-x-1/2 -translate-y-1/2 px-1 py-[1px] sm:px-1.5 sm:py-0.5 rounded border shadow-md font-sans transition-all duration-200 cursor-pointer flex items-center gap-1 whitespace-nowrap ${
+                      className={`absolute -translate-x-1/2 -translate-y-1/2 px-1 py-[1px] sm:px-1.5 sm:py-0.5 rounded border shadow-md font-sans transition duration-200 cursor-pointer flex items-center gap-1 whitespace-nowrap ${
                         selectedSensor === 'Radar Sensor'
                           ? 'bg-brand-dark text-white border-brand-amber scale-105 ring-1 ring-brand-amber/40 shadow-brand-amber/10'
                           : 'bg-white/95 text-brand-dark/95 border-brand-gold/20 hover:border-brand-amber hover:bg-white text-opacity-90'
@@ -285,7 +285,7 @@ export default function InteractiveHUD() {
                     <button 
                       onClick={() => setSelectedSensor('LED Headlights')}
                       style={{ left: '14%', top: '51%' }}
-                      className={`absolute -translate-x-1/2 -translate-y-1/2 px-1 py-[1px] sm:px-1.5 sm:py-0.5 rounded border shadow-md font-sans transition-all duration-200 cursor-pointer flex items-center gap-1 whitespace-nowrap ${
+                      className={`absolute -translate-x-1/2 -translate-y-1/2 px-1 py-[1px] sm:px-1.5 sm:py-0.5 rounded border shadow-md font-sans transition duration-200 cursor-pointer flex items-center gap-1 whitespace-nowrap ${
                         selectedSensor === 'LED Headlights'
                           ? 'bg-brand-dark text-white border-brand-amber scale-105 ring-1 ring-brand-amber/40 shadow-brand-amber/10'
                           : 'bg-white/95 text-brand-dark/95 border-brand-gold/20 hover:border-brand-amber hover:bg-white text-opacity-90'
@@ -299,7 +299,7 @@ export default function InteractiveHUD() {
                     <button 
                       onClick={() => setSelectedSensor('Engine ECU')}
                       style={{ left: '26%', top: '46%' }}
-                      className={`absolute -translate-x-1/2 -translate-y-1/2 px-1 py-[1px] sm:px-1.5 sm:py-0.5 rounded border shadow-md font-sans transition-all duration-200 cursor-pointer flex items-center gap-1 whitespace-nowrap ${
+                      className={`absolute -translate-x-1/2 -translate-y-1/2 px-1 py-[1px] sm:px-1.5 sm:py-0.5 rounded border shadow-md font-sans transition duration-200 cursor-pointer flex items-center gap-1 whitespace-nowrap ${
                         selectedSensor === 'Engine ECU'
                           ? 'bg-brand-dark text-white border-brand-amber scale-105 ring-1 ring-brand-amber/40 shadow-brand-amber/10'
                           : 'bg-white/95 text-brand-dark/95 border-brand-gold/20 hover:border-brand-amber hover:bg-white text-opacity-90'
@@ -313,7 +313,7 @@ export default function InteractiveHUD() {
                     <button 
                       onClick={() => setSelectedSensor('Brake Caliper')}
                       style={{ left: '30%', top: '72%' }}
-                      className={`absolute -translate-x-1/2 -translate-y-1/2 px-1 py-[1px] sm:px-1.5 sm:py-0.5 rounded border shadow-md font-sans transition-all duration-200 cursor-pointer flex items-center gap-1 whitespace-nowrap ${
+                      className={`absolute -translate-x-1/2 -translate-y-1/2 px-1 py-[1px] sm:px-1.5 sm:py-0.5 rounded border shadow-md font-sans transition duration-200 cursor-pointer flex items-center gap-1 whitespace-nowrap ${
                         selectedSensor === 'Brake Caliper'
                           ? 'bg-brand-dark text-white border-brand-amber scale-105 ring-1 ring-brand-amber/40 shadow-brand-amber/10'
                           : 'bg-white/95 text-brand-dark/95 border-brand-gold/20 hover:border-brand-amber hover:bg-white text-opacity-90'
@@ -327,7 +327,7 @@ export default function InteractiveHUD() {
                     <button 
                       onClick={() => setSelectedSensor('ADAS Camera')}
                       style={{ left: '46%', top: '30%' }}
-                      className={`absolute -translate-x-1/2 -translate-y-1/2 px-1 py-[1px] sm:px-1.5 sm:py-0.5 rounded border shadow-md font-sans transition-all duration-200 cursor-pointer flex items-center gap-1 whitespace-nowrap ${
+                      className={`absolute -translate-x-1/2 -translate-y-1/2 px-1 py-[1px] sm:px-1.5 sm:py-0.5 rounded border shadow-md font-sans transition duration-200 cursor-pointer flex items-center gap-1 whitespace-nowrap ${
                         selectedSensor === 'ADAS Camera'
                           ? 'bg-brand-dark text-white border-brand-amber scale-105 ring-1 ring-brand-amber/40 shadow-brand-amber/10'
                           : 'bg-white/95 text-brand-dark/95 border-brand-gold/20 hover:border-brand-amber hover:bg-white text-opacity-90'
@@ -341,7 +341,7 @@ export default function InteractiveHUD() {
                     <button 
                       onClick={() => setSelectedSensor('Transmission TCU')}
                       style={{ left: '46%', top: '65%' }}
-                      className={`absolute -translate-x-1/2 -translate-y-1/2 px-1 py-[1px] sm:px-1.5 sm:py-0.5 rounded border shadow-md font-sans transition-all duration-200 cursor-pointer flex items-center gap-1 whitespace-nowrap ${
+                      className={`absolute -translate-x-1/2 -translate-y-1/2 px-1 py-[1px] sm:px-1.5 sm:py-0.5 rounded border shadow-md font-sans transition duration-200 cursor-pointer flex items-center gap-1 whitespace-nowrap ${
                         selectedSensor === 'Transmission TCU'
                           ? 'bg-brand-dark text-white border-brand-amber scale-105 ring-1 ring-brand-amber/40 shadow-brand-amber/10'
                           : 'bg-white/95 text-brand-dark/95 border-brand-gold/20 hover:border-brand-amber hover:bg-white text-opacity-90'
@@ -355,7 +355,7 @@ export default function InteractiveHUD() {
                     <button 
                       onClick={() => setSelectedSensor('Airbags SRS')}
                       style={{ left: '58%', top: '38%' }}
-                      className={`absolute -translate-x-1/2 -translate-y-1/2 px-1 py-[1px] sm:px-1.5 sm:py-0.5 rounded border shadow-md font-sans transition-all duration-200 cursor-pointer flex items-center gap-1 whitespace-nowrap ${
+                      className={`absolute -translate-x-1/2 -translate-y-1/2 px-1 py-[1px] sm:px-1.5 sm:py-0.5 rounded border shadow-md font-sans transition duration-200 cursor-pointer flex items-center gap-1 whitespace-nowrap ${
                         selectedSensor === 'Airbags SRS'
                           ? 'bg-brand-dark text-white border-brand-amber scale-105 ring-1 ring-brand-amber/40 shadow-brand-amber/10'
                           : 'bg-white/95 text-brand-dark/95 border-brand-gold/20 hover:border-brand-amber hover:bg-white text-opacity-90'
@@ -369,7 +369,7 @@ export default function InteractiveHUD() {
                     <button 
                       onClick={() => setSelectedSensor('Fuel System')}
                       style={{ left: '68%', top: '66%' }}
-                      className={`absolute -translate-x-1/2 -translate-y-1/2 px-1 py-[1px] sm:px-1.5 sm:py-0.5 rounded border shadow-md font-sans transition-all duration-200 cursor-pointer flex items-center gap-1 whitespace-nowrap ${
+                      className={`absolute -translate-x-1/2 -translate-y-1/2 px-1 py-[1px] sm:px-1.5 sm:py-0.5 rounded border shadow-md font-sans transition duration-200 cursor-pointer flex items-center gap-1 whitespace-nowrap ${
                         selectedSensor === 'Fuel System'
                           ? 'bg-brand-dark text-white border-brand-amber scale-105 ring-1 ring-brand-amber/40 shadow-brand-amber/10'
                           : 'bg-white/95 text-brand-dark/95 border-brand-gold/20 hover:border-brand-amber hover:bg-white text-opacity-90'
@@ -383,7 +383,7 @@ export default function InteractiveHUD() {
                     <button 
                       onClick={() => setSelectedSensor('ABS Controller')}
                       style={{ left: '78%', top: '70%' }}
-                      className={`absolute -translate-x-1/2 -translate-y-1/2 px-1 py-[1px] sm:px-1.5 sm:py-0.5 rounded border shadow-md font-sans transition-all duration-200 cursor-pointer flex items-center gap-1 whitespace-nowrap ${
+                      className={`absolute -translate-x-1/2 -translate-y-1/2 px-1 py-[1px] sm:px-1.5 sm:py-0.5 rounded border shadow-md font-sans transition duration-200 cursor-pointer flex items-center gap-1 whitespace-nowrap ${
                         selectedSensor === 'ABS Controller'
                           ? 'bg-brand-dark text-white border-brand-amber scale-105 ring-1 ring-brand-amber/40 shadow-brand-amber/10'
                           : 'bg-white/95 text-brand-dark/95 border-brand-gold/20 hover:border-brand-amber hover:bg-white text-opacity-90'
@@ -397,7 +397,7 @@ export default function InteractiveHUD() {
                     <button 
                       onClick={() => setSelectedSensor('Tail Lights')}
                       style={{ left: '88%', top: '48%' }}
-                      className={`absolute -translate-x-1/2 -translate-y-1/2 px-1 py-[1px] sm:px-1.5 sm:py-0.5 rounded border shadow-md font-sans transition-all duration-200 cursor-pointer flex items-center gap-1 whitespace-nowrap ${
+                      className={`absolute -translate-x-1/2 -translate-y-1/2 px-1 py-[1px] sm:px-1.5 sm:py-0.5 rounded border shadow-md font-sans transition duration-200 cursor-pointer flex items-center gap-1 whitespace-nowrap ${
                         selectedSensor === 'Tail Lights'
                           ? 'bg-brand-dark text-white border-brand-amber scale-105 ring-1 ring-brand-amber/40 shadow-brand-amber/10'
                           : 'bg-white/95 text-brand-dark/95 border-brand-gold/20 hover:border-brand-amber hover:bg-white text-opacity-90'
@@ -583,7 +583,7 @@ export default function InteractiveHUD() {
                       <button
                         key={s.step}
                         onClick={() => setEscrowStep(s.step)}
-                        className={`p-3 rounded-xl border text-left cursor-pointer transition-all ${
+                        className={`p-3 rounded-xl border text-left cursor-pointer transition ${
                           isCurrent 
                             ? 'bg-brand-amber/5 border-brand-amber shadow-md' 
                             : isPassed 
@@ -675,7 +675,7 @@ export default function InteractiveHUD() {
                 
                 <button
                   onClick={() => setIsExpanded(false)}
-                  className="p-2 rounded-full bg-brand-dark/80 border border-brand-gold/30 text-brand-gold hover:text-white hover:border-brand-amber transition-all cursor-pointer shadow-lg z-10"
+                  className="p-2 rounded-full bg-brand-dark/80 border border-brand-gold/30 text-brand-gold hover:text-white hover:border-brand-amber transition cursor-pointer shadow-lg z-10"
                   aria-label="Close detailed view"
                 >
                   <X className="w-5 h-5" />
@@ -703,7 +703,7 @@ export default function InteractiveHUD() {
                   <button 
                     onClick={() => setSelectedSensor('Radar Sensor')}
                     style={{ left: '10%', top: '65%' }}
-                    className={`absolute -translate-x-1/2 -translate-y-1/2 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg border shadow-xl font-sans transition-all duration-200 cursor-pointer flex items-center gap-2 whitespace-nowrap ${
+                    className={`absolute -translate-x-1/2 -translate-y-1/2 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg border shadow-xl font-sans transition duration-200 cursor-pointer flex items-center gap-2 whitespace-nowrap ${
                       selectedSensor === 'Radar Sensor'
                         ? 'bg-brand-dark text-white border-brand-amber scale-105 ring-2 ring-brand-amber/40 shadow-brand-amber/25'
                         : 'bg-white/95 text-brand-dark/95 border-brand-gold/30 hover:border-brand-amber hover:bg-white text-opacity-95'
@@ -717,7 +717,7 @@ export default function InteractiveHUD() {
                   <button 
                     onClick={() => setSelectedSensor('LED Headlights')}
                     style={{ left: '14%', top: '51%' }}
-                    className={`absolute -translate-x-1/2 -translate-y-1/2 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg border shadow-xl font-sans transition-all duration-200 cursor-pointer flex items-center gap-2 whitespace-nowrap ${
+                    className={`absolute -translate-x-1/2 -translate-y-1/2 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg border shadow-xl font-sans transition duration-200 cursor-pointer flex items-center gap-2 whitespace-nowrap ${
                       selectedSensor === 'LED Headlights'
                         ? 'bg-brand-dark text-white border-brand-amber scale-105 ring-2 ring-brand-amber/40 shadow-brand-amber/25'
                         : 'bg-white/95 text-brand-dark/95 border-brand-gold/30 hover:border-brand-amber hover:bg-white text-opacity-95'
@@ -731,7 +731,7 @@ export default function InteractiveHUD() {
                   <button 
                     onClick={() => setSelectedSensor('Engine ECU')}
                     style={{ left: '26%', top: '46%' }}
-                    className={`absolute -translate-x-1/2 -translate-y-1/2 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg border shadow-xl font-sans transition-all duration-200 cursor-pointer flex items-center gap-2 whitespace-nowrap ${
+                    className={`absolute -translate-x-1/2 -translate-y-1/2 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg border shadow-xl font-sans transition duration-200 cursor-pointer flex items-center gap-2 whitespace-nowrap ${
                       selectedSensor === 'Engine ECU'
                         ? 'bg-brand-dark text-white border-brand-amber scale-105 ring-2 ring-brand-amber/40 shadow-brand-amber/25'
                         : 'bg-white/95 text-brand-dark/95 border-brand-gold/30 hover:border-brand-amber hover:bg-white text-opacity-95'
@@ -745,7 +745,7 @@ export default function InteractiveHUD() {
                   <button 
                     onClick={() => setSelectedSensor('Brake Caliper')}
                     style={{ left: '30%', top: '72%' }}
-                    className={`absolute -translate-x-1/2 -translate-y-1/2 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg border shadow-xl font-sans transition-all duration-200 cursor-pointer flex items-center gap-2 whitespace-nowrap ${
+                    className={`absolute -translate-x-1/2 -translate-y-1/2 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg border shadow-xl font-sans transition duration-200 cursor-pointer flex items-center gap-2 whitespace-nowrap ${
                       selectedSensor === 'Brake Caliper'
                         ? 'bg-brand-dark text-white border-brand-amber scale-105 ring-2 ring-brand-amber/40 shadow-brand-amber/25'
                         : 'bg-white/95 text-brand-dark/95 border-brand-gold/30 hover:border-brand-amber hover:bg-white text-opacity-95'
@@ -759,7 +759,7 @@ export default function InteractiveHUD() {
                   <button 
                     onClick={() => setSelectedSensor('ADAS Camera')}
                     style={{ left: '46%', top: '30%' }}
-                    className={`absolute -translate-x-1/2 -translate-y-1/2 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg border shadow-xl font-sans transition-all duration-200 cursor-pointer flex items-center gap-2 whitespace-nowrap ${
+                    className={`absolute -translate-x-1/2 -translate-y-1/2 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg border shadow-xl font-sans transition duration-200 cursor-pointer flex items-center gap-2 whitespace-nowrap ${
                       selectedSensor === 'ADAS Camera'
                         ? 'bg-brand-dark text-white border-brand-amber scale-105 ring-2 ring-brand-amber/40 shadow-brand-amber/25'
                         : 'bg-white/95 text-brand-dark/95 border-brand-gold/30 hover:border-brand-amber hover:bg-white text-opacity-95'
@@ -773,7 +773,7 @@ export default function InteractiveHUD() {
                   <button 
                     onClick={() => setSelectedSensor('Transmission TCU')}
                     style={{ left: '46%', top: '65%' }}
-                    className={`absolute -translate-x-1/2 -translate-y-1/2 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg border shadow-xl font-sans transition-all duration-200 cursor-pointer flex items-center gap-2 whitespace-nowrap ${
+                    className={`absolute -translate-x-1/2 -translate-y-1/2 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg border shadow-xl font-sans transition duration-200 cursor-pointer flex items-center gap-2 whitespace-nowrap ${
                       selectedSensor === 'Transmission TCU'
                         ? 'bg-brand-dark text-white border-brand-amber scale-105 ring-2 ring-brand-amber/40 shadow-brand-amber/25'
                         : 'bg-white/95 text-brand-dark/95 border-brand-gold/30 hover:border-brand-amber hover:bg-white text-opacity-95'
@@ -787,7 +787,7 @@ export default function InteractiveHUD() {
                   <button 
                     onClick={() => setSelectedSensor('Airbags SRS')}
                     style={{ left: '58%', top: '38%' }}
-                    className={`absolute -translate-x-1/2 -translate-y-1/2 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg border shadow-xl font-sans transition-all duration-200 cursor-pointer flex items-center gap-2 whitespace-nowrap ${
+                    className={`absolute -translate-x-1/2 -translate-y-1/2 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg border shadow-xl font-sans transition duration-200 cursor-pointer flex items-center gap-2 whitespace-nowrap ${
                       selectedSensor === 'Airbags SRS'
                         ? 'bg-brand-dark text-white border-brand-amber scale-105 ring-2 ring-brand-amber/40 shadow-brand-amber/25'
                         : 'bg-white/95 text-brand-dark/95 border-brand-gold/30 hover:border-brand-amber hover:bg-white text-opacity-95'
@@ -801,7 +801,7 @@ export default function InteractiveHUD() {
                   <button 
                     onClick={() => setSelectedSensor('Fuel System')}
                     style={{ left: '68%', top: '66%' }}
-                    className={`absolute -translate-x-1/2 -translate-y-1/2 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg border shadow-xl font-sans transition-all duration-200 cursor-pointer flex items-center gap-2 whitespace-nowrap ${
+                    className={`absolute -translate-x-1/2 -translate-y-1/2 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg border shadow-xl font-sans transition duration-200 cursor-pointer flex items-center gap-2 whitespace-nowrap ${
                       selectedSensor === 'Fuel System'
                         ? 'bg-brand-dark text-white border-brand-amber scale-105 ring-2 ring-brand-amber/40 shadow-brand-amber/25'
                         : 'bg-white/95 text-brand-dark/95 border-brand-gold/30 hover:border-brand-amber hover:bg-white text-opacity-95'
@@ -815,7 +815,7 @@ export default function InteractiveHUD() {
                   <button 
                     onClick={() => setSelectedSensor('ABS Controller')}
                     style={{ left: '78%', top: '70%' }}
-                    className={`absolute -translate-x-1/2 -translate-y-1/2 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg border shadow-xl font-sans transition-all duration-200 cursor-pointer flex items-center gap-2 whitespace-nowrap ${
+                    className={`absolute -translate-x-1/2 -translate-y-1/2 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg border shadow-xl font-sans transition duration-200 cursor-pointer flex items-center gap-2 whitespace-nowrap ${
                       selectedSensor === 'ABS Controller'
                         ? 'bg-brand-dark text-white border-brand-amber scale-105 ring-2 ring-brand-amber/40 shadow-brand-amber/25'
                         : 'bg-white/95 text-brand-dark/95 border-brand-gold/30 hover:border-brand-amber hover:bg-white text-opacity-95'
@@ -829,7 +829,7 @@ export default function InteractiveHUD() {
                   <button 
                     onClick={() => setSelectedSensor('Tail Lights')}
                     style={{ left: '88%', top: '48%' }}
-                    className={`absolute -translate-x-1/2 -translate-y-1/2 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg border shadow-xl font-sans transition-all duration-200 cursor-pointer flex items-center gap-2 whitespace-nowrap ${
+                    className={`absolute -translate-x-1/2 -translate-y-1/2 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg border shadow-xl font-sans transition duration-200 cursor-pointer flex items-center gap-2 whitespace-nowrap ${
                       selectedSensor === 'Tail Lights'
                         ? 'bg-brand-dark text-white border-brand-amber scale-105 ring-2 ring-brand-amber/40 shadow-brand-amber/25'
                         : 'bg-white/95 text-brand-dark/95 border-brand-gold/30 hover:border-brand-amber hover:bg-white text-opacity-95'
