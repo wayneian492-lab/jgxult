@@ -161,7 +161,7 @@ export default function App() {
         id="desktop-sidebar"
         onMouseEnter={() => setDesktopSidebarExpanded(true)}
         onMouseLeave={() => setDesktopSidebarExpanded(false)}
-        className={`hidden md:flex flex-col fixed left-0 top-0 bottom-0 bg-[#0c1020] border-r border-brand-gold/15 text-slate-100 z-30 select-none overflow-y-auto overflow-x-hidden custom-scrollbar transition-[width,box-shadow] duration-250 ease-in-out will-change-[width] ${
+        className={`hidden md:flex flex-col fixed left-0 top-0 bottom-0 bg-[#0c1020] border-r border-brand-gold/15 text-slate-100 z-30 select-none overflow-y-auto overflow-x-hidden custom-scrollbar transition-all duration-300 ease-in-out will-change-[width] ${
           desktopSidebarExpanded ? 'w-72 shadow-[10px_0_40px_rgba(0,0,0,0.5)]' : 'w-18'
         }`}
       >
@@ -182,7 +182,7 @@ export default function App() {
               referrerPolicy="no-referrer"
             />
           </div>
-          <div className={`transition-all duration-250 ease-in-out origin-left min-w-0 ${
+          <div className={`transition-all duration-300 ease-in-out origin-left min-w-0 ${
             desktopSidebarExpanded 
               ? 'opacity-100 translate-x-0 max-w-[180px] visible' 
               : 'opacity-0 -translate-x-3 max-w-0 overflow-hidden invisible pointer-events-none'
@@ -194,7 +194,7 @@ export default function App() {
 
         {/* Sidebar Nav Items */}
         <nav className="flex-1 p-4 space-y-1">
-          <div className={`px-3 mb-2 transition-all duration-250 ease-in-out ${
+          <div className={`px-3 mb-2 transition-all duration-300 ease-in-out ${
             desktopSidebarExpanded 
               ? 'opacity-100 max-h-8 visible' 
               : 'opacity-0 max-h-0 overflow-hidden invisible pointer-events-none'
@@ -208,7 +208,11 @@ export default function App() {
               <button
                 key={tab.id}
                 onClick={() => handleNavigate(tab.id)}
-                className={`w-full flex items-center rounded-xl text-left transition-all duration-250 ease-in-out group cursor-pointer py-3 gap-3.5 justify-start px-3.5 ${
+                className={`w-full flex items-center rounded-xl transition-all duration-300 ease-in-out group cursor-pointer py-3 ${
+                  desktopSidebarExpanded 
+                    ? 'px-3.5 gap-3.5 justify-start text-left' 
+                    : 'px-0 gap-0 justify-center text-center'
+                } ${
                   isActive
                     ? 'bg-brand-amber text-white shadow-lg shadow-brand-amber/20 font-bold'
                     : 'text-slate-400 hover:text-white hover:bg-white/5 font-medium'
@@ -216,7 +220,7 @@ export default function App() {
                 title={!desktopSidebarExpanded ? tab.label : undefined}
               >
                 <Icon className={`w-5 h-5 shrink-0 transition-transform duration-200 group-hover:scale-110 ${isActive ? 'text-white' : 'text-brand-gold group-hover:text-brand-amber'}`} />
-                <div className={`transition-all duration-250 ease-in-out origin-left min-w-0 ${
+                <div className={`transition-all duration-300 ease-in-out origin-left min-w-0 ${
                   desktopSidebarExpanded 
                     ? 'opacity-100 translate-x-0 max-w-[200px] visible' 
                     : 'opacity-0 -translate-x-3 max-w-0 overflow-hidden invisible pointer-events-none'
@@ -233,13 +237,13 @@ export default function App() {
         <div className="p-4 border-t border-white/5 bg-[#080b16] space-y-3">
           <button
             onClick={() => setActiveSOS(true)}
-            className={`rounded-xl bg-red-600 hover:bg-red-700 active:bg-red-800 text-white font-mono text-[11px] font-extrabold uppercase tracking-widest flex items-center transition-all duration-250 ease-in-out shadow-md shadow-red-900/20 cursor-pointer h-11 ${
+            className={`rounded-xl bg-red-600 hover:bg-red-700 active:bg-red-800 text-white font-mono text-[11px] font-extrabold uppercase tracking-widest flex items-center transition-all duration-300 ease-in-out shadow-md shadow-red-900/20 cursor-pointer h-11 ${
               desktopSidebarExpanded ? 'w-full px-4 gap-2.5 justify-start' : 'w-10 px-2.5 justify-center'
             }`}
             title="Emergency SOS"
           >
             <ShieldAlert className="w-5 h-5 animate-pulse text-white shrink-0" />
-            <span className={`transition-all duration-250 ease-in-out origin-left whitespace-nowrap ${
+            <span className={`transition-all duration-300 ease-in-out origin-left whitespace-nowrap ${
               desktopSidebarExpanded 
                 ? 'opacity-100 translate-x-0 max-w-[150px] visible' 
                 : 'opacity-0 -translate-x-3 max-w-0 overflow-hidden invisible pointer-events-none'
@@ -248,7 +252,7 @@ export default function App() {
             </span>
           </button>
           
-          <div className={`transition-all duration-250 ease-in-out flex flex-col gap-1 text-[10px] text-slate-500 font-mono w-full ${
+          <div className={`transition-all duration-300 ease-in-out flex flex-col gap-1 text-[10px] text-slate-500 font-mono w-full ${
             desktopSidebarExpanded 
               ? 'opacity-100 max-h-24 visible mt-1 border-t border-white/5 pt-2' 
               : 'opacity-0 max-h-0 overflow-hidden invisible pointer-events-none mt-0'
@@ -374,7 +378,7 @@ export default function App() {
       />
 
       {/* 3. MAIN WORKSPACE CONTENT */}
-      <div className={`flex-1 flex flex-col min-w-0 transition-[padding-left] duration-250 ease-in-out will-change-[padding-left] relative ${
+      <div className={`flex-1 flex flex-col min-w-0 transition-all duration-300 ease-in-out will-change-[padding-left] relative ${
         desktopSidebarExpanded ? 'md:pl-72' : 'md:pl-18'
       }`}>
         
@@ -408,8 +412,12 @@ export default function App() {
         </header>
 
         {/* DESKTOP HEADER (STAYS FIXED AT TOP OF WORKSPACE CONTENT) */}
-        <header className="hidden md:flex sticky top-0 z-20 items-center justify-between h-20 bg-white/80 backdrop-blur-md border-b border-brand-gold/15 px-8 select-none">
-          <div className="space-y-0.5">
+        <header className="hidden md:flex relative sticky top-0 z-20 items-center justify-between h-20 bg-gradient-to-r from-sky-100/80 via-sky-50/90 to-sky-100/50 backdrop-blur-md border-b border-sky-200/80 shadow-[0_4px_25px_rgba(14,165,233,0.12)] px-8 select-none overflow-hidden">
+          {/* Shining Fade Light effect */}
+          <div className="absolute inset-0 bg-gradient-to-r from-sky-400/5 via-transparent to-sky-400/5 pointer-events-none" />
+          <div className="absolute top-0 w-48 h-full bg-gradient-to-r from-transparent via-white/55 to-transparent -skew-x-12 pointer-events-none animate-shine" />
+
+          <div className="relative z-10 space-y-0.5">
             <div className="flex items-center gap-2">
               <span className="text-[10px] font-mono text-brand-amber font-bold uppercase tracking-widest">mCarFix Premium Hub</span>
               <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
@@ -420,29 +428,45 @@ export default function App() {
             </h1>
           </div>
 
-          <div className="flex items-center gap-5">
+          <div className="relative z-10 flex items-center gap-5">
             {/* Quick status banner */}
             <div className="flex items-center gap-2 bg-brand-gold-light/60 border border-brand-gold/15 py-1.5 px-3 rounded-xl text-[10px] font-mono font-bold text-brand-muted">
               <span>GPS Dispatcher:</span>
               <span className="text-brand-amber font-extrabold">Active (Nairobi Central)</span>
             </div>
 
-            <div className="flex flex-col items-end text-right font-mono border-l border-brand-gold/15 pl-4">
-              <span className="text-[9px] uppercase tracking-widest text-brand-muted font-extrabold block">Customer Support</span>
-              <a 
-                href="tel:+254704804932" 
-                className="flex items-center gap-1.5 text-brand-dark hover:text-brand-amber text-xs font-bold transition-all mt-0.5"
+            <div className="flex items-center gap-3 border-l border-sky-200/50 pl-4 font-mono">
+              <button
+                onClick={() => {
+                  window.location.href = "tel:+254704804932";
+                }}
+                className="flex items-center gap-2.5 bg-rose-50/95 hover:bg-rose-100/95 border border-rose-200/80 hover:border-rose-400/80 px-3 py-1.5 rounded-xl transition-all shadow-sm hover:shadow-md group text-left cursor-pointer shrink-0"
+                title="Call Customer Support"
               >
-                <Phone className="w-3.5 h-3.5 text-brand-amber shrink-0" />
-                <span>+254 704 804932</span>
-              </a>
-              <a 
-                href="mailto:support@mcarfix.com" 
-                className="text-[10px] text-slate-500 hover:text-brand-amber transition-all flex items-center gap-1 mt-0.5 justify-end"
+                <div className="bg-rose-100 p-1.5 rounded-lg group-hover:bg-rose-200 transition-colors text-rose-600 shrink-0">
+                  <Phone className="w-3.5 h-3.5" />
+                </div>
+                <div className="flex flex-col min-w-0">
+                  <span className="text-[8px] uppercase tracking-widest text-rose-500 font-extrabold block">Support Call</span>
+                  <span className="text-[11px] font-extrabold text-rose-700 group-hover:text-rose-900 transition-colors mt-0.5 whitespace-nowrap">+254 704 804932</span>
+                </div>
+              </button>
+
+              <button
+                onClick={() => {
+                  window.location.href = "mailto:support@mcarfix.com";
+                }}
+                className="flex items-center gap-2.5 bg-white/95 hover:bg-white border border-slate-200/80 hover:border-slate-400/80 px-3 py-1.5 rounded-xl transition-all shadow-sm hover:shadow-md group text-left cursor-pointer"
+                title="Email Customer Support"
               >
-                <Mail className="w-3 h-3 text-slate-400 shrink-0" />
-                <span>support@mcarfix.com</span>
-              </a>
+                <div className="bg-slate-100 p-1.5 rounded-lg group-hover:bg-slate-200 transition-colors text-slate-500 shrink-0">
+                  <Mail className="w-3.5 h-3.5" />
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-[8px] uppercase tracking-widest text-slate-400 font-extrabold block">Support Email</span>
+                  <span className="text-[11px] font-extrabold text-slate-700 group-hover:text-slate-900 transition-colors mt-0.5">support@mcarfix.com</span>
+                </div>
+              </button>
             </div>
 
             <button
@@ -466,7 +490,7 @@ export default function App() {
         {/* Selected Tab Content Viewport */}
         <main className="flex-grow">
           {activeTab === 'home' && (
-            <header id="hero" className="relative overflow-hidden py-16 lg:py-24 border-b border-brand-gold/15 bg-brand-cream">
+            <header id="hero" className="relative overflow-hidden py-16 lg:py-24 border-b border-sky-100 bg-gradient-to-b from-sky-100/40 via-sky-50/20 to-white">
         {/* Visually Stunning Background Garage Image */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden select-none">
           <img 
@@ -476,8 +500,8 @@ export default function App() {
             referrerPolicy="no-referrer"
           />
           {/* Premium light transparent overlays that blend beautifully while keeping the image 90% visible and keeping text readable */}
-          <div className="absolute inset-0 bg-gradient-to-b from-brand-cream/40 via-transparent to-brand-cream/50" />
-          <div className="absolute inset-0 bg-gradient-to-r from-brand-cream/35 via-transparent to-brand-cream/35" />
+          <div className="absolute inset-0 bg-gradient-to-b from-sky-100/60 via-transparent to-sky-50/80" />
+          <div className="absolute inset-0 bg-gradient-to-r from-sky-100/35 via-transparent to-sky-100/35" />
           <div className="absolute inset-0 bg-white/10 mix-blend-overlay" />
 
           {/* Animated subtle high-tech scanning rings & glowing blueprint particles (User-requested) */}
@@ -494,7 +518,7 @@ export default function App() {
                 repeat: Infinity, 
                 ease: "easeInOut" 
               }}
-              className="absolute top-1/4 left-1/4 w-80 h-80 rounded-full border border-brand-amber/15 bg-brand-amber/5 blur-xl"
+              className="absolute top-1/4 left-1/4 w-80 h-80 rounded-full border border-sky-300/15 bg-sky-400/5 blur-xl"
             />
             <motion.div 
               animate={{ 
@@ -508,7 +532,7 @@ export default function App() {
                 repeat: Infinity, 
                 ease: "easeInOut" 
               }}
-              className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full border border-brand-gold/15 bg-brand-gold/5 blur-2xl"
+              className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full border border-cyan-300/15 bg-cyan-400/5 blur-2xl"
             />
             {/* Animated slow-scanning radar line */}
             <motion.div 
@@ -554,8 +578,8 @@ export default function App() {
         </div>
 
         {/* Premium ambient glows */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,rgba(197,168,92,0.12),transparent_50%)] pointer-events-none" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(255,94,0,0.06),transparent_50%)] pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,rgba(14,165,233,0.15),transparent_50%)] pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(6,182,212,0.1),transparent_50%)] pointer-events-none" />
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
@@ -1247,18 +1271,27 @@ export default function App() {
 
             {/* Support Hotline */}
             <div>
-              <h4 className="font-display font-bold text-white mb-3 uppercase tracking-wider text-[11px]">Nairobi Head Office</h4>
+              <h4 className="font-display font-bold text-white mb-3 uppercase tracking-wider text-[11px]">General Enquiries</h4>
               <p className="leading-relaxed font-light mb-3 text-slate-400">
                 Delta Corner Towers, 4th Floor,<br />
                 Waiyaki Way, Westlands, Nairobi.
               </p>
-              <a 
-                href="tel:+25470000000" 
-                className="inline-flex items-center gap-1.5 text-brand-amber hover:text-white font-mono font-bold"
-              >
-                <Phone className="w-3.5 h-3.5" />
-                <span>+254 700 mCarFix</span>
-              </a>
+              <div className="flex flex-col gap-2">
+                <a 
+                  href="tel:+254704804578" 
+                  className="inline-flex items-center gap-1.5 text-brand-amber hover:text-white font-mono font-bold"
+                >
+                  <Phone className="w-3.5 h-3.5" />
+                  <span>+254 704 804578</span>
+                </a>
+                <a 
+                  href="mailto:enquiries@mcarfix.com" 
+                  className="inline-flex items-center gap-1.5 text-slate-400 hover:text-brand-amber transition-colors font-mono"
+                >
+                  <Mail className="w-3.5 h-3.5 text-slate-500" />
+                  <span>enquiries@mcarfix.com</span>
+                </a>
+              </div>
             </div>
 
             {/* Partners Portal */}

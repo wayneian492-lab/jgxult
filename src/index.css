@@ -16,10 +16,16 @@
   --color-brand-muted: #64748b; /* slate gray text */
 
   --animate-marquee: marquee 45s linear infinite;
+  --animate-shine: shine 4.5s ease-in-out infinite;
 
   @keyframes marquee {
     0% { transform: translateX(0%); }
     100% { transform: translateX(-50%); }
+  }
+
+  @keyframes shine {
+    0% { left: -100%; }
+    100% { left: 200%; }
   }
 }
 
