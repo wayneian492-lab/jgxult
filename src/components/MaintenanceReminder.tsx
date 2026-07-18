@@ -225,7 +225,7 @@ export default function MaintenanceReminder() {
                       initial={{ opacity: 0, scale: 0.95 }}
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, x: -10 }}
-                      className={`p-4 rounded-2xl border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 transition-all duration-300 ${
+                      className={`p-4 rounded-2xl border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 transition duration-300 ${
                         urgent 
                           ? 'bg-brand-amber/5 border-brand-amber/30' 
                           : 'bg-brand-gold-light/20 border-brand-gold/15 hover:bg-brand-gold-light/40'
@@ -257,7 +257,7 @@ export default function MaintenanceReminder() {
                       <div className="flex items-center gap-2 w-full sm:w-auto justify-end border-t sm:border-t-0 border-brand-gold/10 pt-3 sm:pt-0">
                         <button
                           onClick={() => handleRequestTestNotification(profile)}
-                          className={`flex-1 sm:flex-none text-[11px] font-mono font-bold px-3 py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                          className={`flex-1 sm:flex-none text-[11px] font-mono font-bold px-3 py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition cursor-pointer ${
                             profile.notified
                               ? 'bg-emerald-500/10 text-emerald-700 border border-emerald-500/20'
                               : 'bg-white hover:bg-brand-gold-light/60 text-brand-dark border border-brand-gold/20'
@@ -269,7 +269,7 @@ export default function MaintenanceReminder() {
 
                         <button
                           onClick={() => handleDeleteProfile(profile.id)}
-                          className="p-2 bg-white hover:bg-rose-500/10 border border-brand-gold/20 hover:border-rose-500/30 text-brand-muted hover:text-rose-600 rounded-lg transition-all cursor-pointer"
+                          className="p-2 bg-white hover:bg-rose-500/10 border border-brand-gold/20 hover:border-rose-500/30 text-brand-muted hover:text-rose-600 rounded-lg transition cursor-pointer"
                           title="Delete profile"
                         >
                           <Trash2 className="w-3.5 h-3.5" />

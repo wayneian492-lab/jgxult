@@ -326,7 +326,7 @@ export default function App() {
                     <button
                       key={tab.id}
                       onClick={() => handleNavigate(tab.id)}
-                      className={`w-full flex items-center gap-3.5 px-3.5 py-3 rounded-xl text-left transition-all duration-200 group cursor-pointer ${
+                      className={`w-full flex items-center gap-3.5 px-3.5 py-3 rounded-xl text-left transition duration-200 group cursor-pointer ${
                         isActive
                           ? 'bg-brand-amber text-white shadow-lg shadow-brand-amber/20 font-bold'
                           : 'text-slate-400 hover:text-white hover:bg-white/5 font-medium'
@@ -349,7 +349,7 @@ export default function App() {
                     setActiveSOS(true);
                     setSidebarOpen(false);
                   }}
-                  className="w-full py-2.5 px-3 rounded-xl bg-red-600 hover:bg-red-700 active:bg-red-800 text-white font-mono text-[11px] font-extrabold uppercase tracking-widest flex items-center justify-center gap-2 transition-all shadow-md shadow-red-900/20 cursor-pointer"
+                  className="w-full py-2.5 px-3 rounded-xl bg-red-600 hover:bg-red-700 active:bg-red-800 text-white font-mono text-[11px] font-extrabold uppercase tracking-widest flex items-center justify-center gap-2 transition shadow-md shadow-red-900/20 cursor-pointer"
                 >
                   <ShieldAlert className="w-4 h-4 animate-pulse text-white" />
                   <span>Emergency SOS</span>
@@ -403,7 +403,7 @@ export default function App() {
           <div className="flex items-center gap-2">
             <button
               onClick={() => setActiveSOS(true)}
-              className="px-3 py-1.5 rounded-lg bg-red-600 hover:bg-red-700 text-white text-[10px] font-mono font-bold uppercase tracking-wider flex items-center gap-1 shadow-sm transition-all cursor-pointer"
+              className="px-3 py-1.5 rounded-lg bg-red-600 hover:bg-red-700 text-white text-[10px] font-mono font-bold uppercase tracking-wider flex items-center gap-1 shadow-sm transition cursor-pointer"
             >
               <ShieldAlert className="w-3.5 h-3.5 animate-pulse" />
               <span>SOS</span>
@@ -440,7 +440,7 @@ export default function App() {
                 onClick={() => {
                   window.location.href = "tel:+254704804932";
                 }}
-                className="flex items-center gap-2.5 bg-rose-50/95 hover:bg-rose-100/95 border border-rose-200/80 hover:border-rose-400/80 px-3 py-1.5 rounded-xl transition-all shadow-sm hover:shadow-md group text-left cursor-pointer shrink-0"
+                className="flex items-center gap-2.5 bg-rose-50/95 hover:bg-rose-100/95 border border-rose-200/80 hover:border-rose-400/80 px-3 py-1.5 rounded-xl transition shadow-sm hover:shadow-md group text-left cursor-pointer shrink-0"
                 title="Call Customer Support"
               >
                 <div className="bg-rose-100 p-1.5 rounded-lg group-hover:bg-rose-200 transition-colors text-rose-600 shrink-0">
@@ -456,7 +456,7 @@ export default function App() {
                 onClick={() => {
                   window.location.href = "mailto:support@mcarfix.com";
                 }}
-                className="flex items-center gap-2.5 bg-white/95 hover:bg-white border border-slate-200/80 hover:border-slate-400/80 px-3 py-1.5 rounded-xl transition-all shadow-sm hover:shadow-md group text-left cursor-pointer"
+                className="flex items-center gap-2.5 bg-white/95 hover:bg-white border border-slate-200/80 hover:border-slate-400/80 px-3 py-1.5 rounded-xl transition shadow-sm hover:shadow-md group text-left cursor-pointer"
                 title="Email Customer Support"
               >
                 <div className="bg-slate-100 p-1.5 rounded-lg group-hover:bg-slate-200 transition-colors text-slate-500 shrink-0">
@@ -471,7 +471,7 @@ export default function App() {
 
             <button
               onClick={() => setActiveSOS(true)}
-              className="px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-mono text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-red-950/10 transition-all hover:scale-[1.02] cursor-pointer"
+              className="px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-mono text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-red-950/10 transition hover:scale-[1.02] cursor-pointer"
             >
               <ShieldAlert className="w-4 h-4 animate-pulse" />
               <span>Emergency SOS</span>
@@ -621,7 +621,7 @@ export default function App() {
               >
                 <button
                   onClick={() => handleScrollToSection('garages')}
-                  className="w-full sm:w-auto bg-brand-amber hover:bg-brand-amber-hover text-white font-mono text-xs font-extrabold py-4 px-8 rounded-xl flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-brand-amber/15 hover:-translate-y-0.5 transition-all duration-300 tracking-wider uppercase"
+                  className="w-full sm:w-auto bg-brand-amber hover:bg-brand-amber-hover text-white font-mono text-xs font-extrabold py-4 px-8 rounded-xl flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-brand-amber/15 hover:-translate-y-0.5 transition duration-300 tracking-wider uppercase"
                 >
                   <span>Book Verified Mechanic</span>
                   <ArrowRight className="w-4 h-4" />
@@ -629,7 +629,7 @@ export default function App() {
 
                 <button
                   onClick={() => handleScrollToSection('simulator')}
-                  className="w-full sm:w-auto bg-transparent hover:bg-brand-gold-light/90 text-brand-dark font-mono text-xs font-extrabold py-4 px-8 rounded-xl border border-brand-gold/25 flex items-center justify-center gap-2 cursor-pointer transition-all duration-300 tracking-wider uppercase shadow-sm hover:border-brand-gold/40"
+                  className="w-full sm:w-auto bg-transparent hover:bg-brand-gold-light/90 text-brand-dark font-mono text-xs font-extrabold py-4 px-8 rounded-xl border border-brand-gold/25 flex items-center justify-center gap-2 cursor-pointer transition duration-300 tracking-wider uppercase shadow-sm hover:border-brand-gold/40"
                 >
                   <span>Watch App Demo</span>
                 </button>
@@ -855,10 +855,10 @@ export default function App() {
                     handleScrollToSection('garages');
                   }
                 }}
-                className="bg-white border border-brand-gold/20 hover:border-brand-amber hover:bg-brand-gold-light/40 rounded-3xl p-6 transition-all duration-300 group cursor-pointer hover:-translate-y-1 flex flex-col justify-between shadow-xl"
+                className="bg-white border border-brand-gold/20 hover:border-brand-amber hover:bg-brand-gold-light/40 rounded-3xl p-6 transition duration-300 group cursor-pointer hover:-translate-y-1 flex flex-col justify-between shadow-xl"
               >
                 <div className="space-y-4">
-                  <div className="bg-brand-gold-light/60 border border-brand-gold/15 text-brand-amber p-3 rounded-2xl w-max group-hover:bg-brand-amber group-hover:text-white transition-all duration-300">
+                  <div className="bg-brand-gold-light/60 border border-brand-gold/15 text-brand-amber p-3 rounded-2xl w-max group-hover:bg-brand-amber group-hover:text-white transition duration-300">
                     {getServiceIcon(item.iconName)}
                   </div>
                   <h3 className="font-display font-bold text-lg text-brand-dark group-hover:text-brand-amber transition-colors leading-snug">
@@ -1032,7 +1032,7 @@ export default function App() {
               <div className="px-6 md:px-8 pb-8">
                 <button
                   onClick={() => handleScrollToSection('estimator')}
-                  className="bg-brand-amber hover:bg-brand-amber-hover text-white font-mono text-xs font-bold py-3 px-5 rounded-xl transition-all duration-300 cursor-pointer w-full text-center shadow-lg shadow-brand-amber/15 hover:-translate-y-0.5"
+                  className="bg-brand-amber hover:bg-brand-amber-hover text-white font-mono text-xs font-bold py-3 px-5 rounded-xl transition duration-300 cursor-pointer w-full text-center shadow-lg shadow-brand-amber/15 hover:-translate-y-0.5"
                 >
                   Verify Spare Parts Pricing
                 </button>
@@ -1066,7 +1066,7 @@ export default function App() {
               <div className="px-6 md:px-8 pb-8">
                 <button
                   onClick={() => setActiveSOS(true)}
-                  className="bg-brand-amber hover:bg-brand-amber-hover text-white font-mono text-xs font-bold py-3 px-5 rounded-xl transition-all duration-300 cursor-pointer w-full text-center shadow-lg shadow-brand-amber/15 hover:-translate-y-0.5"
+                  className="bg-brand-amber hover:bg-brand-amber-hover text-white font-mono text-xs font-bold py-3 px-5 rounded-xl transition duration-300 cursor-pointer w-full text-center shadow-lg shadow-brand-amber/15 hover:-translate-y-0.5"
                 >
                   Request Emergency Tow Truck
                 </button>
@@ -1106,7 +1106,7 @@ export default function App() {
             {MOCK_TESTIMONIALS.map((t) => (
               <div 
                 key={t.id}
-                className="bg-white border border-brand-gold/20 p-6 rounded-3xl flex flex-col justify-between h-full hover:border-brand-amber hover:shadow-lg transition-all duration-300 shadow-xl"
+                className="bg-white border border-brand-gold/20 p-6 rounded-3xl flex flex-col justify-between h-full hover:border-brand-amber hover:shadow-lg transition duration-300 shadow-xl"
               >
                 <div className="space-y-4">
                   <div className="flex text-brand-amber gap-0.5">
@@ -1162,7 +1162,7 @@ export default function App() {
               return (
                 <div 
                   key={idx}
-                  className="bg-white border border-brand-gold/20 rounded-2xl overflow-hidden transition-all duration-300 shadow-xl"
+                  className="bg-white border border-brand-gold/20 rounded-2xl overflow-hidden transition duration-300 shadow-xl"
                 >
                   <button
                     onClick={() => toggleFAQ(idx)}
@@ -1213,14 +1213,14 @@ export default function App() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <button
               onClick={() => handleScrollToSection('garages')}
-              className="w-full sm:w-auto bg-brand-amber hover:bg-brand-amber-hover text-white font-mono font-bold py-4 px-8 rounded-xl flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-brand-amber/15 transition-all hover:-translate-y-0.5"
+              className="w-full sm:w-auto bg-brand-amber hover:bg-brand-amber-hover text-white font-mono font-bold py-4 px-8 rounded-xl flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-brand-amber/15 transition hover:-translate-y-0.5"
             >
               <span>Book a Mechanic Now</span>
             </button>
             
             <button
               onClick={() => setActiveSOS(true)}
-              className="w-full sm:w-auto bg-brand-amber hover:bg-brand-amber-hover text-white font-mono font-bold py-4 px-8 rounded-xl flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-brand-amber/15 transition-all hover:-translate-y-0.5"
+              className="w-full sm:w-auto bg-brand-amber hover:bg-brand-amber-hover text-white font-mono font-bold py-4 px-8 rounded-xl flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-brand-amber/15 transition hover:-translate-y-0.5"
             >
               <span>Request Roadside SOS</span>
             </button>

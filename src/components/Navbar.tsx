@@ -32,7 +32,7 @@ export default function Navbar({ onSOSClick, onNavigate, activeTab }: NavbarProp
   };
 
   return (
-    <nav className="sticky top-0 z-50 backdrop-blur-md bg-brand-cream/90 border-b border-brand-gold/15 transition-all duration-300">
+    <nav className="sticky top-0 z-50 backdrop-blur-md bg-brand-cream/90 border-b border-brand-gold/15 transition duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
@@ -40,7 +40,7 @@ export default function Navbar({ onSOSClick, onNavigate, activeTab }: NavbarProp
             onClick={() => handleLinkClick('hero')} 
             className="flex items-center gap-3 cursor-pointer group"
           >
-            <div className="w-12 h-12 rounded-xl overflow-hidden bg-white border border-brand-gold/20 shadow-sm flex items-center justify-center p-0.5 group-hover:border-brand-amber transition-all duration-300">
+            <div className="w-12 h-12 rounded-xl overflow-hidden bg-white border border-brand-gold/20 shadow-sm flex items-center justify-center p-0.5 group-hover:border-brand-amber transition duration-300">
               <img 
                 src={mcarfixLogo} 
                 alt="mCarFix Logo" 
@@ -64,7 +64,7 @@ export default function Navbar({ onSOSClick, onNavigate, activeTab }: NavbarProp
                 <button
                   key={item.target}
                   onClick={() => handleLinkClick(item.target)}
-                  className={`font-semibold transition-all cursor-pointer text-sm relative py-2 ${
+                  className={`font-semibold transition cursor-pointer text-sm relative py-2 ${
                     isActive
                       ? 'text-brand-amber font-bold'
                       : 'text-brand-dark/85 hover:text-brand-amber'
@@ -105,9 +105,9 @@ export default function Navbar({ onSOSClick, onNavigate, activeTab }: NavbarProp
             
             <button
               onClick={onSOSClick}
-              className="relative group overflow-hidden bg-brand-amber hover:bg-brand-amber-hover text-white font-bold py-2.5 px-5 rounded-xl flex items-center gap-2 cursor-pointer transition-all duration-300 shadow-md hover:-translate-y-0.5 active:translate-y-0 text-sm"
+              className="relative group overflow-hidden bg-brand-amber hover:bg-brand-amber-hover text-white font-bold py-2.5 px-5 rounded-xl flex items-center gap-2 cursor-pointer transition duration-300 shadow-md hover:-translate-y-0.5 active:translate-y-0 text-sm"
             >
-              <div className="absolute inset-0 w-3 bg-white/10 transition-all duration-500 ease-out group-hover:w-full -skew-x-12" />
+              <div className="absolute inset-0 bg-white/10 transition-transform duration-500 ease-out scale-x-0 group-hover:scale-x-100 origin-left -skew-x-12" />
               <ShieldAlert className="w-4 h-4 animate-bounce text-white" />
               <span>Emergency Assistance</span>
             </button>

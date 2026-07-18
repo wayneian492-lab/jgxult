@@ -86,7 +86,7 @@ export default function CostEstimator() {
               <button
                 type="button"
                 onClick={() => handleSelectionChange('car', 'sedan')}
-                className={`p-3.5 rounded-xl border text-sm font-medium transition-all text-center cursor-pointer ${
+                className={`p-3.5 rounded-xl border text-sm font-medium transition text-center cursor-pointer ${
                   carType === 'sedan'
                     ? 'border-brand-amber bg-brand-amber/5 text-brand-dark font-extrabold shadow-md shadow-brand-amber/5'
                     : 'border-brand-gold/20 bg-brand-gold-light/40 text-brand-muted hover:border-brand-gold/40 hover:text-brand-dark'
@@ -97,7 +97,7 @@ export default function CostEstimator() {
               <button
                 type="button"
                 onClick={() => handleSelectionChange('car', 'suv')}
-                className={`p-3.5 rounded-xl border text-sm font-medium transition-all text-center cursor-pointer ${
+                className={`p-3.5 rounded-xl border text-sm font-medium transition text-center cursor-pointer ${
                   carType === 'suv'
                     ? 'border-brand-amber bg-brand-amber/5 text-brand-dark font-extrabold shadow-md shadow-brand-amber/5'
                     : 'border-brand-gold/20 bg-brand-gold-light/40 text-brand-muted hover:border-brand-gold/40 hover:text-brand-dark'
@@ -121,7 +121,7 @@ export default function CostEstimator() {
                 <button
                   key={s.id}
                   onClick={() => handleSelectionChange('service', s.id)}
-                  className={`w-full flex items-center justify-between p-3.5 rounded-xl border text-left text-sm transition-all cursor-pointer ${
+                  className={`w-full flex items-center justify-between p-3.5 rounded-xl border text-left text-sm transition cursor-pointer ${
                     service === s.id
                       ? 'border-brand-amber bg-brand-amber/5 text-brand-dark'
                       : 'border-brand-gold/20 bg-white text-brand-muted hover:border-brand-gold/40 hover:text-brand-dark'
@@ -227,7 +227,7 @@ export default function CostEstimator() {
                   element.scrollIntoView({ behavior: 'smooth' });
                 }
               }}
-              className="bg-brand-amber hover:bg-brand-amber-hover text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-all cursor-pointer shadow-lg shadow-brand-amber/10 font-mono tracking-tight"
+              className="bg-brand-amber hover:bg-brand-amber-hover text-white text-xs font-bold px-4 py-2.5 rounded-xl transition cursor-pointer shadow-lg shadow-brand-amber/10 font-mono tracking-tight"
             >
               Find Repair Shops
             </button>

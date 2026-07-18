@@ -81,7 +81,7 @@ export default function AppSimulator() {
             {/* Tab 1: Repair Booking */}
             <button
               onClick={() => { setActiveScreen('booking'); }}
-              className={`p-4 rounded-2xl border text-left flex items-center gap-3.5 transition-all cursor-pointer ${
+              className={`p-4 rounded-2xl border text-left flex items-center gap-3.5 transition cursor-pointer ${
                 activeScreen === 'booking'
                   ? 'bg-white/95 border-brand-amber shadow-md'
                   : 'bg-white/70 backdrop-blur-[2px] border-brand-gold/15 hover:border-brand-amber/50 shadow-sm'
@@ -100,7 +100,7 @@ export default function AppSimulator() {
             {/* Tab 2: GPS Tracking */}
             <button
               onClick={() => { setActiveScreen('tracking'); }}
-              className={`p-4 rounded-2xl border text-left flex items-center gap-3.5 transition-all cursor-pointer ${
+              className={`p-4 rounded-2xl border text-left flex items-center gap-3.5 transition cursor-pointer ${
                 activeScreen === 'tracking'
                   ? 'bg-white/95 border-brand-amber shadow-md'
                   : 'bg-white/70 backdrop-blur-[2px] border-brand-gold/15 hover:border-brand-amber/50 shadow-sm'
@@ -119,7 +119,7 @@ export default function AppSimulator() {
             {/* Tab 3: Parts Scan */}
             <button
               onClick={() => { setActiveScreen('parts'); }}
-              className={`p-4 rounded-2xl border text-left flex items-center gap-3.5 transition-all cursor-pointer ${
+              className={`p-4 rounded-2xl border text-left flex items-center gap-3.5 transition cursor-pointer ${
                 activeScreen === 'parts'
                   ? 'bg-white/95 border-brand-amber shadow-md'
                   : 'bg-white/70 backdrop-blur-[2px] border-brand-gold/15 hover:border-brand-amber/50 shadow-sm'
@@ -138,7 +138,7 @@ export default function AppSimulator() {
             {/* Tab 4: Secure Escrow Pay */}
             <button
               onClick={() => { setActiveScreen('payment'); }}
-              className={`p-4 rounded-2xl border text-left flex items-center gap-3.5 transition-all cursor-pointer ${
+              className={`p-4 rounded-2xl border text-left flex items-center gap-3.5 transition cursor-pointer ${
                 activeScreen === 'payment'
                   ? 'bg-white/95 border-brand-amber shadow-md'
                   : 'bg-white/70 backdrop-blur-[2px] border-brand-gold/15 hover:border-brand-amber/50 shadow-sm'
@@ -243,7 +243,7 @@ export default function AppSimulator() {
                         ) : (
                           <button
                             onClick={() => setBookingConfirmed(true)}
-                            className="w-full bg-brand-amber hover:bg-brand-amber-hover text-brand-dark font-mono font-bold text-xs py-3 rounded-xl cursor-pointer shadow-lg shadow-brand-amber/15 transition-all text-center uppercase tracking-wide"
+                            className="w-full bg-brand-amber hover:bg-brand-amber-hover text-brand-dark font-mono font-bold text-xs py-3 rounded-xl cursor-pointer shadow-lg shadow-brand-amber/15 transition text-center uppercase tracking-wide"
                           >
                             Confirm Repair Booking
                           </button>
@@ -420,7 +420,7 @@ export default function AppSimulator() {
                         ) : (
                           <button
                             onClick={() => setPaymentStep('success')}
-                            className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-mono font-bold text-xs py-3 rounded-xl cursor-pointer shadow-lg shadow-emerald-500/15 transition-all text-center uppercase tracking-wide"
+                            className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-mono font-bold text-xs py-3 rounded-xl cursor-pointer shadow-lg shadow-emerald-500/15 transition text-center uppercase tracking-wide"
                           >
                             Pay with M-Pesa KES 8,500
                           </button>
